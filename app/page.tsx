@@ -1,5 +1,7 @@
 
 // app/page.tsx
+import { Analytics } from '@vercel/analytics/next';
+
 import Navbar from "./components/Navbar";
 //import HeroSection from "./components/HeroSection";
 //import InfoSection from "./components/InfoSection";
@@ -22,6 +24,7 @@ export default function LandingPage() {
       <PartnersSection />
       <MissionarySection />
       <CTASection />
+      <Analytics />
       <Footer />
     </div>
   );
