@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "@/components/ui/toast";
 
 const signinSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -45,19 +46,23 @@ export default function SignIn() {
     mode: "onChange",
   });
 
- async function onSubmit(values: SigninInput) {
-     await authClient.signIn.email({
-          email:values.email,
-          password: values.password,
-    
-          callbackURL:"/dashboard",
-          fetchOptions: {
-            onError: ({error}) =>{
-    
-             console.log("Enter valid input");
-            }
-          }
-        })
+  async function onSubmit(values: SigninInput) {
+    await authClient.signIn.email({
+      email: values.email,
+      password: values.password,
+
+      callbackURL: "/dashboard",
+      fetchOptions: {
+        onError: ({ error }) => {
+          toast.add({
+            type: "error",
+            title: "Sign In Failed",
+            description: error.message,
+          });
+          console.log("Enter valid input");
+        },
+      },
+    });
   }
 
   return (
@@ -226,7 +231,12 @@ export default function SignIn() {
               </div>
 
               {/* Google */}
-              <Button type="button" variant="outline" size="lg" className="w-full">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="w-full"
+              >
                 <span className="font-bold">G</span>
                 Continue with Google
               </Button>
