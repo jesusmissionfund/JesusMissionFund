@@ -25,7 +25,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
-import { error } from "console";
+import { toast } from "@/components/ui/toast";
 
 
 const signupSchema = z
@@ -61,6 +61,7 @@ export default function SignUp() {
     mode: "onChange",
   });
 
+
   async function onSubmit(values: SignUpInput) {
      await authClient.signUp.email({
       name:values.name,
@@ -69,10 +70,14 @@ export default function SignUp() {
 
       callbackURL:"/dashboard",
       fetchOptions: {
-        onError: ({error}) =>{
-
-         console.log("Enter valid input");
-        }
+       onError: ({ error }) => {
+          toast.add({
+            type: "error",
+            title: "Sign Up Failed",
+            description: error.message,
+          });
+          console.log("Enter valid input");
+        },
       }
     })
 }
