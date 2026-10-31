@@ -23,6 +23,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  role String @default("missionary")
+
   @@unique([email])
   @@map("user")
 }
@@ -45,7 +47,7 @@ model Session {
 
 model Account {
   id                    String    @id
-  issuer                String
+  issuer                String?    
   accountId             String
   providerId            String
   userId                String
