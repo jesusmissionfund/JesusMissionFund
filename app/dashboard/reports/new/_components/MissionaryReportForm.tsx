@@ -14,12 +14,12 @@ export default function MissionaryReportForm() {
   }
 
   if (submitted) {
-    return <section role="status" className="max-w-3xl border border-border bg-card p-8"><CheckCircle2 aria-hidden="true" className="h-8 w-8 text-brand" /><h2 className="mt-5 text-2xl font-semibold">Your report is ready to submit.</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">This prototype doesn’t save reports yet. In the connected portal, the report will appear in your history and the admin review queue.</p><Link href="/dashboard/missionary" className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">Return to dashboard<ArrowRight aria-hidden="true" className="h-4 w-4" /></Link></section>;
+    return <section role="status" className="max-w-3xl border border-border bg-card p-8"><CheckCircle2 aria-hidden="true" className="h-8 w-8 text-brand" /><h2 className="mt-5 text-2xl font-semibold">Your report is ready to submit.</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">This prototype doesn’t save reports yet. In the connected portal, the report will appear in your history and the admin review queue.</p><Link href="/dashboard" className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">Return to dashboard<ArrowRight aria-hidden="true" className="h-4 w-4" /></Link></section>;
   }
 
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl border border-border bg-card p-5 sm:p-8">
-      <Link href="/dashboard/missionary" className="inline-flex items-center gap-2 text-sm font-semibold text-brand"><ArrowLeft aria-hidden="true" className="h-4 w-4" />Back to dashboard</Link>
+      <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm font-semibold text-brand"><ArrowLeft aria-hidden="true" className="h-4 w-4" />Back to dashboard</Link>
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <label className="grid gap-2 text-sm font-medium text-foreground/85">Report period <select required defaultValue="" className="min-h-12 border border-input bg-card px-3 font-normal"><option value="" disabled>Select a month</option>{["November 2026", "October 2026", "September 2026", "August 2026"].map((month) => <option key={month}>{month}</option>)}</select></label>
         <label className="grid gap-2 text-sm font-medium text-foreground/85">Ministry location<input required defaultValue="Northern Ghana" className="min-h-12 border border-input px-3 font-normal" /></label>

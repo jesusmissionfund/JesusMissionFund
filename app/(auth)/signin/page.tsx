@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { CreateAccountMenu } from "@/components/auth/CreateAccountMenu";
-import { getSession } from "@/lib/session";
+import { getSession, homeFor } from "@/lib/session";
 import { AuthShell } from "../_components/AuthShell";
 import { SignInForm } from "./_components/SignInForm";
 
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function SignInPage() {
-  if (await getSession()) redirect("/dashboard");
+  const session = await getSession();
+  if (session) redirect(homeFor(session.user.role));
 
   return (
     <AuthShell

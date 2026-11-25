@@ -76,6 +76,35 @@ export function SelectField<T extends FieldValues>({
   );
 }
 
+export function TextareaField<T extends FieldValues>({
+  control,
+  name,
+  label,
+  ...textareaProps
+}: FieldProps<T> & Omit<ComponentProps<"textarea">, "name">) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid}>
+          <FieldLabel htmlFor={name} className="text-foreground/85">{label}</FieldLabel>
+          <textarea
+            rows={4}
+            {...textareaProps}
+            {...field}
+            value={field.value ?? ""}
+            id={name}
+            aria-invalid={fieldState.invalid}
+            className={cn(controlClass, "h-auto py-3")}
+          />
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+}
+
 export function PasswordField<T extends FieldValues>({
   control,
   name,

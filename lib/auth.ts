@@ -14,7 +14,7 @@ export const auth = betterAuth({
   plugins: [
     // The admin plugin owns `user.role` and rejects it as client input, so roles can only be set on the
     // server (sign-up flows, scripts/create-admin.ts, admin user management). Default is the least-privileged role.
-    admin({ ac, roles, defaultRole: "partner", adminRoles: ["admin"] }),
+    admin({ ac, roles, defaultRole: "user", adminRoles: ["admin"] }),
     nextCookies(),
   ],
 });
