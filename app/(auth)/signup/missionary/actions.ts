@@ -1,53 +1,28 @@
 "use server";
 
-import { headers } from "next/headers";
-import { APIError } from "better-auth/api";
-
-import { auth } from "@/lib/auth";
+import { invalidInput, type ActionResult } from "@/lib/action-result";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/session";
-import {
-  accountSchema,
-  contactSchema,
-  ministrySchema,
-  type AccountInput,
-  type ContactInput,
-  type MinistryInput,
-} from "./schema";
+import { getUserSession } from "@/lib/session";
+import { createAccount } from "../create-account";
+import type { AccountInput } from "../schema";
+import { contactSchema, ministrySchema, type ContactInput, type MinistryInput } from "./schema";
 
-type ActionResult = { error: string } | { error?: undefined };
+const signedOut = { error: "Please sign in to continue your application." };
+const alreadySubmitted = { error: "Your application has already been submitted." };
 
-const invalidInput = { error: "Some details are missing or invalid. Please check the form and try again." };
-
-export async function createMissionaryAccount(input: AccountInput): Promise<ActionResult> {
-  const parsed = accountSchema.safeParse(input);
-  if (!parsed.success) return invalidInput;
-  if (await getSession()) return { error: "You're already signed in. Sign out to create a new account." };
-
-  try {
-    // createUser (admin plugin) is the only way to set a role at creation; it skips the admin-session check
-    // because no request headers are passed. Rate limiting doesn't apply to server calls like this.
-    await auth.api.createUser({ body: { ...parsed.data, role: "missionary" } });
-    await auth.api.signInEmail({
-      body: { email: parsed.data.email, password: parsed.data.password },
-      headers: await headers(),
-    });
-  } catch (error) {
-    if (error instanceof APIError) return { error: error.message };
-    throw error;
-  }
-  return {};
+export async function createMissionaryAccount(input: AccountInput) {
+  return createAccount(input, "missionary");
 }
 
 type DraftData = Partial<ContactInput & Omit<MinistryInput, "yearsServing"> & { yearsServing: number }>;
 
 async function saveDraft(data: DraftData): Promise<ActionResult> {
-  const session = await getSession();
-  if (session?.user.role !== "missionary") return { error: "Please sign in to continue your application." };
+  const session = await getUserSession();
+  if (!session) return signedOut;
 
   const userId = session.user.id;
   const existing = await prisma.missionaryApplication.findUnique({ where: { userId }, select: { status: true } });
-  if (existing && existing.status !== "DRAFT") return { error: "Your application has already been submitted." };
+  if (existing && existing.status !== "DRAFT") return alreadySubmitted;
 
   await prisma.missionaryApplication.upsert({
     where: { userId },
@@ -69,20 +44,27 @@ export async function saveMinistry(input: MinistryInput): Promise<ActionResult> 
 }
 
 export async function submitApplication(): Promise<ActionResult> {
-  const session = await getSession();
-  if (session?.user.role !== "missionary") return { error: "Please sign in to continue your application." };
+  const session = await getUserSession();
+  if (!session) return signedOut;
 
-  const application = await prisma.missionaryApplication.findUnique({ where: { userId: session.user.id } });
+  const userId = session.user.id;
+  const application = await prisma.missionaryApplication.findUnique({ where: { userId } });
   const complete =
     application &&
     contactSchema.safeParse(application).success &&
     ministrySchema.safeParse({ ...application, yearsServing: String(application.yearsServing) }).success;
   if (!complete) return { error: "Please complete every step before submitting." };
 
-  // Filtering on DRAFT makes a double submit a no-op instead of overwriting submittedAt.
-  const { count } = await prisma.missionaryApplication.updateMany({
-    where: { userId: session.user.id, status: "DRAFT" },
-    data: { status: "SUBMITTED", submittedAt: new Date() },
+  const submitted = await prisma.$transaction(async (tx) => {
+    // Filtering on DRAFT makes a double submit a no-op instead of overwriting submittedAt.
+    const { count } = await tx.missionaryApplication.updateMany({
+      where: { userId, status: "DRAFT" },
+      data: { status: "SUBMITTED", submittedAt: new Date() },
+    });
+    if (count === 1) {
+      await tx.user.update({ where: { id: userId }, data: { phone: application.phone, country: application.country } });
+    }
+    return count === 1;
   });
-  return count === 1 ? {} : { error: "Your application has already been submitted." };
+  return submitted ? {} : alreadySubmitted;
 }

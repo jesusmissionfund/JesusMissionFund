@@ -40,7 +40,7 @@ export function ReviewStep({
       setPending(false);
       return setServerError(result.error);
     }
-    router.push("/dashboard/missionary");
+    router.push("/dashboard");
   }
 
   return (

@@ -8,11 +8,19 @@ import type { Role } from "./permissions";
 // Cached per request so a page and its helpers share one session lookup.
 export const getSession = cache(async () => auth.api.getSession({ headers: await headers() }));
 
+export const homeFor = (role: string | null | undefined) => (role === "admin" ? "/admin" : "/dashboard");
+
 // Call this in every protected page and server action. Layout-level checks are not enough in Next.js:
 // layouts don't re-run on client navigation and pages render in parallel with them.
 export async function requireRole(role: Role) {
   const session = await getSession();
   if (!session) redirect("/signin");
-  if (session.user.role !== role) redirect("/dashboard");
+  if (session.user.role !== role) redirect(homeFor(session.user.role));
   return session;
+}
+
+// For server actions on a person's own data: admin work accounts never hold missionary or partner records.
+export async function getUserSession() {
+  const session = await getSession();
+  return session?.user.role === "user" ? session : null;
 }
