@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/lib/site";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 import { Toaster } from "@/components/ui/toast";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -17,7 +17,11 @@ export const metadata: Metadata = {
   openGraph: { type: "website", siteName },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={cn("font-sans", inter.variable)}>
       <body>
