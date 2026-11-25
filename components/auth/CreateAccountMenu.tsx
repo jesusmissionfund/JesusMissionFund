@@ -42,9 +42,9 @@ export function CreateAccountMenu({
         {children}
         <ChevronDown aria-hidden="true" className="size-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={align} className="w-72 rounded-none p-1">
+      <DropdownMenuContent align={align} className="w-72 p-1">
         {accountTypes.map(({ href, icon: Icon, title, description }) => (
-          <DropdownMenuItem key={href} render={<Link href={href} />} className="items-start gap-3 rounded-none px-3 py-3">
+          <DropdownMenuItem key={href} render={<Link href={href} />} className="items-start gap-3 px-3 py-3">
             <span className="flex size-9 shrink-0 items-center justify-center bg-secondary text-secondary-foreground">
               <Icon aria-hidden="true" className="size-4" />
             </span>

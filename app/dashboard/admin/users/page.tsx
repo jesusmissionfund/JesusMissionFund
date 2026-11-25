@@ -1,0 +1,128 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Plus, Search } from "lucide-react";
+
+import type { Prisma } from "@/app/generated/prisma/client";
+import { DashboardShell } from "@/app/dashboard/_components/DashboardShell";
+import { formatDate } from "@/lib/format";
+import { isRole } from "@/lib/permissions";
+import { prisma } from "@/lib/prisma";
+import { requireRole } from "@/lib/session";
+import { Badge } from "../_components/Badge";
+import { adminLinks } from "../links";
+import { UserActions } from "./_components/UserActions";
+import { roleLabels } from "./roles";
+
+export const metadata: Metadata = { title: "Users" };
+
+const pageSize = 25;
+
+export default async function UsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; role?: string; page?: string }>;
+}) {
+  const session = await requireRole("admin");
+  const { q = "", role, page: pageParam } = await searchParams;
+  const query = q.trim();
+  const page = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);
+
+  const where: Prisma.UserWhereInput = {
+    ...(isRole(role) && { role }),
+    ...(query && {
+      OR: [
+        { name: { contains: query, mode: "insensitive" } },
+        { email: { contains: query, mode: "insensitive" } },
+      ],
+    }),
+  };
+
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      select: { id: true, name: true, email: true, role: true, banned: true, createdAt: true },
+    }),
+    prisma.user.count({ where }),
+  ]);
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+
+  function pageHref(target: number) {
+    const params = new URLSearchParams({ ...(query && { q: query }), ...(isRole(role) && { role }), page: String(target) });
+    return `?${params}`;
+  }
+
+  return (
+    <DashboardShell role="Administrator" user={session.user} title="Users" subtitle="Everyone with an account: staff, missionaries, and partners." links={adminLinks}>
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <form className="flex flex-1 flex-col gap-2 sm:flex-row" role="search">
+          <label className="relative flex-1 sm:max-w-sm">
+            <span className="sr-only">Search by name or email</span>
+            <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle-foreground" />
+            <input name="q" defaultValue={query} placeholder="Search by name or email" className="h-10 w-full border border-input bg-card pl-9 pr-3 text-sm outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/10" />
+          </label>
+          <select name="role" defaultValue={isRole(role) ? role : ""} aria-label="Filter by role" className="h-10 border border-input bg-card px-3 text-sm outline-none focus-visible:border-brand">
+            <option value="">All roles</option>
+            {Object.entries(roleLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+          </select>
+          <button type="submit" className="h-10 border border-input bg-card px-4 text-sm font-semibold text-brand hover:bg-muted">Filter</button>
+        </form>
+        <Link href="/dashboard/admin/users/new" className="inline-flex h-10 items-center justify-center gap-2 bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-hover">
+          <Plus aria-hidden="true" className="size-4" />
+          Add staff member
+        </Link>
+      </div>
+
+      <section className="border border-border bg-card">
+        {users.length === 0 ? (
+          <p className="p-6 text-sm text-muted-foreground">No users match.</p>
+        ) : (
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-border bg-muted text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <tr>
+                <th scope="col" className="px-5 py-3 font-semibold">User</th>
+                <th scope="col" className="hidden px-5 py-3 font-semibold md:table-cell">Role</th>
+                <th scope="col" className="hidden px-5 py-3 font-semibold lg:table-cell">Joined</th>
+                <th scope="col" className="px-5 py-3"><span className="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td className="px-5 py-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-semibold">{user.name}</span>
+                      {user.banned && <Badge tone="danger">Banned</Badge>}
+                    </div>
+                    <span className="block text-muted-foreground">{user.email}</span>
+                  </td>
+                  <td className="hidden px-5 py-3 md:table-cell">{isRole(user.role) ? roleLabels[user.role] : user.role}</td>
+                  <td className="hidden px-5 py-3 text-muted-foreground lg:table-cell">{formatDate(user.createdAt)}</td>
+                  <td className="px-5 py-3 text-right">
+                    {user.id === session.user.id ? (
+                      <span className="text-xs text-subtle-foreground">You</span>
+                    ) : (
+                      <UserActions user={user} />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+
+      {pages > 1 && (
+        <nav aria-label="Pagination" className="mt-5 flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">Page {page} of {pages} · {total} users</span>
+          <div className="flex gap-2">
+            {page > 1 && <Link href={pageHref(page - 1)} className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted">Previous</Link>}
+            {page < pages && <Link href={pageHref(page + 1)} className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted">Next</Link>}
+          </div>
+        </nav>
+      )}
+    </DashboardShell>
+  );
+}

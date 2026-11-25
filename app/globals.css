@@ -41,7 +41,8 @@
   --chart-3: #587261;
   --chart-4: #c4d3bc;
   --chart-5: #d7a92d;
-  --radius: 0.625rem;
+  /* Square corners match the draft design. Illustrations that need rounding (components/partners/MomoWalkthrough.tsx) use fixed rem radii. */
+  --radius: 0rem;
   --sidebar: #ffffff;
   --sidebar-foreground: #1c2c22;
   --sidebar-primary: #174b35;

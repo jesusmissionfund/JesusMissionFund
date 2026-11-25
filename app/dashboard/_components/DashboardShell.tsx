@@ -1,30 +1,35 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Bell, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
+
+import { UserMenu } from "@/components/auth/UserMenu";
 
 type DashboardLink = { label: string; href: string };
 
-export default function DashboardShell({
+export function DashboardShell({
   role,
-  name,
+  user,
   title,
   subtitle,
   links,
+  preview = false,
   children,
 }: {
   role: "Missionary" | "Administrator" | "Giving partner";
-  name: string;
+  user: { name: string; email: string };
   title: string;
   subtitle: string;
   links: DashboardLink[];
+  preview?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="min-h-screen bg-muted text-foreground">
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-border bg-card px-5 py-6 lg:flex">
-        <Link href="/" className="flex items-center gap-3 font-semibold"><span className="flex h-10 w-10 items-center justify-center bg-secondary text-sm text-brand">JM</span><span>Jesus&apos; Mission Fund</span></Link>
+        <Link href="/" className="flex items-center gap-3 font-semibold"><Image src="/JMF_Logo-Green_NoBG.png" alt="" width={40} height={40} /><span>Jesus&apos; Mission Fund</span></Link>
         <div className="mt-10 border-y border-border py-4">
           <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-subtle-foreground">{role} portal</p>
-          <p className="mt-2 text-sm font-semibold">{name}</p>
+          <p className="mt-2 truncate text-sm font-semibold">{user.name}</p>
         </div>
         <nav aria-label={`${role} dashboard`} className="mt-5 grid gap-1">
           {links.map((link) => (
@@ -39,8 +44,8 @@ export default function DashboardShell({
       <div className="lg:pl-64">
         <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur-sm">
           <div className="mx-auto flex min-h-[72px] max-w-7xl items-center justify-between px-5 sm:px-8">
-            <div><p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">{role} dashboard</p><p className="mt-1 text-sm font-semibold">{name}</p></div>
-            <div className="flex items-center gap-4"><button type="button" aria-label="Notifications (preview)" className="flex h-10 w-10 items-center justify-center border border-border text-muted-foreground"><Bell aria-hidden="true" className="h-4 w-4" /></button><Link href="/signin" className="text-sm font-semibold text-brand">Sign in</Link></div>
+            <div><p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">{role} dashboard</p><p className="mt-1 text-sm font-semibold">{user.name}</p></div>
+            <UserMenu user={user} />
           </div>
           <nav aria-label="Dashboard sections" className="flex gap-1 overflow-x-auto border-t border-border px-5 py-2 lg:hidden">
             {links.map((link) => <Link key={link.href} href={link.href} className="shrink-0 px-3 py-2 text-xs font-medium text-muted-foreground">{link.label}</Link>)}
@@ -48,9 +53,11 @@ export default function DashboardShell({
         </header>
 
         <main className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-10">
-          <div className="mb-7 border border-border bg-accent px-4 py-3 text-xs leading-5 text-muted-foreground">
-            <span className="font-semibold text-brand">UI preview.</span> Sample information only; sign-in, saving, and notifications are not connected yet.
-          </div>
+          {preview && (
+            <div className="mb-7 border border-border bg-accent px-4 py-3 text-xs leading-5 text-muted-foreground">
+              <span className="font-semibold text-brand">UI preview.</span> Sample information only; saving and notifications are not connected yet.
+            </div>
+          )}
           <div className="mb-8"><h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{subtitle}</p></div>
           {children}
         </main>
