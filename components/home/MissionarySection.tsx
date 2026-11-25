@@ -7,7 +7,6 @@ import Image from "next/image";
 export default function MissionarySection() {
   return (
     <section className="py-20 bg-muted/30 relative overflow-hidden md:py-28">
-
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image — left on desktop */}
@@ -18,7 +17,7 @@ export default function MissionarySection() {
             transition={{ duration: 0.8 }}
             className="relative order-2 lg:order-1"
           >
-            <div className="relative overflow-hidden shadow-elevated">
+            <div className="relative overflow-hidden">
               <Image
                 src="/img5.jpg"
                 alt="Missionary discipling believers"
@@ -43,7 +42,8 @@ export default function MissionarySection() {
             </div>
 
             <h2 className="text-4xl lg:text-5xl font-semibold text-foreground mb-6 leading-[1.08] tracking-tight">
-              Focus on <span className="text-gradient font-serif italic font-normal">the call.</span>
+              Focus on{" "}
+              <span className="font-serif italic font-normal">the call.</span>
             </h2>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-4">
@@ -51,9 +51,10 @@ export default function MissionarySection() {
             </p>
 
             <p className="text-muted-foreground leading-relaxed mb-8">
-              If God has called you to the field but you need support to stay fully
-              focused on the mission, we want to stand with you. Our Missionary Support
-              Program exists to empower you to do more for the Kingdom.
+              If God has called you to the field but you need support to stay
+              fully focused on the mission, we want to stand with you. Our
+              Missionary Support Program exists to empower you to do more for
+              the Kingdom.
             </p>
 
             <Link href="/missionary" passHref>

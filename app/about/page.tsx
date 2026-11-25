@@ -73,7 +73,7 @@ export default function About() {
       <Breadcrumb />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 hero-gradient relative overflow-hidden bg-accent">
+      <section className="pt-32 pb-20 relative overflow-hidden bg-accent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -81,13 +81,12 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <div className="inline-flex items-center px-4 py-2 glass-card text-secondary text-sm font-medium mb-6">
+            <div className="inline-flex items-center px-4 py-2 text-secondary text-sm font-medium mb-6">
               <Users className="w-4 h-4 mr-2" />
               Our Story
             </div>
             <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              About{" "}
-              <span className="text-gradient">Jesus&apos; Mission Fund</span>
+              About Jesus&apos; Mission Fund
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
               For over a decade, we&apos;ve been connecting generous hearts with
@@ -108,7 +107,7 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <div className="inline-flex items-center px-4 py-2 glass-card text-secondary text-sm font-medium mb-6">
+              <div className="inline-flex items-center px-4 py-2 text-secondary text-sm font-medium mb-6">
                 <Handshake className="w-4 h-4 mr-2" />
                 Our Mission
               </div>
@@ -136,7 +135,7 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="rounded-3xl overflow-hidden shadow-elevated"
+              className="rounded-3xl overflow-hidden"
             >
               <img
                 src="/about-mission.jpg"
@@ -157,7 +156,7 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="rounded-3xl overflow-hidden shadow-elevated order-2 lg:order-1"
+              className="rounded-3xl overflow-hidden order-2 lg:order-1"
             >
               <img
                 src="/about-vision.jpg"
@@ -173,7 +172,7 @@ export default function About() {
               transition={{ duration: 0.8 }}
               className="order-1 lg:order-2"
             >
-              <div className="inline-flex items-center px-4 py-2 glass-card text-secondary text-sm font-medium mb-6">
+              <div className="inline-flex items-center px-4 py-2 text-secondary text-sm font-medium mb-6">
                 <Eye className="w-4 h-4 mr-2" />
                 Our Vision
               </div>

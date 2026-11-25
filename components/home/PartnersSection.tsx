@@ -23,7 +23,7 @@ export default function PartnersSection() {
 
             <h2 className="text-4xl lg:text-5xl font-semibold text-foreground mb-6 leading-[1.08] tracking-tight">
               Stand behind{" "}
-              <span className="text-gradient font-serif italic font-normal">
+              <span className="font-serif italic font-normal">
                 the frontline.
               </span>
             </h2>
@@ -50,7 +50,7 @@ export default function PartnersSection() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative overflow-hidden shadow-elevated">
+            <div className="relative overflow-hidden">
               <Image
                 src="/pexels-rdne-6646949.jpg"
                 alt="Partners standing together in prayer"
