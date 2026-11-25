@@ -1,0 +1,9 @@
+// Fixed-window counters for lib/rate-limit.ts, shared by better-auth's endpoints and the app's own server calls.
+model RateLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+
+  @@index([windowStart])
+  @@map("rate_limit")
+}
