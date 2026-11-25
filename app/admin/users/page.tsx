@@ -6,7 +6,7 @@ import type { Prisma } from "@/app/generated/prisma/client";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/session";
+import { requireAdmin } from "@/lib/session";
 import { Badge } from "../_components/Badge";
 import { adminLinks } from "../links";
 import { UserActions } from "./_components/UserActions";
@@ -21,7 +21,7 @@ export default async function UsersPage({
 }: {
   searchParams: Promise<{ q?: string; type?: string; page?: string }>;
 }) {
-  const session = await requireRole("admin");
+  const session = await requireAdmin();
   const { q = "", type, page: pageParam } = await searchParams;
   const query = q.trim();
   const page = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);

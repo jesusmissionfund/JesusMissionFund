@@ -5,13 +5,13 @@ import { ArrowRight, ClipboardList, HandHeart, ShieldCheck, UserRound } from "lu
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/session";
+import { requireAdmin } from "@/lib/session";
 import { adminLinks } from "./links";
 
 export const metadata: Metadata = { title: "Admin" };
 
 export default async function AdminDashboardPage() {
-  const session = await requireRole("admin");
+  const session = await requireAdmin();
 
   const [toReview, missionaries, partners, admins, latest] = await Promise.all([
     prisma.missionaryApplication.count({ where: { status: "SUBMITTED" } }),

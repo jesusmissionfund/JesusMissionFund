@@ -11,5 +11,3 @@ export const roles = {
   admin: ac.newRole(adminAc.statements),
   user: ac.newRole({ user: [], session: [] }),
 };
-
-export type Role = keyof typeof roles;

@@ -7,11 +7,11 @@ import { APIError } from "better-auth/api";
 
 import type { ActionResult } from "@/lib/action-result";
 import { auth } from "@/lib/auth";
-import { requireRole } from "@/lib/session";
+import { requireAdmin } from "@/lib/session";
 import { adminSchema, type AdminInput } from "./schema";
 
 async function onOtherUser(userId: string, call: (headers: Headers) => Promise<unknown>): Promise<ActionResult> {
-  const session = await requireRole("admin");
+  const session = await requireAdmin();
   // Stops an admin from banning or deleting themselves and losing access.
   if (session.user.id === userId) return { error: "You can't change your own account from here." };
 
@@ -44,7 +44,7 @@ export async function removeUser(userId: string) {
 }
 
 export async function createAdminAccount(input: AdminInput): Promise<ActionResult> {
-  await requireRole("admin");
+  await requireAdmin();
   const parsed = adminSchema.safeParse(input);
   if (!parsed.success) return { error: "Some details are missing or invalid." };
 
