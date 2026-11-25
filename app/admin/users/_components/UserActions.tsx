@@ -17,19 +17,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { roleLabels } from "../roles";
-import { banUser, removeUser, revokeUserSessions, setUserRole, unbanUser } from "../actions";
+import { banUser, removeUser, revokeUserSessions, unbanUser } from "../actions";
 
-type User = { id: string; name: string; role: string; banned: boolean };
+type User = { id: string; name: string; banned: boolean };
 
 export function UserActions({ user }: { user: User }) {
   const [pending, startTransition] = useTransition();
@@ -57,16 +51,6 @@ export function UserActions({ user }: { user: User }) {
           <MoreHorizontal aria-hidden="true" className="size-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Change role</DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={user.role} onValueChange={(role: string) => run(() => setUserRole(user.id, role))}>
-                {Object.entries(roleLabels).map(([role, label]) => (
-                  <DropdownMenuRadioItem key={role} value={role}>{label}</DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
           <DropdownMenuItem onClick={() => run(() => revokeUserSessions(user.id))}>Sign out everywhere</DropdownMenuItem>
           <DropdownMenuSeparator />
           {user.banned ? (
@@ -96,7 +80,7 @@ export function UserActions({ user }: { user: User }) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete {user.name}?</AlertDialogTitle>
-            <AlertDialogDescription>This permanently deletes the account and everything linked to it, including any missionary application.</AlertDialogDescription>
+            <AlertDialogDescription>This permanently deletes the account and everything linked to it, including any missionary application or partnership.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>

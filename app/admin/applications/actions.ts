@@ -16,6 +16,6 @@ export async function reviewApplication(applicationId: string, decision: Decisio
     data: { status: decision, reviewedAt: new Date() },
   });
 
-  revalidatePath("/dashboard/admin", "layout");
+  revalidatePath("/admin", "layout");
   return count === 1 ? {} : { error: "This application has already been reviewed." };
 }
