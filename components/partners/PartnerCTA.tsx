@@ -1,7 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
+import Link from "next/link";
+
+const actionClass =
+  "group inline-flex min-h-14 w-full items-center justify-center gap-2 px-8 text-base font-semibold transition-colors sm:w-auto";
 
 export default function PartnerCTA() {
   return (
@@ -42,33 +45,20 @@ export default function PartnerCTA() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-           <Button
-  asChild
-  variant="heroOutline"
-  size="xl"
-  className="group w-full sm:w-auto"
->
-  <a
-    href="/partner/join"
-    className="flex items-center gap-2 bg-green-600 text-black px-10 py-4 font-bold text-lg rounded-xl hover:bg-green-700 transition-all duration-300 transform hover:scale-105 group-hover:bg-green-700"
-  >
-Partner With Jesus&apos; Mission Fund    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-  </a>
-</Button>
-            <Button
-              asChild
-              variant="heroOutline"
-              size="xl"
-              className="group w-full sm:w-auto"
+            <Link
+              href="/signup/partner"
+              className={`${actionClass} bg-primary text-primary-foreground hover:bg-primary-hover`}
             >
-              <a
-                href="/partner/join"
-                className="flex items-center gap-2"
-              >
-                Send the Gospel Further
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </a>
-            </Button>
+              Partner With Jesus&apos; Mission Fund
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href="/signup/partner"
+              className={`${actionClass} border border-primary text-primary hover:bg-accent`}
+            >
+              Send the Gospel Further
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
 
           <div className="space-y-2">
