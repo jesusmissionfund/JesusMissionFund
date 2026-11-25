@@ -1,0 +1,70 @@
+"use client";
+import { motion } from "framer-motion";
+import { ArrowRight, Heart } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+
+export default function MissionarySection() {
+  return (
+    <section className="py-20 bg-muted/30 relative overflow-hidden md:py-28">
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Image — left on desktop */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative order-2 lg:order-1"
+          >
+            <div className="relative overflow-hidden shadow-elevated">
+              <Image
+                src="/img5.jpg"
+                alt="Missionary discipling believers"
+                width={800}
+                height={600}
+                className="w-full h-full object-cover aspect-4/3"
+              />
+            </div>
+          </motion.div>
+
+          {/* Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="order-1 lg:order-2"
+          >
+            <div className="inline-flex items-center px-0 py-2 text-secondary text-xs font-bold uppercase tracking-[0.18em] mb-5">
+              <Heart className="w-4 h-4 mr-2" />
+              For Missionaries
+            </div>
+
+            <h2 className="text-4xl lg:text-5xl font-semibold text-foreground mb-6 leading-[1.08] tracking-tight">
+              Focus on <span className="text-gradient font-serif italic font-normal">the call.</span>
+            </h2>
+
+            <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+              Are you winning souls and discipling believers for Christ?
+            </p>
+
+            <p className="text-muted-foreground leading-relaxed mb-8">
+              If God has called you to the field but you need support to stay fully
+              focused on the mission, we want to stand with you. Our Missionary Support
+              Program exists to empower you to do more for the Kingdom.
+            </p>
+
+            <Link href="/missionary" passHref>
+              <span className="group inline-flex min-h-12 items-center gap-3 rounded-md bg-[#174b35] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#103a29]">
+                Apply for support
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
