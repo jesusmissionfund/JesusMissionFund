@@ -26,7 +26,7 @@ const sections = [
 
 export default function VolunteerPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f3]">
+    <main className="min-h-screen bg-background">
       <Navbar />
       <IntakeForm
         eyebrow="Volunteer with us"

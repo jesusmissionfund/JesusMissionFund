@@ -24,7 +24,7 @@ export default function InfoSection() {
   ];
 
   return (
-    <section className="py-20 bg-linear-to-b from-white to-gray-50">
+    <section className="py-20 bg-linear-to-b from-card to-gray-50">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -42,10 +42,10 @@ export default function InfoSection() {
           {cards.map((card, index) => (
             <div 
               key={index}
-              className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+              className="group relative bg-card rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
             >
               {/* Icon Container with Gradient */}
-              <div className={`inline-flex p-4 rounded-xl bg-linear-to-br ${card.color} text-white mb-6`}>
+              <div className={`inline-flex p-4 rounded-xl bg-linear-to-br ${card.color} text-inverse-foreground mb-6`}>
                 {card.icon}
               </div>
               
@@ -65,7 +65,7 @@ export default function InfoSection() {
 
         {/* Scripture Verse */}
         <div className="mt-16 text-center">
-          <blockquote className="text-xl italic text-gray-700 max-w-2xl mx-auto p-6 bg-white/50 rounded-xl">
+          <blockquote className="text-xl italic text-gray-700 max-w-2xl mx-auto p-6 bg-card/50 rounded-xl">
             &quot;How beautiful are the feet of those who bring good news!&quot; 
             <footer className="text-gray-600 text-lg mt-2 not-italic">— Romans 10:15</footer>
           </blockquote>

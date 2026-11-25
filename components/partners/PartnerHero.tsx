@@ -5,7 +5,7 @@ import { Shield } from "lucide-react";
 
 export default function PartnerHero() {
   return (
-    <section className="pt-32 pb-24 hero-gradient relative overflow-hidden bg-green-100">
+    <section className="pt-32 pb-24 hero-gradient relative overflow-hidden bg-accent">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-0 -left-20 w-72 h-72 bg-secondary/10 rounded-full blur-3xl animate-float-delayed" />

@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
 
 const sectionFade = {
   hidden: { opacity: 0, y: 30 },
@@ -32,18 +31,10 @@ export default function MissionaryCTA() {
             If you believe this support will help you fulfill your calling more
             effectively, we invite you to apply today.
           </p>
-
-          <Button
-            asChild
-            variant="heroOutline"
-            size="xl"
-            className="group w-full sm:w-auto"
-          >
-            <Link href="/missionary/apply" className="flex items-center gap-2 rounded-md bg-[#174b35] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#103a29]">
-              Apply for support
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
+          <Link href="/missionary/apply" className="group w-full justify-center sm:w-auto flex items-center gap-2 rounded-md bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover">
+            Apply for support
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+          </Link>
         </motion.div>
       </div>
     </section>

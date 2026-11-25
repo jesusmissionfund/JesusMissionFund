@@ -73,7 +73,7 @@ export default function About() {
       <Breadcrumb />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 hero-gradient relative overflow-hidden bg-green-100">
+      <section className="pt-32 pb-20 hero-gradient relative overflow-hidden bg-accent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -149,7 +149,7 @@ export default function About() {
       </section>
 
       {/* Vision Section */}
-      <section className="py-20 bg-muted/30 bg-green-100">
+      <section className="py-20 bg-muted/30 bg-accent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div
@@ -223,7 +223,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="border border-[#dfe5dc] bg-white p-6 text-center transition-colors hover:border-[#a8b9aa]"
+                className="border border-border bg-card p-6 text-center transition-colors hover:border-input"
               >
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <value.icon className="w-7 h-7 text-primary" />
@@ -266,7 +266,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group overflow-hidden border border-[#dfe5dc] bg-white"
+                className="group overflow-hidden border border-border bg-card"
               >
                 <div className="relative w-full aspect-[4/5] overflow-hidden ">
                   <img

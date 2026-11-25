@@ -88,7 +88,7 @@ export default function SignUp() {
     <main className="min-h-screen bg-background">
       <div className="grid min-h-screen lg:grid-cols-2">
         {/* Missionary Image */}
-        <section className="relative hidden overflow-hidden bg-[#2F5D50] lg:block">
+        <section className="relative hidden overflow-hidden bg-brand lg:block">
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{
@@ -96,13 +96,13 @@ export default function SignUp() {
             }}
           />
 
-          <div className="absolute inset-0 bg-[#173B32]/75" />
+          <div className="absolute inset-0 bg-inverse/75" />
 
-          <div className="relative z-10 flex min-h-screen flex-col justify-between p-12 text-white">
+          <div className="relative z-10 flex min-h-screen flex-col justify-between p-12 text-inverse-foreground">
             <p className="text-2xl font-bold">Jesus Mission Fund</p>
 
             <div className="max-w-xl">
-              <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-white/70">
+              <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-inverse-foreground/70">
                 Join the Movement
               </p>
 
@@ -110,13 +110,13 @@ export default function SignUp() {
                 Your support can help carry the mission forward.
               </h1>
 
-              <p className="mt-6 max-w-lg text-base leading-7 text-white/80">
+              <p className="mt-6 max-w-lg text-base leading-7 text-inverse-foreground/80">
                 Become part of a growing community supporting missionaries and
                 advancing the Gospel in communities around the world.
               </p>
             </div>
 
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-inverse-foreground/60">
               © {new Date().getFullYear()} Jesus Mission Fund
             </p>
           </div>
@@ -127,11 +127,11 @@ export default function SignUp() {
           <Card className="w-full max-w-md border-0 shadow-none">
             <CardHeader className="px-0">
               {/* Mobile Logo */}
-              <p className="mb-8 text-2xl font-bold text-[#2F5D50] lg:hidden">
+              <p className="mb-8 text-2xl font-bold text-brand lg:hidden">
                 Jesus Mission Fund
               </p>
 
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#2F5D50]">
+              <p className="text-sm font-semibold uppercase tracking-wider text-brand">
                 Join the Mission
               </p>
 
@@ -301,14 +301,14 @@ export default function SignUp() {
                           I agree to the{" "}
                           <Link
                             href="/terms"
-                            className="font-medium text-[#2F5D50] hover:underline"
+                            className="font-medium text-brand hover:underline"
                           >
                             Terms of Service
                           </Link>{" "}
                           and{" "}
                           <Link
                             href="/privacy"
-                            className="font-medium text-[#2F5D50] hover:underline"
+                            className="font-medium text-brand hover:underline"
                           >
                             Privacy Policy
                           </Link>
@@ -325,7 +325,7 @@ export default function SignUp() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="group w-full bg-[#2F5D50] hover:bg-[#244A40]"
+                    className="group w-full bg-brand hover:bg-primary-hover"
                   >
                     Create Account
                     <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
@@ -337,7 +337,7 @@ export default function SignUp() {
                 Already have an account?{" "}
                 <Link
                   href="/signin"
-                  className="font-semibold text-[#2F5D50] hover:underline"
+                  className="font-semibold text-brand hover:underline"
                 >
                   Sign in
                 </Link>

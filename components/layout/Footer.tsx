@@ -18,7 +18,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#173c2c] text-white">
+    <footer className="bg-inverse text-inverse-foreground">
       <div className="max-w-7xl mx-auto px-6 py-14 md:py-16">
         <div className="grid md:grid-cols-3 gap-12">
           {/* Brand & Description */}
@@ -30,7 +30,7 @@ export default function Footer() {
             className="h-12 w-12 mb-5"
             />
             
-            <p className="text-white/65 mb-6 max-w-md leading-7">
+            <p className="text-inverse-foreground/65 mb-6 max-w-md leading-7">
               Practical support for missionaries serving their communities.
             </p>
             {/* Social Links */}
@@ -40,7 +40,7 @@ export default function Footer() {
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 border border-white/20 rounded-sm flex items-center justify-center text-white/75 hover:bg-white/10 transition-colors"
+                  className="w-10 h-10 border border-inverse-foreground/20 rounded-sm flex items-center justify-center text-inverse-foreground/75 hover:bg-card/10 transition-colors"
                 >
                   {social.icon}
                 </a>
@@ -50,13 +50,13 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.16em] mb-6 text-white/85">Quick Links</h4>
+            <h4 className="text-xs font-bold uppercase tracking-[0.16em] mb-6 text-inverse-foreground/85">Quick Links</h4>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-white/65 hover:text-white transition-colors"
+                    className="text-inverse-foreground/65 hover:text-inverse-foreground transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -67,30 +67,30 @@ export default function Footer() {
 
           {/* Contact Information */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-[0.16em] mb-6 text-white/85">Contact Us</h4>
+            <h4 className="text-xs font-bold uppercase tracking-[0.16em] mb-6 text-inverse-foreground/85">Contact Us</h4>
             <ul className="space-y-4">
               <li className="flex items-start">
-                <MapPin className="w-5 h-5 text-[#b8cdaa] mr-3 mt-1 flex-shrink-0" />
-                <span className="text-white/65">
+                <MapPin className="w-5 h-5 text-inverse-muted mr-3 mt-1 flex-shrink-0" />
+                <span className="text-inverse-foreground/65">
                   Community 8<br />
                  Adjacent Deks Educational Institute ,Tema
                 </span>
               </li>
               <li className="flex items-center">
-                <Phone className="w-5 h-5 text-[#b8cdaa] mr-3" />
-                  <a className="text-white/65 hover:text-white" href="tel:+233547537888">+233 54 753 7888</a>
+                <Phone className="w-5 h-5 text-inverse-muted mr-3" />
+                  <a className="text-inverse-foreground/65 hover:text-inverse-foreground" href="tel:+233547537888">+233 54 753 7888</a>
               </li>
               <li className="flex items-center">
-                <Mail className="w-5 h-5 text-[#b8cdaa] mr-3" />
-                  <a className="text-white/65 hover:text-white" href="mailto:Jesusmissionfund@gmail.com">Jesusmissionfund@gmail.com</a>
+                <Mail className="w-5 h-5 text-inverse-muted mr-3" />
+                  <a className="text-inverse-foreground/65 hover:text-inverse-foreground" href="mailto:Jesusmissionfund@gmail.com">Jesusmissionfund@gmail.com</a>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-7 border-t border-white/15 text-left">
-          <p className="text-white/50 text-xs">
+        <div className="mt-12 pt-7 border-t border-inverse-foreground/15 text-left">
+          <p className="text-inverse-foreground/50 text-xs">
             © {new Date().getFullYear()} Jesus&apos; Mission Fund. All rights reserved.
           </p>
         </div>

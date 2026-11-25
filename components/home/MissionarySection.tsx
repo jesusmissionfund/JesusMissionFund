@@ -57,7 +57,7 @@ export default function MissionarySection() {
             </p>
 
             <Link href="/missionary" passHref>
-              <span className="group inline-flex min-h-12 items-center gap-3 rounded-md bg-[#174b35] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#103a29]">
+              <span className="group inline-flex min-h-12 items-center gap-3 rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover">
                 Apply for support
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </span>

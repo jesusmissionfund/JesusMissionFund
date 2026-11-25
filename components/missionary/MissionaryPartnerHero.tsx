@@ -6,7 +6,7 @@ import { ArrowDown, Shield } from "lucide-react";
 
 export default function MissionaryPartnerHero() {
   return (
-    <section className="pt-32 pb-24 hero-gradient relative overflow-hidden bg-green-100">
+    <section className="pt-32 pb-24 hero-gradient relative overflow-hidden bg-accent">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -25,7 +25,7 @@ export default function MissionaryPartnerHero() {
           <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             Tell us about your ministry and the practical support that would help you serve.
           </p>
-          <Link href="#application-process" className="mt-8 inline-flex items-center gap-3 bg-[#174b35] px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#103a29]">
+          <Link href="#application-process" className="mt-8 inline-flex items-center gap-3 bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover">
             View application steps <ArrowDown aria-hidden="true" className="h-4 w-4" />
           </Link>
         </motion.div>

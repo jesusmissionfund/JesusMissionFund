@@ -49,12 +49,12 @@ export default function HowItWorks() {
                 className="text-center"
               >
                 {/* Step Number */}
-                <div className="w-16 h-16 bg-white border-4 border-green-100 rounded-full flex items-center justify-center text-2xl font-bold text-green-700 mb-6 mx-auto">
+                <div className="w-16 h-16 bg-card border-4 border-green-100 rounded-full flex items-center justify-center text-2xl font-bold text-green-700 mb-6 mx-auto">
                   {step.number}
                 </div>
                 
                 {/* Step Content */}
-                <div className="bg-white rounded-2xl shadow-lg p-8 border border-green-100">
+                <div className="bg-card rounded-2xl shadow-lg p-8 border border-green-100">
                   <div className="text-green-600 mb-4 flex justify-center">
                     {step.icon}
                   </div>
@@ -72,7 +72,7 @@ export default function HowItWorks() {
 
         {/* Impact Statement */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center bg-white rounded-full px-6 py-3 shadow-md">
+          <div className="inline-flex items-center bg-card rounded-full px-6 py-3 shadow-md">
             <span className="text-green-700 font-semibold">
               100% of donations directly support missionary work
             </span>

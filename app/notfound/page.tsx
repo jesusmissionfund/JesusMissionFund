@@ -17,12 +17,12 @@ const NotFound = () => {
   }, [pathname]);
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-white via-green-50 to-green-100">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-card via-muted to-accent">
 
       {/* Floating Background Circles */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 -right-32 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl animate-pulse delay-200" />
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-brand/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 -right-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse delay-200" />
       </div>
 
       {/* Content */}
@@ -37,18 +37,18 @@ const NotFound = () => {
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.6 }}
-          className="text-8xl md:text-9xl font-extrabold text-green-700 drop-shadow-lg"
+          className="text-8xl md:text-9xl font-extrabold text-primary drop-shadow-lg"
         >
           404
         </motion.h1>
 
         {/* Heading */}
-        <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">
+        <h2 className="mt-4 text-3xl md:text-4xl font-bold text-foreground">
           Page Not Ready Yet
         </h2>
 
         {/* Subtext */}
-        <p className="mt-3 text-gray-600 max-w-md mx-auto">
+        <p className="mt-3 text-muted-foreground max-w-md mx-auto">
           Hi 👋 we are currently working on getting this page to you.
           We appreciate your patience and support.
         </p>
@@ -61,7 +61,7 @@ const NotFound = () => {
         >
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-white font-semibold shadow-lg transition hover:bg-emerald-700"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-primary-foreground font-semibold shadow-lg transition hover:bg-primary-hover"
           >
             <Home size={18} />
             Return Home

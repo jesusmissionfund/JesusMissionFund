@@ -1,259 +1,63 @@
-"use client";
-
-import { useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { LockKeyhole } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "@/components/ui/toast";
+import { CreateAccountMenu } from "@/components/auth/CreateAccountMenu";
+import { SignInForm } from "./_components/SignInForm";
 
-const signinSchema = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-});
+export const metadata: Metadata = {
+  title: "Sign in",
+  description: "Sign in to your Jesus' Mission Fund account.",
+};
 
-type SigninInput = z.infer<typeof signinSchema>;
-
-export default function SignIn() {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const form = useForm<SigninInput>({
-    resolver: zodResolver(signinSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-    mode: "onChange",
-  });
-
-  async function onSubmit(values: SigninInput) {
-    await authClient.signIn.email({
-      email: values.email,
-      password: values.password,
-
-      callbackURL: "/dashboard",
-      fetchOptions: {
-        onError: ({ error }) => {
-          toast.add({
-            type: "error",
-            title: "Sign In Failed",
-            description: error.message,
-          });
-          console.log("Enter valid input");
-        },
-      },
-    });
-  }
-
+export default function SignInPage() {
   return (
-    <main className="min-h-screen bg-background">
-      <div className="grid min-h-screen lg:grid-cols-2">
-        {/* Missionary Image */}
-        <section className="relative hidden overflow-hidden bg-[#2F5D50] lg:block">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: "url('/images/missionary.jpg')",
-            }}
-          />
+    <main className="min-h-screen bg-background px-5 py-8 sm:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl flex-col">
+        <Link href="/" className="inline-flex w-fit items-center gap-3 text-sm font-semibold text-brand">
+          <span className="flex size-10 items-center justify-center bg-secondary">
+            <LockKeyhole aria-hidden="true" className="size-4" />
+          </span>
+          Jesus&apos; Mission Fund
+        </Link>
 
-          <div className="absolute inset-0 bg-[#173B32]/75" />
-
-          <div className="relative z-10 flex min-h-screen flex-col justify-between p-12 text-white">
-            {/* Logo */}
-            <p className="text-2xl font-bold">Jesus Mission Fund</p>
-
-            {/* Message */}
-            <div className="max-w-xl">
-              <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-white/70">
-                Together for the Mission
+        <div className="my-auto grid overflow-hidden border border-border bg-card shadow-[0_20px_70px_rgba(28,44,34,0.06)] md:grid-cols-[0.9fr_1.1fr]">
+          <div className="hidden flex-col justify-between bg-inverse p-10 text-inverse-foreground md:flex lg:p-14">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-inverse-muted">A shared mission</p>
+              <p className="mt-8 max-w-sm font-serif text-4xl leading-tight lg:text-5xl">
+                Faithful people. <span className="italic text-inverse-muted">Shared work.</span>
               </p>
-
-              <h1 className="text-4xl font-bold leading-tight xl:text-5xl">
-                Supporting those who carry the Gospel to the nations.
-              </h1>
-
-              <p className="mt-6 max-w-lg text-base leading-7 text-white/80">
-                Join a community committed to supporting missionaries,
-                empowering outreach, and helping advance God&apos;s mission.
+              <p className="mt-6 max-w-sm text-sm leading-7 text-inverse-foreground/70">
+                Sign in to continue your work with Jesus&apos; Mission Fund.
               </p>
             </div>
-
-            <p className="text-sm text-white/60">
-              © {new Date().getFullYear()} Jesus Mission Fund
+            <p className="border-t border-inverse-foreground/20 pt-5 text-xs uppercase tracking-[0.16em] text-inverse-foreground/55">
+              Fueling the Gospel · Strengthening the frontline
             </p>
           </div>
-        </section>
 
-        {/* Form Section */}
-        <section className="flex items-center justify-center px-6 py-12">
-          <Card className="w-full max-w-md border-0 shadow-none">
-            <CardHeader className="px-0">
-              {/* Mobile Logo */}
-              <p className="mb-8 text-2xl font-bold text-[#2F5D50] lg:hidden">
-                Jesus Mission Fund
-              </p>
+          <div className="px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-muted">Welcome back</p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">Sign in to your account</h1>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">Enter your details to continue.</p>
 
-              <p className="text-sm font-semibold uppercase tracking-wider text-[#2F5D50]">
-                Welcome Back
-              </p>
+            <SignInForm />
 
-              <CardTitle className="mt-2 text-3xl font-bold">
-                Sign in to your account
-              </CardTitle>
-
-              <CardDescription className="text-sm leading-6">
-                Continue supporting the mission and stay connected with Jesus
-                Mission Fund.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="px-0">
-              <form id="sign-in" onSubmit={form.handleSubmit(onSubmit)}>
-                <FieldGroup>
-                  {/* Email */}
-                  <Controller
-                    name="email"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="email">Email address</FieldLabel>
-                        <Input
-                          {...field}
-                          id="email"
-                          type="email"
-                          placeholder="you@example.com"
-                          aria-invalid={fieldState.invalid}
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-
-                  {/* Password */}
-                  <Controller
-                    name="password"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <div className="flex items-center justify-between">
-                          <FieldLabel htmlFor="password">Password</FieldLabel>
-                          <Link
-                            href="/forgot-password"
-                            className="text-sm font-medium text-[#2F5D50] hover:underline"
-                          >
-                            Forgot password?
-                          </Link>
-                        </div>
-                        <div className="relative">
-                          <Input
-                            {...field}
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Enter your password"
-                            className="pr-11"
-                            aria-invalid={fieldState.invalid}
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-1 top-1/2 -translate-y-1/2"
-                            aria-label={
-                              showPassword ? "Hide password" : "Show password"
-                            }
-                          >
-                            {showPassword ? (
-                              <EyeOff className="size-4" />
-                            ) : (
-                              <Eye className="size-4" />
-                            )}
-                          </Button>
-                        </div>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-
-                  {/* Remember */}
-                  <Field orientation="horizontal">
-                    <Checkbox id="remember" />
-                    <FieldLabel
-                      htmlFor="remember"
-                      className="font-normal text-muted-foreground"
-                    >
-                      Remember me
-                    </FieldLabel>
-                  </Field>
-
-                  {/* Submit */}
-                  <Button
-                    type="submit"
-                    className="group w-full bg-[#2F5D50] hover:bg-[#244A40]"
-                    size="lg"
-                  >
-                    Sign In
-                    <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </FieldGroup>
-              </form>
-
-              {/* Divider */}
-              <div className="my-8 flex items-center gap-4">
-                <Separator className="flex-1" />
-                <span className="text-xs text-muted-foreground">OR</span>
-                <Separator className="flex-1" />
-              </div>
-
-              {/* Google */}
-              <Button
-                type="button"
-                variant="outline"
-                size="lg"
-                className="w-full"
+            <p className="mt-7 text-center text-sm text-muted-foreground">
+              New to Jesus&apos; Mission Fund?{" "}
+              <CreateAccountMenu
+                align="center"
+                className="font-semibold text-brand underline decoration-brand/40 underline-offset-4 hover:decoration-brand focus-visible:ring-2 focus-visible:ring-ring/30"
               >
-                <span className="font-bold">G</span>
-                Continue with Google
-              </Button>
-
-              {/* Sign Up */}
-              <p className="mt-8 text-center text-sm text-muted-foreground">
-                Don&apos;t have an account?{" "}
-                <Link
-                  href="/signup"
-                  className="font-semibold text-[#2F5D50] hover:underline"
-                >
-                  Create one
-                </Link>
-              </p>
-            </CardContent>
-          </Card>
-        </section>
+                Create an account
+              </CreateAccountMenu>
+            </p>
+            <p className="mt-6 text-center text-xs text-subtle-foreground">
+              <Link href="/" className="hover:text-brand">Return to the main site</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </main>
   );
