@@ -120,6 +120,8 @@
 
 /* OPTIONAL: disable dark mode override */
 
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   min-height: 100vh;
 }

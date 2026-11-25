@@ -1,20 +1,11 @@
-
 // app/page.tsx
-import { Analytics } from '@vercel/analytics/next';
-
-import Navbar from "./components/Navbar";
-//import HeroSection from "./components/HeroSection";
-//import InfoSection from "./components/InfoSection";
-//import HowItWorks from "./components/HowItWorks";
-import CTASection from "./components/CTASection";
-import Footer from "./components/Footer";
-import LandingHero from "./components/LandingHero";
-import PartnersSection from "./components/PartnersSection";
-import MissionarySection from "./components/MissionarySection";
-//import JoinMissionSection from "./components/NavLink";
-
-
-
+import CTASection from "@/components/home/CTASection";
+import LandingHero from "@/components/home/LandingHero";
+import MissionarySection from "@/components/home/MissionarySection";
+import PartnersSection from "@/components/home/PartnersSection";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import { Analytics } from "@vercel/analytics/next";
 
 export default function LandingPage() {
   return (

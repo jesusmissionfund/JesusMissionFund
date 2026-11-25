@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" fill="#F8F8F3"/>
+  <rect x="36" y="36" width="1128" height="828" rx="24" fill="#FFFFFF" stroke="#DFE5DC" stroke-width="2"/>
+  <text x="76" y="104" fill="#587261" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="3">MOBILE MONEY GIVING</text>
+  <text x="76" y="158" fill="#1C2C22" font-family="Georgia, serif" font-size="40" font-weight="700">Give in four simple steps</text>
+  <rect x="76" y="190" width="1048" height="110" rx="16" fill="#174B35"/>
+  <text x="108" y="231" fill="#C4D3BC" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">DIAL THIS CODE ON YOUR PHONE</text>
+  <text x="108" y="278" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="34" font-weight="700">*713*9040#</text>
+  <g font-family="Arial, sans-serif">
+    <circle cx="105" cy="365" r="24" fill="#E8EEE5"/><text x="105" y="372" text-anchor="middle" fill="#315B42" font-size="18" font-weight="700">1</text>
+    <text x="150" y="360" fill="#1C2C22" font-size="20" font-weight="700">Dial the code</text><text x="150" y="388" fill="#66746A" font-size="16">Start the USSD session from your mobile phone.</text>
+    <path d="M105 397V422" stroke="#B9C7B8" stroke-width="2" stroke-dasharray="4 5"/>
+    <circle cx="105" cy="456" r="24" fill="#E8EEE5"/><text x="105" y="463" text-anchor="middle" fill="#315B42" font-size="18" font-weight="700">2</text>
+    <text x="150" y="451" fill="#1C2C22" font-size="20" font-weight="700">Select an amount</text><text x="150" y="479" fill="#66746A" font-size="16">GH₵5 · GH₵10 · GH₵50 · GH₵100 · GH₵500 · Custom amount</text>
+    <path d="M105 488V513" stroke="#B9C7B8" stroke-width="2" stroke-dasharray="4 5"/>
+    <circle cx="105" cy="547" r="24" fill="#E8EEE5"/><text x="105" y="554" text-anchor="middle" fill="#315B42" font-size="18" font-weight="700">3</text>
+    <text x="150" y="542" fill="#1C2C22" font-size="20" font-weight="700">Choose a frequency</text><text x="150" y="570" fill="#66746A" font-size="16">One-time · Weekly · Monthly · Cancel subscription</text>
+    <path d="M105 579V604" stroke="#B9C7B8" stroke-width="2" stroke-dasharray="4 5"/>
+    <circle cx="105" cy="638" r="24" fill="#E8EEE5"/><text x="105" y="645" text-anchor="middle" fill="#315B42" font-size="18" font-weight="700">4</text>
+    <text x="150" y="633" fill="#1C2C22" font-size="20" font-weight="700">Approve the payment</text><text x="150" y="661" fill="#66746A" font-size="16">Confirm the payment from the notification on your phone.</text>
+  </g>
+  <rect x="76" y="720" width="1048" height="92" rx="14" fill="#EEF1E9"/>
+  <circle cx="112" cy="766" r="17" fill="#D7E3D5"/>
+  <path d="M105 766l5 5 10-11" stroke="#315B42" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="145" y="758" fill="#315B42" font-family="Arial, sans-serif" font-size="16" font-weight="700">Your choice, your rhythm</text>
+  <text x="145" y="784" fill="#66746A" font-family="Arial, sans-serif" font-size="15">Select the frequency that works for you. You can choose one-time or set a recurring gift.</text>
+</svg>

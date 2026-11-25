@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Heart, Users, Target, Globe, Handshake, Eye } from "lucide-react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { Breadcrumb } from "../components/BreadCrumb";
+import Navbar from "../../components/layout/Navbar";
+import Footer from "../../components/layout/Footer";
+import { Breadcrumb } from "../../components/layout/BreadCrumb";
 
 const values = [
   {
@@ -74,11 +74,6 @@ export default function About() {
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 hero-gradient relative overflow-hidden bg-green-100">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-0 -left-20 w-72 h-72 bg-secondary/10 rounded-full blur-3xl animate-float-delayed" />
-        </div>
-
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -228,8 +223,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="glass-card p-6 text-center shadow-elevated border-muted/50 rounded-2xl bg-green-200/30 hover:bg-green-400/30 transition-all duration-300 ease-in-out"
+                className="border border-[#dfe5dc] bg-white p-6 text-center transition-colors hover:border-[#a8b9aa]"
               >
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <value.icon className="w-7 h-7 text-primary" />
@@ -272,7 +266,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group glass-card overflow-hidden hover:shadow-elevated transition-all duration-300 border-none rounded-2xl bg-green-200/30 hover:bg-green-400/30"
+                className="group overflow-hidden border border-[#dfe5dc] bg-white"
               >
                 <div className="relative w-full aspect-[4/5] overflow-hidden ">
                   <img
@@ -280,7 +274,6 @@ export default function About() {
                     alt={member.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
                 </div>
                 <div className="p-6 text-center">
                   <h3 className="text-lg font-semibold text-foreground">

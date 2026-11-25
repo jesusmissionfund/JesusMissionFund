@@ -1,29 +1,21 @@
-import React from 'react'
-import Footer from '../components/Footer';
-import MissionaryCTA from '../components/missionary/MissionaryCTA';
-import MissionaryHero from '../components/missionary/MissionaryHero';
-import Navbar from '../components/Navbar';
-import ApplicationProcess from '../components/missionary/ApplicationProcess';
-import MissionaryIntro from '../components/missionary/MissionaryIntro';
-import SupportIncludes from '../components/missionary/SupportIncludes';
-import WhoWeSupport from '../components/missionary/WhoWeSupport';
-//import PartnerHero from '../components/partners/PartnerHero';
-import MissionaryPartnerHero from '../components/missionary/MissionaryPartnerHero';
+import Footer from '../../components/layout/Footer';
+import MissionaryCTA from '../../components/missionary/MissionaryCTA';
+import Navbar from '../../components/layout/Navbar';
+import ApplicationProcess from '../../components/missionary/ApplicationProcess';
+import SupportIncludes from '../../components/missionary/SupportIncludes';
+import WhoWeSupport from '../../components/missionary/WhoWeSupport';
+import MissionaryPartnerHero from '../../components/missionary/MissionaryPartnerHero';
 
-function page() {
+export default function MissionaryPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
       <MissionaryPartnerHero />
+      <WhoWeSupport />
+      <SupportIncludes />
       <ApplicationProcess />
       <MissionaryCTA />
-      <MissionaryHero />
-      <MissionaryIntro />
-      <SupportIncludes />
-      <WhoWeSupport />
-        <Footer />
+      <Footer />
     </main>
   );
 }
-
-export default page
