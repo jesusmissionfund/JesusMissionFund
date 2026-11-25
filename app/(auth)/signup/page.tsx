@@ -67,7 +67,6 @@ export default function SignUp() {
       name:values.name,
       email:values.email,
       password: values.password,
-      role: "missionary",
 
 
       callbackURL:"/dashboard",

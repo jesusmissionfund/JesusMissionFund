@@ -1,19 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { NextResponse, type NextRequest } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
-export async function proxy(request: NextRequest) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if(!session) {
-        return NextResponse.redirect(new URL("/signin", request.url));
-    }
-
-    return NextResponse.next();
+// Cookie presence only; pages verify the session and role via lib/session.
+export function proxy(request: NextRequest) {
+  if (!getSessionCookie(request)) {
+    return NextResponse.redirect(new URL("/signin", request.url));
+  }
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard"], // Specify the routes the middleware applies to
+  matcher: ["/dashboard/:path*"],
 };
