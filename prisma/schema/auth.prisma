@@ -20,6 +20,8 @@ model User {
 
   missionaryApplication MissionaryApplication?
   partnerProfile        PartnerProfile?
+  auditActions          AuditLog[]             @relation("AuditActor")
+  auditEntries          AuditLog[]             @relation("AuditTarget")
 
   @@unique([email])
   @@map("user")

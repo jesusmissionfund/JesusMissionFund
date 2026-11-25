@@ -1,0 +1,27 @@
+enum AuditAction {
+  APPLICATION_APPROVED
+  APPLICATION_REJECTED
+  USER_BANNED
+  USER_UNBANNED
+  USER_SIGNED_OUT
+  USER_DELETED
+  ADMIN_CREATED
+}
+
+// Admin actions, newest first in /admin/activity. The admin's email and the person's name are copied in so an
+// entry stays readable after either account is deleted.
+model AuditLog {
+  id         String      @id @default(cuid())
+  action     AuditAction
+  actorId    String?
+  actor      User?       @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  actorEmail String
+  targetId   String?
+  target     User?       @relation("AuditTarget", fields: [targetId], references: [id], onDelete: SetNull)
+  targetName String
+  note       String?
+  createdAt  DateTime    @default(now())
+
+  @@index([createdAt])
+  @@map("audit_log")
+}
