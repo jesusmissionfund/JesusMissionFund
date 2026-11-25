@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 
 const sectionFade = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: "easeOut" as const },
+  },
 };
 
 const steps = [
@@ -48,14 +52,15 @@ export default function ApplicationProcess() {
               <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0 text-primary-foreground font-bold text-lg shadow-lg">
                 {index + 1}
               </div>
-              <div className="glass-card p-5 flex-1 hover:shadow-elevated transition-all duration-300">
+              <div className="p-5 flex-1">
                 <p className="text-foreground font-medium">{step}</p>
               </div>
             </motion.div>
           ))}
         </div>
         <p className="text-center text-muted-foreground mt-10 max-w-xl mx-auto">
-          Our team will review your application prayerfully and contact you regarding next steps.
+          Our team will review your application prayerfully and contact you
+          regarding next steps.
         </p>
       </div>
     </section>
