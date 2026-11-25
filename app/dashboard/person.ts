@@ -1,11 +1,11 @@
 import { cache } from "react";
 
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/session";
+import { requireUser } from "@/lib/session";
 
 // Every page under /dashboard is for a person (role "user"); admin work accounts are sent on to /admin.
 export const requirePerson = cache(async () => {
-  const session = await requireRole("user");
+  const session = await requireUser();
   const { missionaryApplication: application, partnerProfile: partner, ...details } = await prisma.user.findUniqueOrThrow({
     where: { id: session.user.id },
     select: {

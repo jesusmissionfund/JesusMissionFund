@@ -5,7 +5,7 @@ import type { ApplicationStatus } from "@/app/generated/prisma/client";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/session";
+import { requireAdmin } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { Badge } from "../_components/Badge";
 import { adminLinks } from "../links";
@@ -20,7 +20,7 @@ const tabs: { status: ApplicationStatus; label: string }[] = [
 ];
 
 export default async function ApplicationsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
-  const session = await requireRole("admin");
+  const session = await requireAdmin();
   const { status: requested } = await searchParams;
   const status = tabs.find((tab) => tab.status === requested)?.status ?? "SUBMITTED";
 
