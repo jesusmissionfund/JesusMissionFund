@@ -4,18 +4,40 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
+import { recordAudit } from "../audit";
 
 type Decision = "APPROVED" | "REJECTED";
 
-export async function reviewApplication(applicationId: string, decision: Decision) {
-  await requireAdmin();
+export async function reviewApplication(
+  applicationId: string,
+  decision: Decision,
+) {
+  const { user: admin } = await requireAdmin();
 
-  // Only SUBMITTED applications can be decided, so two admins acting at once can't overwrite each other.
-  const { count } = await prisma.missionaryApplication.updateMany({
-    where: { id: applicationId, status: "SUBMITTED" },
-    data: { status: decision, reviewedAt: new Date() },
+  const reviewed = await prisma.$transaction(async (tx) => {
+    // Only SUBMITTED applications can be decided, so two admins acting at once can't overwrite each other.
+    const { count } = await tx.missionaryApplication.updateMany({
+      where: { id: applicationId, status: "SUBMITTED" },
+      data: { status: decision, reviewedAt: new Date() },
+    });
+    if (count === 0) return false;
+
+    const { user } = await tx.missionaryApplication.findUniqueOrThrow({
+      where: { id: applicationId },
+      select: { user: { select: { id: true, name: true } } },
+    });
+    await recordAudit(
+      admin,
+      decision === "APPROVED" ? "APPLICATION_APPROVED" : "APPLICATION_REJECTED",
+      user,
+      undefined,
+      tx,
+    );
+    return true;
   });
 
   revalidatePath("/admin", "layout");
-  return count === 1 ? {} : { error: "This application has already been reviewed." };
+  return reviewed
+    ? {}
+    : { error: "This application has already been reviewed." };
 }
