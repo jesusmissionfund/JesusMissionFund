@@ -1,11 +1,11 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
+import { isRole } from "@/lib/permissions";
+import { getSession } from "@/lib/session";
 
 export default async function DashboardPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/signin");
+  const session = await getSession();
+  if (!session || !isRole(session.user.role)) redirect("/signin");
 
   redirect(`/dashboard/${session.user.role}`);
 }
