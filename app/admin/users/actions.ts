@@ -5,16 +5,14 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { APIError } from "better-auth/api";
 
+import type { ActionResult } from "@/lib/action-result";
 import { auth } from "@/lib/auth";
-import { isRole } from "@/lib/permissions";
 import { requireRole } from "@/lib/session";
-import { staffSchema, type StaffInput } from "./schema";
-
-type ActionResult = { error?: string };
+import { adminSchema, type AdminInput } from "./schema";
 
 async function onOtherUser(userId: string, call: (headers: Headers) => Promise<unknown>): Promise<ActionResult> {
   const session = await requireRole("admin");
-  // Stops an admin from demoting, banning or deleting themselves and losing access.
+  // Stops an admin from banning or deleting themselves and losing access.
   if (session.user.id === userId) return { error: "You can't change your own account from here." };
 
   try {
@@ -23,13 +21,8 @@ async function onOtherUser(userId: string, call: (headers: Headers) => Promise<u
     if (error instanceof APIError) return { error: error.message };
     throw error;
   }
-  revalidatePath("/dashboard/admin", "layout");
+  revalidatePath("/admin", "layout");
   return {};
-}
-
-export async function setUserRole(userId: string, role: string) {
-  if (!isRole(role)) return { error: "Unknown role." };
-  return onOtherUser(userId, (headers) => auth.api.setRole({ body: { userId, role }, headers }));
 }
 
 export async function banUser(userId: string, banReason: string) {
@@ -50,9 +43,9 @@ export async function removeUser(userId: string) {
   return onOtherUser(userId, (headers) => auth.api.removeUser({ body: { userId }, headers }));
 }
 
-export async function createStaffMember(input: StaffInput): Promise<ActionResult> {
+export async function createAdminAccount(input: AdminInput): Promise<ActionResult> {
   await requireRole("admin");
-  const parsed = staffSchema.safeParse(input);
+  const parsed = adminSchema.safeParse(input);
   if (!parsed.success) return { error: "Some details are missing or invalid." };
 
   try {
@@ -61,6 +54,6 @@ export async function createStaffMember(input: StaffInput): Promise<ActionResult
     if (error instanceof APIError) return { error: error.message };
     throw error;
   }
-  revalidatePath("/dashboard/admin", "layout");
-  redirect("/dashboard/admin/users");
+  revalidatePath("/admin", "layout");
+  redirect("/admin/users");
 }

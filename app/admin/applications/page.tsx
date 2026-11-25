@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import type { ApplicationStatus } from "@/app/generated/prisma/client";
-import { DashboardShell } from "@/app/dashboard/_components/DashboardShell";
+import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
@@ -31,7 +31,7 @@ export default async function ApplicationsPage({ searchParams }: { searchParams:
   });
 
   return (
-    <DashboardShell role="Administrator" user={session.user} title="Missionary applications" subtitle="Review submitted applications. Approved missionaries get access to their portal." links={adminLinks}>
+    <DashboardShell label="Admin" user={session.user} title="Missionary applications" subtitle="Review submitted applications. Approved missionaries get access to their portal." links={adminLinks}>
       <nav aria-label="Application status" className="mb-5 flex gap-1 border-b border-border">
         {tabs.map((tab) => (
           <Link

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ClipboardList, HandHeart, ShieldCheck, UserRound } from "lucide-react";
 
-import { DashboardShell } from "@/app/dashboard/_components/DashboardShell";
+import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
@@ -13,10 +13,10 @@ export const metadata: Metadata = { title: "Admin" };
 export default async function AdminDashboardPage() {
   const session = await requireRole("admin");
 
-  const [toReview, missionaries, partners, staff, latest] = await Promise.all([
+  const [toReview, missionaries, partners, admins, latest] = await Promise.all([
     prisma.missionaryApplication.count({ where: { status: "SUBMITTED" } }),
     prisma.missionaryApplication.count({ where: { status: "APPROVED" } }),
-    prisma.user.count({ where: { role: "partner" } }),
+    prisma.partnerProfile.count({ where: { status: "ACTIVE" } }),
     prisma.user.count({ where: { role: "admin" } }),
     prisma.missionaryApplication.findMany({
       where: { status: "SUBMITTED" },
@@ -27,14 +27,14 @@ export default async function AdminDashboardPage() {
   ]);
 
   const stats = [
-    { label: "Applications to review", value: toReview, icon: ClipboardList, href: "/dashboard/admin/applications" },
-    { label: "Approved missionaries", value: missionaries, icon: UserRound, href: "/dashboard/admin/applications?status=APPROVED" },
-    { label: "Partners", value: partners, icon: HandHeart, href: "/dashboard/admin/users?role=partner" },
-    { label: "Staff", value: staff, icon: ShieldCheck, href: "/dashboard/admin/users?role=admin" },
+    { label: "Applications to review", value: toReview, icon: ClipboardList, href: "/admin/applications" },
+    { label: "Approved missionaries", value: missionaries, icon: UserRound, href: "/admin/applications?status=APPROVED" },
+    { label: "Partners", value: partners, icon: HandHeart, href: "/admin/users?type=partner" },
+    { label: "Admin accounts", value: admins, icon: ShieldCheck, href: "/admin/users?type=admin" },
   ];
 
   return (
-    <DashboardShell role="Administrator" user={session.user} title="Overview" subtitle="Review applications and manage the people using the platform." links={adminLinks}>
+    <DashboardShell label="Admin" user={session.user} title="Overview" subtitle="Review applications and manage the people using the platform." links={adminLinks}>
       <div className="space-y-8">
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Summary">
           {stats.map(({ label, value, icon: Icon, href }) => (
@@ -54,7 +54,7 @@ export default async function AdminDashboardPage() {
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-muted">Missionary intake</p>
               <h2 className="mt-2 text-xl font-semibold">Waiting longest</h2>
             </div>
-            <Link href="/dashboard/admin/applications" className="inline-flex items-center gap-1 text-sm font-semibold text-brand">
+            <Link href="/admin/applications" className="inline-flex items-center gap-1 text-sm font-semibold text-brand">
               All applications <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </div>

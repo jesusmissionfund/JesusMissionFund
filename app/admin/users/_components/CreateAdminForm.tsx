@@ -6,20 +6,20 @@ import { useForm } from "react-hook-form";
 
 import { FormAlert, PasswordField, SubmitButton, TextField } from "@/components/forms/fields";
 import { FieldGroup } from "@/components/ui/field";
-import { createStaffMember } from "../actions";
-import { staffSchema, type StaffInput } from "../schema";
+import { createAdminAccount } from "../actions";
+import { adminSchema, type AdminInput } from "../schema";
 
-export function CreateStaffForm() {
+export function CreateAdminForm() {
   const [serverError, setServerError] = useState("");
-  const form = useForm<StaffInput>({
-    resolver: zodResolver(staffSchema),
+  const form = useForm<AdminInput>({
+    resolver: zodResolver(adminSchema),
     defaultValues: { name: "", email: "", password: "" },
     mode: "onTouched",
   });
 
-  async function onSubmit(values: StaffInput) {
+  async function onSubmit(values: AdminInput) {
     setServerError("");
-    const result = await createStaffMember(values);
+    const result = await createAdminAccount(values);
     if (result?.error) setServerError(result.error);
   }
 
@@ -30,7 +30,7 @@ export function CreateStaffForm() {
         <TextField control={form.control} name="email" label="Email address" type="email" autoComplete="off" />
         <PasswordField control={form.control} name="password" label="Temporary password" autoComplete="new-password" />
         <FormAlert>{serverError}</FormAlert>
-        <SubmitButton pending={form.formState.isSubmitting}>Create staff account</SubmitButton>
+        <SubmitButton pending={form.formState.isSubmitting}>Create admin account</SubmitButton>
       </FieldGroup>
     </form>
   );

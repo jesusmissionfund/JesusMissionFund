@@ -1,5 +1,5 @@
-// Creates a new staff (admin) account. Needed once to bootstrap the first admin; after that, admins add
-// staff from /dashboard/admin/users/new.
+// Creates a new admin account. Needed once to bootstrap the first admin; after that, admins add
+// more from /admin/users/new.
 // Usage: pnpm tsx scripts/create-admin.ts --email you@example.org --password '...' [--name "JMF Support"]
 import "dotenv/config";
 import { parseArgs } from "node:util";
