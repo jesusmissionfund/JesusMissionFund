@@ -1,0 +1,28 @@
+enum ApplicationStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+// Contact fields are the applicant's working copy while a draft and a record of what was sent once submitted;
+// the user's own phone and country are updated from them on submit.
+model MissionaryApplication {
+  id            String            @id @default(cuid())
+  userId        String            @unique
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status        ApplicationStatus @default(DRAFT)
+  phone         String?
+  country       String?
+  region        String?
+  church        String?
+  yearsServing  Int?
+  ministryFocus String?
+  submittedAt   DateTime?
+  reviewedAt    DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([status])
+  @@map("missionary_application")
+}

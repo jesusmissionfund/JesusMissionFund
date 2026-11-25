@@ -1,16 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
-generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
-}
-
-datasource db {
-  provider = "postgresql"
-}
+// Tables owned by better-auth and its admin plugin; its columns must keep the names it expects.
 
 model User {
   id            String    @id
@@ -22,12 +10,16 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-  role          String    @default("partner")
+  role          String    @default("user")
   banned        Boolean   @default(false)
   banReason     String?
   banExpires    DateTime?
+  // Current contact details, shared by every form the person fills in. Forms are prefilled from them.
+  phone         String?
+  country       String?
 
   missionaryApplication MissionaryApplication?
+  partnerProfile        PartnerProfile?
 
   @@unique([email])
   @@map("user")
@@ -82,31 +74,4 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
-}
-
-enum ApplicationStatus {
-  DRAFT
-  SUBMITTED
-  APPROVED
-  REJECTED
-}
-
-model MissionaryApplication {
-  id            String            @id @default(cuid())
-  userId        String            @unique
-  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status        ApplicationStatus @default(DRAFT)
-  phone         String?
-  country       String?
-  region        String?
-  church        String?
-  yearsServing  Int?
-  ministryFocus String?
-  submittedAt   DateTime?
-  reviewedAt    DateTime?
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-
-  @@index([status])
-  @@map("missionary_application")
 }

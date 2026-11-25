@@ -1,0 +1,20 @@
+enum PartnerStatus {
+  DRAFT
+  ACTIVE
+}
+
+// Fields are nullable while the profile is a draft.
+model PartnerProfile {
+  id              String        @id @default(cuid())
+  userId          String        @unique
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status          PartnerStatus @default(DRAFT)
+  frequency       String?
+  amount          String?
+  supportInterest String?
+  message         String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("partner_profile")
+}
