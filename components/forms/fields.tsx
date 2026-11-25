@@ -2,12 +2,17 @@
 
 import { useState, type ComponentProps, type ReactNode } from "react";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
-import { Controller, type Control, type FieldValues, type Path } from "react-hook-form";
+import {
+  Controller,
+  type Control,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 const controlClass =
   "h-12 w-full border border-input bg-card px-4 text-sm text-foreground outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/10 aria-invalid:border-destructive";
@@ -30,7 +35,9 @@ export function TextField<T extends FieldValues>({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name} className="text-foreground/85">{label}</FieldLabel>
+          <FieldLabel htmlFor={name} className="text-foreground/85">
+            {label}
+          </FieldLabel>
           <Input
             {...inputProps}
             {...field}
@@ -58,7 +65,9 @@ export function SelectField<T extends FieldValues>({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name} className="text-foreground/85">{label}</FieldLabel>
+          <FieldLabel htmlFor={name} className="text-foreground/85">
+            {label}
+          </FieldLabel>
           <select
             {...field}
             value={field.value ?? ""}
@@ -66,8 +75,12 @@ export function SelectField<T extends FieldValues>({
             aria-invalid={fieldState.invalid}
             className={controlClass}
           >
-            <option value="" disabled>Select an option</option>
-            {options.map((option) => <option key={option}>{option}</option>)}
+            <option value="" disabled>
+              Select an option
+            </option>
+            {options.map((option) => (
+              <option key={option}>{option}</option>
+            ))}
           </select>
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
@@ -88,7 +101,9 @@ export function TextareaField<T extends FieldValues>({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name} className="text-foreground/85">{label}</FieldLabel>
+          <FieldLabel htmlFor={name} className="text-foreground/85">
+            {label}
+          </FieldLabel>
           <textarea
             rows={4}
             {...textareaProps}
@@ -119,7 +134,9 @@ export function PasswordField<T extends FieldValues>({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name} className="text-foreground/85">{label}</FieldLabel>
+          <FieldLabel htmlFor={name} className="text-foreground/85">
+            {label}
+          </FieldLabel>
           <div className="relative">
             <Input
               {...field}
@@ -137,7 +154,11 @@ export function PasswordField<T extends FieldValues>({
               aria-label={visible ? "Hide password" : "Show password"}
               className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground"
             >
-              {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              {visible ? (
+                <EyeOff className="size-4" />
+              ) : (
+                <Eye className="size-4" />
+              )}
             </Button>
           </div>
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -150,13 +171,22 @@ export function PasswordField<T extends FieldValues>({
 export function FormAlert({ children }: { children: ReactNode }) {
   if (!children) return null;
   return (
-    <p role="alert" className="border-l-2 border-destructive bg-destructive-muted px-4 py-3 text-sm text-destructive">
+    <p
+      role="alert"
+      className="border-l-2 border-destructive bg-destructive-muted px-4 py-3 text-sm text-destructive"
+    >
       {children}
     </p>
   );
 }
 
-export function SubmitButton({ pending, children }: { pending: boolean; children: ReactNode }) {
+export function SubmitButton({
+  pending,
+  children,
+}: {
+  pending: boolean;
+  children: ReactNode;
+}) {
   return (
     <Button
       type="submit"
