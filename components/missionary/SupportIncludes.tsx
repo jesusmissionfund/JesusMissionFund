@@ -46,9 +46,9 @@ export default function SupportIncludes() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="border border-[#dfe5dc] bg-white p-7 text-center"
+              className="border border-border bg-card p-7 text-center"
             >
-              <div className="w-12 h-12 rounded-full bg-[#e8eee5] flex items-center justify-center mx-auto mb-5">
+              <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mx-auto mb-5">
                 <item.icon className="w-8 h-8 text-primary" />
               </div>
               <p className="text-foreground font-medium leading-relaxed">{item.text}</p>

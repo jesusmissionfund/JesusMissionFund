@@ -40,7 +40,7 @@ const sections = [
 
 export default function MissionaryApplicationPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f3]">
+    <main className="min-h-screen bg-background">
       <Navbar />
       <IntakeForm
         eyebrow="Missionary application"

@@ -26,7 +26,7 @@ const sections = [
 
 export default function PartnerJoinPage() {
   return (
-    <main className="min-h-screen bg-[#f8f8f3]">
+    <main className="min-h-screen bg-background">
       <Navbar />
       <IntakeForm
         eyebrow="Giving partner registration"

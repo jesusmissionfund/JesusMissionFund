@@ -46,7 +46,7 @@ export default function WhoWeSupport() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="flex items-start gap-4 border border-[#dfe5dc] bg-white p-5"
+              className="flex items-start gap-4 border border-border bg-card p-5"
             >
               <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
               <span className="text-foreground font-medium">{item}</span>
