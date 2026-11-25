@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, ClipboardCheck, FilePlus2, MapPin } from "lucide-react";
-import DashboardShell from "../../../components/dashboard/DashboardShell";
+import { DashboardShell } from "@/app/dashboard/_components/DashboardShell";
+import { formatDate } from "@/lib/format";
+import { requireMissionary } from "./require-missionary";
 
 const links = [
   { label: "Overview", href: "/dashboard/missionary" },
@@ -9,9 +11,35 @@ const links = [
   { label: "Submit a report", href: "/dashboard/missionary/reports/new" },
 ];
 
-export default function MissionaryDashboardPage() {
+export default async function MissionaryDashboardPage() {
+  const { session, application } = await requireMissionary();
+  const { name } = session.user;
+
+  if (application.status !== "APPROVED") {
+    return (
+      <DashboardShell role="Missionary" user={session.user} title={`Welcome, ${name}.`} subtitle="Your missionary application" links={links.slice(0, 1)}>
+        <section className="max-w-2xl border border-border bg-card p-6 sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-muted">Application status</p>
+          {application.status === "SUBMITTED" ? (
+            <>
+              <h2 className="mt-3 text-2xl font-semibold">Under review</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                Our team will review your application and follow up. Approved missionaries receive access to their portal.
+              </p>
+              {application.submittedAt && (
+                <p className="mt-4 text-xs text-subtle-foreground">Submitted {formatDate(application.submittedAt)}</p>
+              )}
+            </>
+          ) : (
+            <h2 className="mt-3 text-2xl font-semibold">Not approved</h2>
+          )}
+        </section>
+      </DashboardShell>
+    );
+  }
+
   return (
-    <DashboardShell role="Missionary" name="Samuel A." title="Welcome back, Samuel." subtitle="A place to keep your ministry details current and share updates with the team." links={links}>
+    <DashboardShell role="Missionary" user={session.user} preview title={`Welcome back, ${name}.`} subtitle="A place to keep your ministry details current and share updates with the team." links={links}>
       <div className="grid gap-5 xl:grid-cols-[1.35fr_0.65fr]">
         <div className="space-y-5">
           <section className="border border-border bg-card p-6 sm:p-8">

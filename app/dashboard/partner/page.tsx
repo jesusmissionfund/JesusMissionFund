@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, HeartHandshake, ReceiptText } from "lucide-react";
-import DashboardShell from "../../../components/dashboard/DashboardShell";
+import { DashboardShell } from "@/app/dashboard/_components/DashboardShell";
+import { requireRole } from "@/lib/session";
 
 const links = [
   { label: "Overview", href: "/dashboard/partner" },
@@ -8,9 +9,11 @@ const links = [
   { label: "My details", href: "#details" },
 ];
 
-export default function PartnerDashboardPage() {
+export default async function PartnerDashboardPage() {
+  const session = await requireRole("partner");
+
   return (
-    <DashboardShell role="Giving partner" name="Alex D." title="Thank you for standing with the mission." subtitle="A future partner portal can keep your giving preferences, receipts, and updates together." links={links}>
+    <DashboardShell role="Giving partner" user={session.user} preview title="Thank you for standing with the mission." subtitle="A future partner portal can keep your giving preferences, receipts, and updates together." links={links}>
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-5">
           <section className="border border-border bg-card p-6 sm:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-muted">Partner status</p><h2 className="mt-3 text-2xl font-semibold">Giving partner</h2><p className="mt-2 text-sm text-muted-foreground">Together, we help practical support reach missionaries.</p></div><HeartHandshake aria-hidden="true" className="h-6 w-6 text-brand" /></div><div className="mt-6 grid gap-4 border-t border-border pt-5 sm:grid-cols-2"><div><p className="text-xs uppercase tracking-[0.12em] text-subtle-foreground">Preferred frequency</p><p className="mt-2 font-semibold">Monthly</p></div><div><p className="text-xs uppercase tracking-[0.12em] text-subtle-foreground">Giving method</p><p className="mt-2 font-semibold">Mobile money</p></div></div></section>

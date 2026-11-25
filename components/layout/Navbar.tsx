@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CreateAccountMenu } from "@/components/auth/CreateAccountMenu";
+import { UserMenu } from "@/components/auth/UserMenu";
+import { authClient } from "@/lib/auth-client";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -19,6 +21,7 @@ const navLinks = [
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session, isPending } = authClient.useSession();
 
   const linkClass = (href: string) =>
     cn(
@@ -49,11 +52,19 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden shrink-0 items-center gap-5 lg:flex">
-          <Link href="/signin" aria-current={pathname === "/signin" ? "page" : undefined} className={linkClass("/signin")}>
-            Sign in
-          </Link>
-          <CreateAccountMenu className="min-h-11 justify-center gap-2 bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2" />
+        <div className="hidden min-w-40 shrink-0 items-center justify-end gap-5 lg:flex">
+          {session ? (
+            <UserMenu user={session.user} />
+          ) : (
+            !isPending && (
+              <>
+                <Link href="/signin" aria-current={pathname === "/signin" ? "page" : undefined} className={linkClass("/signin")}>
+                  Sign in
+                </Link>
+                <CreateAccountMenu className="min-h-11 justify-center gap-2 bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2" />
+              </>
+            )
+          )}
         </div>
 
         <button
@@ -85,12 +96,24 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <div className="flex items-center gap-5 pt-5">
-              <Link href="/signin" onClick={() => setIsMenuOpen(false)} className="inline-flex min-h-11 items-center text-[15px] font-medium text-brand">
-                Sign in
-              </Link>
-              <CreateAccountMenu className="min-h-11 flex-1 justify-center gap-2 bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover" />
-            </div>
+            {session ? (
+              <div className="flex items-center justify-between gap-4 pt-5">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-foreground">{session.user.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{session.user.email}</p>
+                </div>
+                <UserMenu user={session.user} />
+              </div>
+            ) : (
+              !isPending && (
+                <div className="flex items-center gap-5 pt-5">
+                  <Link href="/signin" onClick={() => setIsMenuOpen(false)} className="inline-flex min-h-11 items-center text-[15px] font-medium text-brand">
+                    Sign in
+                  </Link>
+                  <CreateAccountMenu className="min-h-11 flex-1 justify-center gap-2 bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover" />
+                </div>
+              )
+            )}
           </div>
         </div>
       )}
