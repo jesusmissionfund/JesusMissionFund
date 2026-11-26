@@ -7,8 +7,17 @@ import { after } from "next/server";
 import { prisma } from "./prisma";
 import { ac, roles } from "./permissions";
 import { consumeRateLimit } from "./rate-limit";
-import { sendEmail } from "./email";
-import { passwordResetEmail } from "./email-templates";
+import { sendEmail, type Email } from "./email";
+import { passwordResetEmail, verificationEmail } from "./email-templates";
+
+// Sent after the response so timing doesn't reveal whether the account exists.
+function sendAfterResponse(email: Email) {
+  after(() =>
+    sendEmail(email).catch((error) =>
+      console.error(`"${email.subject}" email failed`, error),
+    ),
+  );
+}
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -18,17 +27,18 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
     revokeSessionsOnPasswordReset: true,
-    sendResetPassword: async ({ user, url }) => {
-      // Sent after the response so timing doesn't reveal whether the account exists.
-      after(() =>
-        sendEmail({
-          to: user.email,
-          ...passwordResetEmail(user.name, url),
-        }).catch((error) =>
-          console.error("Password reset email failed", error),
-        ),
-      );
-    },
+    sendResetPassword: async ({ user, url }) =>
+      sendAfterResponse({
+        to: user.email,
+        ...passwordResetEmail(user.name, url),
+      }),
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) =>
+      sendAfterResponse({
+        to: user.email,
+        ...verificationEmail(user.name, url),
+      }),
   },
   rateLimit: {
     // Stored in the database: the memory store isn't shared between server instances.
@@ -37,6 +47,7 @@ export const auth = betterAuth({
     customRules: {
       "/sign-in/email": { window: 15 * 60, max: 20 },
       "/request-password-reset": { window: 15 * 60, max: 10 },
+      "/send-verification-email": { window: 15 * 60, max: 5 },
       // Checked on every page view; counting it would write to the database each time.
       "/get-session": false,
     },

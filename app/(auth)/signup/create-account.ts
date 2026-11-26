@@ -75,6 +75,10 @@ export async function createAccount(
       body: { email, password },
       headers: await headers(),
     });
+    if (!existing)
+      await auth.api.sendVerificationEmail({
+        body: { email, callbackURL: "/dashboard" },
+      });
   } catch (error) {
     if (
       existing &&

@@ -12,6 +12,7 @@ export const requirePerson = cache(async () => {
   } = await prisma.user.findUniqueOrThrow({
     where: { id: session.user.id },
     select: {
+      emailVerified: true,
       phone: true,
       country: true,
       missionaryApplication: true,
