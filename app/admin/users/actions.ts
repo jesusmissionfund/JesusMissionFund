@@ -20,11 +20,10 @@ async function onOtherUser(
   note?: string,
 ): Promise<ActionResult> {
   const { user: admin } = await requireAdmin();
-  // Stops an admin from banning or deleting themselves and losing access.
   if (admin.id === userId)
     return { error: "You can't change your own account from here." };
 
-  // Read before the call so a deleted user's name can still be recorded.
+  // Read before the call so a deleted user's name can still be logged.
   const target = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, name: true },
@@ -37,7 +36,6 @@ async function onOtherUser(
     if (error instanceof APIError) return { error: error.message };
     throw error;
   }
-  // A deleted user can't be linked to, so that entry keeps only the name.
   await recordAudit(
     admin,
     action,

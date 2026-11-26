@@ -3,7 +3,6 @@ enum PartnerStatus {
   ACTIVE
 }
 
-// Fields are nullable while the profile is a draft.
 model PartnerProfile {
   id              String        @id @default(cuid())
   userId          String        @unique

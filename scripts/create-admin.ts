@@ -1,5 +1,3 @@
-// Creates a new admin account. Needed once to bootstrap the first admin; after that, admins add
-// more from /admin/users/new.
 // Usage: pnpm tsx scripts/create-admin.ts --email you@example.org --password '...' [--name "JMF Support"]
 import "dotenv/config";
 import { parseArgs } from "node:util";
@@ -24,10 +22,14 @@ const { values } = parseArgs({
 async function main() {
   const parsed = input.safeParse(values);
   if (!parsed.success) {
-    throw new Error(parsed.error.issues.map((issue) => issue.message).join("\n"));
+    throw new Error(
+      parsed.error.issues.map((issue) => issue.message).join("\n"),
+    );
   }
 
-  const { user } = await auth.api.createUser({ body: { ...parsed.data, role: "admin" } });
+  const { user } = await auth.api.createUser({
+    body: { ...parsed.data, role: "admin" },
+  });
   console.log(`Created admin ${user.email} (${user.id})`);
 }
 

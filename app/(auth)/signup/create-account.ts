@@ -12,11 +12,9 @@ type SignupPath = "missionary" | "partner";
 
 const attemptWindow = 15 * 60;
 
-// Server calls skip better-auth's own limiter, and this form also signs in existing accounts, so it is limited
-// here: per IP against one source trying many emails, per email against many sources trying one account.
+// Server calls skip better-auth's rate limiter, so it's applied here.
 async function tooManyAttempts(email: string) {
   const requestHeaders = await headers();
-  // Without a trusted IP header (e.g. a misconfigured proxy) everyone shares this bucket; the per-email limit still holds.
   const ip = getIP(requestHeaders, auth.options) ?? "unknown";
   for (const [key, max] of [
     [`signup-ip:${ip}`, 10],
@@ -35,14 +33,13 @@ async function tooManyAttempts(email: string) {
   return null;
 }
 
-// An empty draft for the chosen path is how the person's intent is kept until they fill it in.
 async function startDraft(userId: string, path: SignupPath) {
   const args = { where: { userId }, create: { userId }, update: {} };
   if (path === "missionary") await prisma.missionaryApplication.upsert(args);
   else await prisma.partnerProfile.upsert(args);
 }
 
-// Deliberately not a server action, so the client can't choose what gets created.
+// Not a server action, so the client can't choose what gets created.
 export async function createAccount(
   input: AccountInput,
   path: SignupPath,
@@ -65,11 +62,9 @@ export async function createAccount(
 
   let userId = existing?.id;
   try {
-    // People often come back to "create account" to resume an unfinished sign-up, so matching credentials sign
-    // them in instead. The page then resumes their flow or sends them to their dashboard.
+    // Matching credentials sign in, so an unfinished sign-up can be resumed.
     if (!userId) {
-      // createUser (admin plugin) is the only way to set a role at creation; it skips the admin-session check
-      // because no request headers are passed.
+      // With no headers passed, createUser sets the role without needing an admin session.
       ({
         user: { id: userId },
       } = await auth.api.createUser({
