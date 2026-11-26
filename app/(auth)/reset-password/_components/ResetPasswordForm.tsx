@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { FieldGroup } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
@@ -13,31 +12,22 @@ import {
   PasswordField,
   SubmitButton,
 } from "@/components/forms/fields";
-import { accountSchema } from "@/app/(auth)/signup/schema";
-
-const resetPasswordSchema = z
-  .object({
-    password: accountSchema.shape.password,
-    confirmPassword: z.string(),
-  })
-  .refine((values) => values.password === values.confirmPassword, {
-    message: "The passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+import {
+  newPasswordSchema,
+  type NewPasswordInput,
+} from "@/app/(auth)/signup/schema";
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const [serverError, setServerError] = useState("");
   const [done, setDone] = useState(false);
 
-  const form = useForm<ResetPasswordInput>({
-    resolver: zodResolver(resetPasswordSchema),
+  const form = useForm<NewPasswordInput>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: { password: "", confirmPassword: "" },
     mode: "onTouched",
   });
 
-  async function onSubmit({ password }: ResetPasswordInput) {
+  async function onSubmit({ password }: NewPasswordInput) {
     setServerError("");
     try {
       const { error } = await authClient.resetPassword({

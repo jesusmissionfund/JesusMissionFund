@@ -48,6 +48,7 @@ export const auth = betterAuth({
       "/sign-in/email": { window: 15 * 60, max: 20 },
       "/request-password-reset": { window: 15 * 60, max: 10 },
       "/send-verification-email": { window: 15 * 60, max: 5 },
+      "/change-password": { window: 15 * 60, max: 10 },
       // Checked on every page view; counting it would write to the database each time.
       "/get-session": false,
     },
