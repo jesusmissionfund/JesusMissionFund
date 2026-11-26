@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { CreateAccountMenu } from "@/components/auth/CreateAccountMenu";
 import { getSession, homeFor } from "@/lib/session";
 import { AuthShell } from "../_components/AuthShell";
+import { SignInAside } from "../_components/SignInAside";
 import { SignInForm } from "./_components/SignInForm";
 
 export const metadata: Metadata = {
@@ -17,27 +18,16 @@ export default async function SignInPage() {
   if (session) redirect(homeFor(session.user.role));
 
   return (
-    <AuthShell
-      aside={
-        <>
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-inverse-muted">A shared mission</p>
-            <p className="mt-8 max-w-sm font-serif text-4xl leading-tight lg:text-5xl">
-              Faithful people. <span className="italic text-inverse-muted">Shared work.</span>
-            </p>
-            <p className="mt-6 max-w-sm text-sm leading-7 text-inverse-foreground/70">
-              Sign in to continue your work with Jesus&apos; Mission Fund.
-            </p>
-          </div>
-          <p className="border-t border-inverse-foreground/20 pt-5 text-xs uppercase tracking-[0.16em] text-inverse-foreground/55">
-            Fueling the Gospel · Strengthening the frontline
-          </p>
-        </>
-      }
-    >
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-muted">Welcome back</p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">Sign in to your account</h1>
-      <p className="mt-3 text-sm leading-6 text-muted-foreground">Enter your details to continue.</p>
+    <AuthShell aside={<SignInAside />}>
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-muted">
+        Welcome back
+      </p>
+      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
+        Sign in to your account
+      </h1>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">
+        Enter your details to continue.
+      </p>
 
       <SignInForm />
 
@@ -51,7 +41,9 @@ export default async function SignInPage() {
         </CreateAccountMenu>
       </p>
       <p className="mt-6 text-center text-xs text-subtle-foreground">
-        <Link href="/" className="hover:text-brand">Return to the main site</Link>
+        <Link href="/" className="hover:text-brand">
+          Return to the main site
+        </Link>
       </p>
     </AuthShell>
   );

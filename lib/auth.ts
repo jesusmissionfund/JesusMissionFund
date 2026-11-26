@@ -2,32 +2,47 @@ import { betterAuth } from "better-auth/minimal";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import { after } from "next/server";
 
 import { prisma } from "./prisma";
 import { ac, roles } from "./permissions";
 import { consumeRateLimit } from "./rate-limit";
+import { sendEmail } from "./email";
+import { passwordResetEmail } from "./email-templates";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  emailAndPassword: { enabled: true, autoSignIn: true },
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }) => {
+      // Sent after the response so timing doesn't reveal whether the account exists.
+      after(() =>
+        sendEmail({
+          to: user.email,
+          ...passwordResetEmail(user.name, url),
+        }).catch((error) =>
+          console.error("Password reset email failed", error),
+        ),
+      );
+    },
+  },
   rateLimit: {
-    // On in development too, so limits behave the same everywhere. Stored in the database because the
-    // default memory store resets on restart and isn't shared between server instances.
+    // Stored in the database: the memory store isn't shared between server instances.
     enabled: true,
     customStorage: { consume: consumeRateLimit },
     customRules: {
-      // Per IP. Longer than better-auth's default (3 per 10 seconds) to slow password guessing; high enough
-      // for several people signing in from one shared connection.
       "/sign-in/email": { window: 15 * 60, max: 20 },
-      // The site header checks the session on every page; counting it would add a database write per page view.
+      "/request-password-reset": { window: 15 * 60, max: 10 },
+      // Checked on every page view; counting it would write to the database each time.
       "/get-session": false,
     },
   },
   plugins: [
-    // The admin plugin owns `user.role` and rejects it as client input, so roles can only be set on the
-    // server (sign-up flows, scripts/create-admin.ts, admin user management). Default is the least-privileged role.
+    // The admin plugin rejects `role` as client input; set it only on the server.
     admin({ ac, roles, defaultRole: "user", adminRoles: ["admin"] }),
     nextCookies(),
   ],
