@@ -3,10 +3,13 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-
 const sectionFade = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: "easeOut" as const },
+  },
 };
 
 export default function MissionaryIntro() {
@@ -24,18 +27,19 @@ export default function MissionaryIntro() {
               You Were Never Meant to Carry the Burden Alone
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Many faithful missionaries face practical limitations—financial strain,
-              lack of resources, and ministry constraints—that can slow down the very
-              work God has called them to do.
+              Many faithful missionaries face practical limitations—financial
+              strain, lack of resources, and ministry constraints—that can slow
+              down the very work God has called them to do.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              We believe those who have answered the call should not carry the burden
-              alone. Our Missionary Support Program exists to empower dedicated
-              missionaries to focus exclusively on evangelism and discipleship while
-              we come alongside them with practical support.
+              We believe those who have answered the call should not carry the
+              burden alone. Our Missionary Support Program exists to empower
+              dedicated missionaries to focus exclusively on evangelism and
+              discipleship while we come alongside them with practical support.
             </p>
             <p className="text-foreground font-semibold text-lg">
-              We are committed to partnering with those who are serious about advancing the Gospel.
+              We are committed to partnering with those who are serious about
+              advancing the Gospel.
             </p>
           </motion.div>
 
@@ -49,8 +53,8 @@ export default function MissionaryIntro() {
             <div className="absolute -inset-4 bg-gradient-to-br from-secondary/15 via-transparent to-primary/15 rounded-3xl blur-sm" />
             <div className="relative rounded-3xl overflow-hidden shadow-elevated">
               <Image
-                src="/about-mission.jpg"
-                alt="Missionary sharing the Gospel with a group of people"                
+                src="/img4.jpg"
+                alt="Missionary sharing the Gospel with a group of people"
                 width={800}
                 height={600}
                 className="w-full h-full object-cover aspect-4/3"

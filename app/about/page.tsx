@@ -72,7 +72,6 @@ export default function About() {
       <Navbar />
       <Breadcrumb />
 
-      {/* Hero Section */}
       <section className="pt-32 pb-20 relative overflow-hidden bg-accent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <motion.div
@@ -97,7 +96,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Mission Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -138,7 +136,7 @@ export default function About() {
               className="rounded-3xl overflow-hidden"
             >
               <img
-                src="/about-mission.jpg"
+                src="/img4.jpg"
                 alt="Missionaries gathered in prayer"
                 className="w-full h-full object-cover aspect-[4/3]"
               />
@@ -147,7 +145,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Vision Section */}
       <section className="py-20 bg-muted/30 bg-accent">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -196,7 +193,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
@@ -239,7 +235,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team Section */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
