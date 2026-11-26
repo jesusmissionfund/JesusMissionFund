@@ -17,15 +17,38 @@ ${body}<p style="margin:24px 0"><a href="${url}" style="background:#174b35;color
 </div>`;
 }
 
-export function passwordResetEmail(name: string, url: string): Template {
-  const paragraphs = [
-    `Hello ${name},`,
-    "We received a request to reset the password for your Jesus' Mission Fund account. The link below is valid for one hour.",
-    "If you didn't ask for this, you can ignore this email and your password will stay the same.",
-  ];
+function template(
+  subject: string,
+  paragraphs: string[],
+  action: { label: string; url: string },
+): Template {
   return {
-    subject: "Reset your password",
-    html: layout(paragraphs, { label: "Reset password", url }),
-    text: `${paragraphs.join("\n\n")}\n\nReset your password: ${url}`,
+    subject,
+    html: layout(paragraphs, action),
+    text: `${paragraphs.join("\n\n")}\n\n${action.label}: ${action.url}`,
   };
+}
+
+export function passwordResetEmail(name: string, url: string) {
+  return template(
+    "Reset your password",
+    [
+      `Hello ${name},`,
+      "We received a request to reset the password for your Jesus' Mission Fund account. The link below is valid for one hour.",
+      "If you didn't ask for this, you can ignore this email and your password will stay the same.",
+    ],
+    { label: "Reset password", url },
+  );
+}
+
+export function verificationEmail(name: string, url: string) {
+  return template(
+    "Verify your email",
+    [
+      `Hello ${name},`,
+      "Please confirm this is the email address for your Jesus' Mission Fund account. The link below is valid for one hour.",
+      "If you didn't create an account, you can ignore this email.",
+    ],
+    { label: "Verify email", url },
+  );
 }
