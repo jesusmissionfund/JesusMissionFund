@@ -8,13 +8,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { FormAlert, SubmitButton } from "@/components/forms/fields";
 import { SendVerificationButton } from "@/components/auth/SendVerificationButton";
 import { submitApplication } from "../actions";
-import type { ApplicationDraft, StepId } from "../schema";
-
-type Section = {
-  step: StepId;
-  title: string;
-  rows: [string, string | undefined][];
-};
+import { answerSections, type ApplicationDraft, type StepId } from "../schema";
 
 export function ReviewStep({
   account,
@@ -30,27 +24,17 @@ export function ReviewStep({
   const [pending, setPending] = useState(false);
   const [serverError, setServerError] = useState("");
 
-  const sections: Section[] = [
+  const [contact, ministry] = answerSections(draft);
+  const sections = [
     {
-      step: "contact",
-      title: "About you",
+      ...contact,
       rows: [
         ["Full name", account.name],
         ["Email address", account.email],
-        ["Phone or WhatsApp", draft.phone],
-        ["Country", draft.country],
-        ["Region, town, or community", draft.region],
+        ...contact.rows,
       ],
     },
-    {
-      step: "ministry",
-      title: "Your ministry",
-      rows: [
-        ["Church or ministry organization", draft.church],
-        ["Years in ministry", draft.yearsServing],
-        ["Main ministry focus", draft.ministryFocus],
-      ],
-    },
+    ministry,
   ];
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {

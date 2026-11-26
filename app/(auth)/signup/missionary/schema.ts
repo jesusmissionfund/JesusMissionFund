@@ -99,3 +99,28 @@ export function resumeStep(signedIn: boolean, draft: ApplicationDraft): StepId {
   if (!ministrySchema.safeParse(draft).success) return "ministry";
   return "review";
 }
+
+type Answers = Partial<Record<keyof ApplicationDraft, string | number | null>>;
+
+export function answerSections(answers: Answers) {
+  return [
+    {
+      step: "contact" as const,
+      title: "About you",
+      rows: [
+        ["Phone or WhatsApp", answers.phone],
+        ["Country", answers.country],
+        ["Region, town, or community", answers.region],
+      ] as const,
+    },
+    {
+      step: "ministry" as const,
+      title: "Your ministry",
+      rows: [
+        ["Church or ministry organization", answers.church],
+        ["Years in ministry", answers.yearsServing],
+        ["Main ministry focus", answers.ministryFocus],
+      ] as const,
+    },
+  ];
+}
