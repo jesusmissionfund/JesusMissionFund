@@ -9,7 +9,6 @@ export default function MissionarySection() {
     <section className="py-20 bg-muted/30 relative overflow-hidden md:py-28">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Image — left on desktop */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -19,7 +18,7 @@ export default function MissionarySection() {
           >
             <div className="relative overflow-hidden">
               <Image
-                src="/img5.jpg"
+                src="/img3.jpg"
                 alt="Missionary discipling believers"
                 width={800}
                 height={600}
@@ -28,7 +27,6 @@ export default function MissionarySection() {
             </div>
           </motion.div>
 
-          {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
