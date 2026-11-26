@@ -7,7 +7,7 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
-import { Badge } from "../_components/Badge";
+import { Badge } from "@/components/dashboard/Badge";
 import { adminLinks } from "../links";
 import { UserActions } from "./_components/UserActions";
 import { isUserKind, kindsOf, userKinds } from "./kinds";
