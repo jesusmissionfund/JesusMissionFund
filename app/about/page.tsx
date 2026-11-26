@@ -1,10 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Heart, Users, Target, Globe, Handshake, Eye } from "lucide-react";
-import Navbar from "../../components/layout/Navbar";
-import Footer from "../../components/layout/Footer";
-import { Breadcrumb } from "../../components/layout/BreadCrumb";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { Breadcrumb } from "@/components/layout/BreadCrumb";
 
 const values = [
   {
@@ -133,12 +134,14 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="rounded-3xl overflow-hidden"
+              className="relative aspect-[4/3] rounded-3xl overflow-hidden"
             >
-              <img
+              <Image
                 src="/img4.jpg"
                 alt="Missionaries gathered in prayer"
-                className="w-full h-full object-cover aspect-[4/3]"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
               />
             </motion.div>
           </div>
@@ -153,12 +156,14 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="rounded-3xl overflow-hidden order-2 lg:order-1"
+              className="relative aspect-[4/3] rounded-3xl overflow-hidden order-2 lg:order-1"
             >
-              <img
+              <Image
                 src="/about-vision.jpg"
                 alt="Global vision for the Gospel"
-                className="w-full h-full object-cover aspect-[4/3]"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
               />
             </motion.div>
 
@@ -263,10 +268,12 @@ export default function About() {
                 className="group overflow-hidden border border-border bg-card"
               >
                 <div className="relative w-full aspect-[4/5] overflow-hidden ">
-                  <img
+                  <Image
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 <div className="p-6 text-center">

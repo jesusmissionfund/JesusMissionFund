@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, ArrowRight } from "lucide-react";
+import { Users } from "lucide-react";
 
 export default function TwoRoles() {
   return (
@@ -34,9 +34,12 @@ export default function TwoRoles() {
               className="glass-card p-8 hover:shadow-elevated transition-all duration-300 bg-green-200 border border-muted/50 hover:bg-green-400/30 rounded-2xl  "
             >
               <div className="text-4xl mb-4">🏃</div>
-              <h3 className="text-xl font-bold text-foreground mb-2">Those Who Go</h3>
+              <h3 className="text-xl font-bold text-foreground mb-2">
+                Those Who Go
+              </h3>
               <p className="text-muted-foreground text-sm">
-                Missionaries on the frontline, carrying the Gospel to the unreached.
+                Missionaries on the frontline, carrying the Gospel to the
+                unreached.
               </p>
             </motion.div>
 
@@ -48,9 +51,12 @@ export default function TwoRoles() {
               className="glass-card p-8 hover:shadow-elevated transition-all duration-300 bg-green-200 border border-muted/50 hover:bg-green-400/30 rounded-2xl  "
             >
               <div className="text-4xl mb-4">🤝</div>
-              <h3 className="text-xl font-bold text-foreground mb-2">Those Who Send</h3>
+              <h3 className="text-xl font-bold text-foreground mb-2">
+                Those Who Send
+              </h3>
               <p className="text-muted-foreground text-sm">
-                Partners behind the lines, fueling the mission through giving and prayer.
+                Partners behind the lines, fueling the mission through giving
+                and prayer.
               </p>
             </motion.div>
           </div>
@@ -59,9 +65,9 @@ export default function TwoRoles() {
             Both are necessary. Both are honored. Both are rewarded.
           </p>
           <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-3">
-            Scripture reminds us that those who support the work share in its fruit. 
-            When you partner with the mission, you participate in every soul saved, 
-            every believer discipled, and every church planted.
+            Scripture reminds us that those who support the work share in its
+            fruit. When you partner with the mission, you participate in every
+            soul saved, every believer discipled, and every church planted.
           </p>
           <p className="text-primary font-semibold italic">
             Heaven records what the world may never see.

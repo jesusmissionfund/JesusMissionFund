@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Gift, Megaphone, BookOpen, Car, Home, Church, Check } from "lucide-react";
+import { Gift, Megaphone, BookOpen, Car, Home, Church } from "lucide-react";
 
 const supports = [
   { icon: Megaphone, text: "Evangelism outreaches" },
@@ -27,9 +27,12 @@ export default function PartnershipSupports() {
             Your Giving
           </div>
           <h2 className="text-4xl font-bold text-foreground mb-4">
-            What Your Partnership <span className="text-gradient">Supports</span>
+            What Your Partnership{" "}
+            <span className="text-gradient">Supports</span>
           </h2>
-          <p className="text-lg text-muted-foreground">Your giving helps provide:</p>
+          <p className="text-lg text-muted-foreground">
+            Your giving helps provide:
+          </p>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
