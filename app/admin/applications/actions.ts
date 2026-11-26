@@ -15,7 +15,7 @@ export async function reviewApplication(
   const { user: admin } = await requireAdmin();
 
   const reviewed = await prisma.$transaction(async (tx) => {
-    // Only SUBMITTED applications can be decided, so two admins acting at once can't overwrite each other.
+    // The status filter stops two admins overwriting each other's decision.
     const { count } = await tx.missionaryApplication.updateMany({
       where: { id: applicationId, status: "SUBMITTED" },
       data: { status: decision, reviewedAt: new Date() },

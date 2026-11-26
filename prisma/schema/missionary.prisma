@@ -5,8 +5,7 @@ enum ApplicationStatus {
   REJECTED
 }
 
-// Contact fields are the applicant's working copy while a draft and a record of what was sent once submitted;
-// the user's own phone and country are updated from them on submit.
+// Contact fields keep what was submitted; the user's own are updated from them.
 model MissionaryApplication {
   id            String            @id @default(cuid())
   userId        String            @unique

@@ -7,10 +7,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { FieldGroup } from "@/components/ui/field";
-import { FormAlert, PasswordField, SubmitButton, TextField } from "@/components/forms/fields";
-import { accountSchema, resumeParam, type AccountInput, type AccountResult } from "../schema";
+import {
+  FormAlert,
+  PasswordField,
+  SubmitButton,
+  TextField,
+} from "@/components/forms/fields";
+import {
+  accountSchema,
+  resumeParam,
+  type AccountInput,
+  type AccountResult,
+} from "../schema";
 
-const linkClass = "font-semibold text-brand underline decoration-brand/40 underline-offset-4 hover:decoration-brand";
+const linkClass =
+  "font-semibold text-brand underline decoration-brand/40 underline-offset-4 hover:decoration-brand";
 
 export function AccountStep({
   createAccount,
@@ -24,7 +35,9 @@ export function AccountStep({
   const router = useRouter();
   const pathname = usePathname();
   const [resuming, startResume] = useTransition();
-  const [serverError, setServerError] = useState<AccountResult & { error: string }>();
+  const [serverError, setServerError] = useState<
+    AccountResult & { error: string }
+  >();
   const form = useForm<AccountInput>({
     resolver: zodResolver(accountSchema),
     defaultValues: { name: "", email: "", password: "" },
@@ -35,8 +48,8 @@ export function AccountStep({
     setServerError(undefined);
     const result = await createAccount(values);
     if (result.error !== undefined) return setServerError(result);
-    if (!result.signedInExisting) return onDone({ name: values.name, email: values.email });
-    // The page works out where an existing account left off, so re-render it rather than guessing here.
+    if (!result.signedInExisting)
+      return onDone({ name: values.name, email: values.email });
     startResume(() => router.replace(`${pathname}?${resumeParam}=1`));
   }
 
@@ -44,9 +57,25 @@ export function AccountStep({
     <>
       <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="mt-8">
         <FieldGroup className="gap-5">
-          <TextField control={form.control} name="name" label="Full name" autoComplete="name" />
-          <TextField control={form.control} name="email" label="Email address" type="email" autoComplete="email" />
-          <PasswordField control={form.control} name="password" label="Password" autoComplete="new-password" />
+          <TextField
+            control={form.control}
+            name="name"
+            label="Full name"
+            autoComplete="name"
+          />
+          <TextField
+            control={form.control}
+            name="email"
+            label="Email address"
+            type="email"
+            autoComplete="email"
+          />
+          <PasswordField
+            control={form.control}
+            name="password"
+            label="Password"
+            autoComplete="new-password"
+          />
           {serverError && (
             <FormAlert>
               {serverError.error}
@@ -62,7 +91,9 @@ export function AccountStep({
               )}
             </FormAlert>
           )}
-          <SubmitButton pending={form.formState.isSubmitting || resuming}>Create account</SubmitButton>
+          <SubmitButton pending={form.formState.isSubmitting || resuming}>
+            Create account
+          </SubmitButton>
         </FieldGroup>
       </form>
       <p className="mt-7 text-center text-sm text-muted-foreground">

@@ -3,8 +3,7 @@ import { prisma } from "./prisma";
 type RateLimitRule = { window: number; max: number };
 type Decision = { allowed: boolean; retryAfter: number | null };
 
-// Matches better-auth's `customStorage.consume`, so one table backs its endpoints and the app's server calls.
-// Check and increment run as one statement so concurrent requests can't all pass on a stale count.
+// One statement, so concurrent requests can't all pass on a stale count.
 export async function consumeRateLimit(
   key: string,
   { window, max }: RateLimitRule,
@@ -25,7 +24,6 @@ export async function consumeRateLimit(
       "count",
       ceil(extract(epoch FROM "windowStart" + ${window}::int * interval '1 second' - now()))::int AS "retryAfter"`;
 
-  // Expired windows are dead rows; clearing them now and then keeps the table small without a cron job.
   if (Math.random() < 0.01)
     await prisma.$executeRaw`DELETE FROM "rate_limit" WHERE "windowStart" < now() - interval '1 day'`;
 

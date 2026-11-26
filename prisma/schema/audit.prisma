@@ -8,8 +8,7 @@ enum AuditAction {
   ADMIN_CREATED
 }
 
-// Admin actions, newest first in /admin/activity. The admin's email and the person's name are copied in so an
-// entry stays readable after either account is deleted.
+// Email and name are copied so entries stay readable after an account is deleted.
 model AuditLog {
   id         String      @id @default(cuid())
   action     AuditAction

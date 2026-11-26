@@ -9,10 +9,13 @@ import { resumeStep, toApplicationDraft } from "./schema";
 
 export const metadata: Metadata = {
   title: "Missionary application",
-  description: "Create your account and apply for missionary support from Jesus' Mission Fund.",
+  description:
+    "Create your account and apply for missionary support from Jesus' Mission Fund.",
 };
 
-export default async function MissionarySignupPage({ searchParams }: PageProps<"/signup/missionary">) {
+export default async function MissionarySignupPage({
+  searchParams,
+}: PageProps<"/signup/missionary">) {
   const session = await getSession();
   if (session?.user.role === "admin") redirect("/admin");
 
@@ -28,11 +31,13 @@ export default async function MissionarySignupPage({ searchParams }: PageProps<"
   const draft = toApplicationDraft(application ?? null, user);
 
   return (
-    // Keyed on the user so signing in to an existing account remounts the flow at its resume step.
+    // Keyed so signing in to an existing account remounts the flow at its resume step.
     <MissionarySignupFlow
       key={session?.user.id ?? "guest"}
       resumed={Boolean(session) && (await searchParams)[resumeParam] === "1"}
-      initialAccount={session ? { name: session.user.name, email: session.user.email } : null}
+      initialAccount={
+        session ? { name: session.user.name, email: session.user.email } : null
+      }
       initialDraft={draft}
       initialStep={resumeStep(Boolean(session), draft)}
     />
