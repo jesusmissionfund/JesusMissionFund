@@ -2,11 +2,12 @@ import { cache } from "react";
 
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
+import { latestApplication } from "@/lib/missionary-application";
 
 export const requirePerson = cache(async () => {
   const session = await requireUser();
   const {
-    missionaryApplication: application,
+    missionaryApplications: [application = null],
     partnerProfile: partner,
     ...details
   } = await prisma.user.findUniqueOrThrow({
@@ -15,7 +16,7 @@ export const requirePerson = cache(async () => {
       emailVerified: true,
       phone: true,
       country: true,
-      missionaryApplication: true,
+      missionaryApplications: latestApplication,
       partnerProfile: true,
     },
   });

@@ -34,9 +34,21 @@ async function tooManyAttempts(email: string) {
 }
 
 async function startDraft(userId: string, path: SignupPath) {
-  const args = { where: { userId }, create: { userId }, update: {} };
-  if (path === "missionary") await prisma.missionaryApplication.upsert(args);
-  else await prisma.partnerProfile.upsert(args);
+  if (path === "partner") {
+    await prisma.partnerProfile.upsert({
+      where: { userId },
+      create: { userId },
+      update: {},
+    });
+    return;
+  }
+  // Reapplying starts on the application page instead, so earlier answers carry over.
+  const existing = await prisma.missionaryApplication.findFirst({
+    where: { userId },
+    select: { id: true },
+  });
+  if (!existing)
+    await prisma.missionaryApplication.create({ data: { userId } });
 }
 
 // Not a server action, so the client can't choose what gets created.
@@ -77,7 +89,11 @@ export async function createAccount(
     });
     if (!existing)
       await auth.api.sendVerificationEmail({
-        body: { email, callbackURL: "/dashboard" },
+        body: {
+          email,
+          callbackURL:
+            path === "missionary" ? "/signup/missionary" : "/dashboard",
+        },
       });
   } catch (error) {
     if (

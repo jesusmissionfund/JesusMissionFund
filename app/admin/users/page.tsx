@@ -49,7 +49,7 @@ export default async function UsersPage({
         role: true,
         banned: true,
         createdAt: true,
-        missionaryApplication: { select: { status: true } },
+        missionaryApplications: { select: { status: true } },
         partnerProfile: { select: { status: true } },
       },
     }),
@@ -58,26 +58,61 @@ export default async function UsersPage({
   const pages = Math.max(1, Math.ceil(total / pageSize));
 
   function pageHref(target: number) {
-    const params = new URLSearchParams({ ...(query && { q: query }), ...(isUserKind(type) && { type }), page: String(target) });
+    const params = new URLSearchParams({
+      ...(query && { q: query }),
+      ...(isUserKind(type) && { type }),
+      page: String(target),
+    });
     return `?${params}`;
   }
 
   return (
-    <DashboardShell label="Admin" user={session.user} title="Users" subtitle="Everyone with an account: admins, missionaries, and partners." links={adminLinks}>
+    <DashboardShell
+      label="Admin"
+      user={session.user}
+      title="Users"
+      subtitle="Everyone with an account: admins, missionaries, and partners."
+      links={adminLinks}
+    >
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <form className="flex flex-1 flex-col gap-2 sm:flex-row" role="search">
           <label className="relative flex-1 sm:max-w-sm">
             <span className="sr-only">Search by name or email</span>
-            <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle-foreground" />
-            <input name="q" defaultValue={query} placeholder="Search by name or email" className="h-10 w-full border border-input bg-card pl-9 pr-3 text-sm outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/10" />
+            <Search
+              aria-hidden="true"
+              className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-subtle-foreground"
+            />
+            <input
+              name="q"
+              defaultValue={query}
+              placeholder="Search by name or email"
+              className="h-10 w-full border border-input bg-card pl-9 pr-3 text-sm outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/10"
+            />
           </label>
-          <select name="type" defaultValue={isUserKind(type) ? type : ""} aria-label="Filter by type" className="h-10 border border-input bg-card px-3 text-sm outline-none focus-visible:border-brand">
+          <select
+            name="type"
+            defaultValue={isUserKind(type) ? type : ""}
+            aria-label="Filter by type"
+            className="h-10 border border-input bg-card px-3 text-sm outline-none focus-visible:border-brand"
+          >
             <option value="">Everyone</option>
-            {Object.entries(userKinds).map(([value, { label }]) => <option key={value} value={value}>{label}</option>)}
+            {Object.entries(userKinds).map(([value, { label }]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
-          <button type="submit" className="h-10 border border-input bg-card px-4 text-sm font-semibold text-brand hover:bg-muted">Filter</button>
+          <button
+            type="submit"
+            className="h-10 border border-input bg-card px-4 text-sm font-semibold text-brand hover:bg-muted"
+          >
+            Filter
+          </button>
         </form>
-        <Link href="/admin/users/new" className="inline-flex h-10 items-center justify-center gap-2 bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-hover">
+        <Link
+          href="/admin/users/new"
+          className="inline-flex h-10 items-center justify-center gap-2 bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
+        >
           <Plus aria-hidden="true" className="size-4" />
           Add admin account
         </Link>
@@ -90,10 +125,24 @@ export default async function UsersPage({
           <table className="w-full text-left text-sm">
             <thead className="border-b border-border bg-muted text-xs uppercase tracking-[0.12em] text-muted-foreground">
               <tr>
-                <th scope="col" className="px-5 py-3 font-semibold">User</th>
-                <th scope="col" className="hidden px-5 py-3 font-semibold md:table-cell">Type</th>
-                <th scope="col" className="hidden px-5 py-3 font-semibold lg:table-cell">Joined</th>
-                <th scope="col" className="px-5 py-3"><span className="sr-only">Actions</span></th>
+                <th scope="col" className="px-5 py-3 font-semibold">
+                  User
+                </th>
+                <th
+                  scope="col"
+                  className="hidden px-5 py-3 font-semibold md:table-cell"
+                >
+                  Type
+                </th>
+                <th
+                  scope="col"
+                  className="hidden px-5 py-3 font-semibold lg:table-cell"
+                >
+                  Joined
+                </th>
+                <th scope="col" className="px-5 py-3">
+                  <span className="sr-only">Actions</span>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -104,17 +153,27 @@ export default async function UsersPage({
                       <span className="font-semibold">{user.name}</span>
                       {user.banned && <Badge tone="danger">Banned</Badge>}
                     </div>
-                    <span className="block text-muted-foreground">{user.email}</span>
+                    <span className="block text-muted-foreground">
+                      {user.email}
+                    </span>
                   </td>
                   <td className="hidden px-5 py-3 md:table-cell">
                     <div className="flex flex-wrap gap-1.5">
-                      {kindsOf(user).map((kind) => <Badge key={kind} tone="neutral">{userKinds[kind].label}</Badge>)}
+                      {kindsOf(user).map((kind) => (
+                        <Badge key={kind} tone="neutral">
+                          {userKinds[kind].label}
+                        </Badge>
+                      ))}
                     </div>
                   </td>
-                  <td className="hidden px-5 py-3 text-muted-foreground lg:table-cell">{formatDate(user.createdAt)}</td>
+                  <td className="hidden px-5 py-3 text-muted-foreground lg:table-cell">
+                    {formatDate(user.createdAt)}
+                  </td>
                   <td className="px-5 py-3 text-right">
                     {user.id === session.user.id ? (
-                      <span className="text-xs text-subtle-foreground">You</span>
+                      <span className="text-xs text-subtle-foreground">
+                        You
+                      </span>
                     ) : (
                       <UserActions user={user} />
                     )}
@@ -127,11 +186,30 @@ export default async function UsersPage({
       </section>
 
       {pages > 1 && (
-        <nav aria-label="Pagination" className="mt-5 flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Page {page} of {pages} · {total} users</span>
+        <nav
+          aria-label="Pagination"
+          className="mt-5 flex items-center justify-between text-sm"
+        >
+          <span className="text-muted-foreground">
+            Page {page} of {pages} · {total} users
+          </span>
           <div className="flex gap-2">
-            {page > 1 && <Link href={pageHref(page - 1)} className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted">Previous</Link>}
-            {page < pages && <Link href={pageHref(page + 1)} className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted">Next</Link>}
+            {page > 1 && (
+              <Link
+                href={pageHref(page - 1)}
+                className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted"
+              >
+                Previous
+              </Link>
+            )}
+            {page < pages && (
+              <Link
+                href={pageHref(page + 1)}
+                className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted"
+              >
+                Next
+              </Link>
+            )}
           </div>
         </nav>
       )}

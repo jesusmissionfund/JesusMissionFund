@@ -3,6 +3,10 @@ import { redirect } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
+import {
+  canStartApplication,
+  latestApplication,
+} from "@/lib/missionary-application";
 import { resumeParam } from "../schema";
 import { MissionarySignupFlow } from "./_components/MissionarySignupFlow";
 import { resumeStep, toApplicationDraft } from "./schema";
@@ -22,11 +26,18 @@ export default async function MissionarySignupPage({
   const user = session
     ? await prisma.user.findUnique({
         where: { id: session.user.id },
-        select: { phone: true, country: true, missionaryApplication: true },
+        select: {
+          emailVerified: true,
+          phone: true,
+          country: true,
+          missionaryApplications: latestApplication,
+        },
       })
     : null;
-  const application = user?.missionaryApplication;
-  if (application && application.status !== "DRAFT") redirect("/dashboard");
+  const [application] = user?.missionaryApplications ?? [];
+  const reapplying = application?.status === "REJECTED";
+  if (application?.status !== "DRAFT" && !canStartApplication(application))
+    redirect("/dashboard");
 
   const draft = toApplicationDraft(application ?? null, user);
 
@@ -36,10 +47,16 @@ export default async function MissionarySignupPage({
       key={session?.user.id ?? "guest"}
       resumed={Boolean(session) && (await searchParams)[resumeParam] === "1"}
       initialAccount={
-        session ? { name: session.user.name, email: session.user.email } : null
+        session && user
+          ? {
+              name: session.user.name,
+              email: session.user.email,
+              emailVerified: user.emailVerified,
+            }
+          : null
       }
       initialDraft={draft}
-      initialStep={resumeStep(Boolean(session), draft)}
+      initialStep={reapplying ? "contact" : resumeStep(Boolean(session), draft)}
     />
   );
 }
