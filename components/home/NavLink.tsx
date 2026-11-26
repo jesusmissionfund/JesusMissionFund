@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Users, Heart } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "../ui/button";
 
 const actions = [
@@ -26,13 +25,11 @@ const actions = [
 export default function JoinMissionSection() {
   return (
     <section className="py-24 bg-background relative overflow-hidden">
-      {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -44,11 +41,11 @@ export default function JoinMissionSection() {
             Join the <span className="text-gradient">Mission</span> Today
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            There are those who go and those who send. Both are necessary. Both are honored. Both are rewarded.
+            There are those who go and those who send. Both are necessary. Both
+            are honored. Both are rewarded.
           </p>
         </motion.div>
 
-        {/* Action Cards */}
         <div className="grid md:grid-cols-2 gap-8">
           {actions.map((action, index) => (
             <motion.div
@@ -62,10 +59,13 @@ export default function JoinMissionSection() {
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 transition-colors duration-300">
                 <action.icon className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">{action.title}</h3>
-              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">{action.description}</p>
-              
-              {/* Updated Next.js Link */}
+              <h3 className="text-xl font-semibold text-foreground mb-3">
+                {action.title}
+              </h3>
+              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                {action.description}
+              </p>
+
               <Link href={action.link} passHref>
                 <Button variant="outline" size="default" className="group/btn">
                   {action.cta}
