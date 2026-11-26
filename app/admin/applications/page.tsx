@@ -4,11 +4,16 @@ import Link from "next/link";
 import type { ApplicationStatus } from "@/app/generated/prisma/client";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
+import {
+  latestApplication,
+  tomorrowAsDateInput,
+} from "@/lib/missionary-application";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
 import { cn } from "cn";
 import { Badge } from "../_components/Badge";
 import { adminLinks } from "../links";
+import { ReapplyControl } from "./_components/ReapplyControl";
 import { ReviewActions } from "./_components/ReviewActions";
 
 export const metadata: Metadata = { title: "Applications" };
@@ -32,8 +37,22 @@ export default async function ApplicationsPage({
   const applications = await prisma.missionaryApplication.findMany({
     where: { status },
     orderBy: { submittedAt: "desc" },
-    include: { user: { select: { name: true, email: true } } },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          emailVerified: true,
+          missionaryApplications: {
+            ...latestApplication,
+            select: { id: true },
+          },
+        },
+      },
+    },
   });
+
+  const minReapplyDate = tomorrowAsDateInput();
 
   return (
     <DashboardShell
@@ -71,66 +90,103 @@ export default async function ApplicationsPage({
           </p>
         ) : (
           <ul className="divide-y divide-border">
-            {applications.map((application) => (
-              <li
-                key={application.id}
-                className="grid gap-4 p-5 sm:grid-cols-[1fr_auto] sm:items-start sm:px-6"
-              >
-                <div>
-                  <div className="flex flex-wrap items-center gap-3">
-                    <h2 className="font-semibold">{application.user.name}</h2>
-                    {application.status === "SUBMITTED" && (
-                      <Badge tone="warning">To review</Badge>
+            {applications.map((application) => {
+              const isLatest =
+                application.user.missionaryApplications[0]?.id ===
+                application.id;
+              return (
+                <li
+                  key={application.id}
+                  className="grid gap-4 p-5 sm:grid-cols-[1fr_auto] sm:items-start sm:px-6"
+                >
+                  <div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <h2 className="font-semibold">{application.user.name}</h2>
+                      {application.status === "SUBMITTED" && (
+                        <Badge tone="warning">To review</Badge>
+                      )}
+                      {application.status === "APPROVED" && (
+                        <Badge tone="success">Approved</Badge>
+                      )}
+                      {application.status === "REJECTED" && (
+                        <Badge tone="danger">Rejected</Badge>
+                      )}
+                      {application.status === "REJECTED" && !isLatest && (
+                        <Badge tone="info">Started again</Badge>
+                      )}
+                      {!application.user.emailVerified && (
+                        <Badge tone="neutral">Email not verified</Badge>
+                      )}
+                    </div>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {application.user.email} · {application.phone}
+                    </p>
+                    <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+                      <div>
+                        <dt className="inline text-muted-foreground">
+                          Location:{" "}
+                        </dt>
+                        <dd className="inline">
+                          {application.region}, {application.country}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="inline text-muted-foreground">
+                          Church:{" "}
+                        </dt>
+                        <dd className="inline">{application.church}</dd>
+                      </div>
+                      <div>
+                        <dt className="inline text-muted-foreground">
+                          Focus:{" "}
+                        </dt>
+                        <dd className="inline">{application.ministryFocus}</dd>
+                      </div>
+                      <div>
+                        <dt className="inline text-muted-foreground">
+                          Years in ministry:{" "}
+                        </dt>
+                        <dd className="inline">{application.yearsServing}</dd>
+                      </div>
+                    </dl>
+                    {application.rejectionReason && (
+                      <p className="mt-3 whitespace-pre-line border-l-2 border-destructive/40 pl-3 text-sm text-muted-foreground">
+                        {application.rejectionReason}
+                      </p>
                     )}
-                    {application.status === "APPROVED" && (
-                      <Badge tone="success">Approved</Badge>
-                    )}
-                    {application.status === "REJECTED" && (
-                      <Badge tone="danger">Rejected</Badge>
-                    )}
+                    <p className="mt-3 text-xs text-subtle-foreground">
+                      {application.submittedAt &&
+                        `Submitted ${formatDate(application.submittedAt)}`}
+                      {application.reviewedAt &&
+                        ` · Reviewed ${formatDate(application.reviewedAt)}`}
+                    </p>
                   </div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {application.user.email} · {application.phone}
-                  </p>
-                  <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
-                    <div>
-                      <dt className="inline text-muted-foreground">
-                        Location:{" "}
-                      </dt>
-                      <dd className="inline">
-                        {application.region}, {application.country}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="inline text-muted-foreground">Church: </dt>
-                      <dd className="inline">{application.church}</dd>
-                    </div>
-                    <div>
-                      <dt className="inline text-muted-foreground">Focus: </dt>
-                      <dd className="inline">{application.ministryFocus}</dd>
-                    </div>
-                    <div>
-                      <dt className="inline text-muted-foreground">
-                        Years in ministry:{" "}
-                      </dt>
-                      <dd className="inline">{application.yearsServing}</dd>
-                    </div>
-                  </dl>
-                  <p className="mt-3 text-xs text-subtle-foreground">
-                    {application.submittedAt &&
-                      `Submitted ${formatDate(application.submittedAt)}`}
-                    {application.reviewedAt &&
-                      ` · Reviewed ${formatDate(application.reviewedAt)}`}
-                  </p>
-                </div>
-                {application.status === "SUBMITTED" && (
-                  <ReviewActions
-                    applicationId={application.id}
-                    applicantName={application.user.name}
-                  />
-                )}
-              </li>
-            ))}
+                  {application.status === "REJECTED" && isLatest && (
+                    <ReapplyControl
+                      applicationId={application.id}
+                      applicantName={application.user.name}
+                      minReapplyDate={minReapplyDate}
+                      reapplyAfter={application.reapplyAfter
+                        ?.toISOString()
+                        .slice(0, 10)}
+                      label={
+                        application.reapplyAfter &&
+                        application.reapplyAfter > new Date()
+                          ? `Can apply again from ${formatDate(application.reapplyAfter)}`
+                          : "Can apply again now"
+                      }
+                    />
+                  )}
+                  {application.status === "SUBMITTED" && (
+                    <ReviewActions
+                      applicationId={application.id}
+                      applicantName={application.user.name}
+                      minReapplyDate={minReapplyDate}
+                    />
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>

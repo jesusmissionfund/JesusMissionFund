@@ -5,7 +5,13 @@ import { ArrowRight } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
 
-export function SendVerificationButton({ email }: { email: string }) {
+export function SendVerificationButton({
+  email,
+  callbackURL,
+}: {
+  email: string;
+  callbackURL: string;
+}) {
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<{ sent?: boolean; error?: string }>({});
 
@@ -14,7 +20,7 @@ export function SendVerificationButton({ email }: { email: string }) {
       try {
         const { error } = await authClient.sendVerificationEmail({
           email,
-          callbackURL: "/dashboard",
+          callbackURL,
         });
         setResult(
           error

@@ -2,22 +2,12 @@ import { betterAuth } from "better-auth/minimal";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
-import { after } from "next/server";
 
 import { prisma } from "./prisma";
 import { ac, roles } from "./permissions";
 import { consumeRateLimit } from "./rate-limit";
-import { sendEmail, type Email } from "./email";
+import { sendEmailAfterResponse } from "./email";
 import { passwordResetEmail, verificationEmail } from "./email-templates";
-
-// Sent after the response so timing doesn't reveal whether the account exists.
-function sendAfterResponse(email: Email) {
-  after(() =>
-    sendEmail(email).catch((error) =>
-      console.error(`"${email.subject}" email failed`, error),
-    ),
-  );
-}
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -28,14 +18,14 @@ export const auth = betterAuth({
     autoSignIn: true,
     revokeSessionsOnPasswordReset: true,
     sendResetPassword: async ({ user, url }) =>
-      sendAfterResponse({
+      sendEmailAfterResponse({
         to: user.email,
         ...passwordResetEmail(user.name, url),
       }),
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) =>
-      sendAfterResponse({
+      sendEmailAfterResponse({
         to: user.email,
         ...verificationEmail(user.name, url),
       }),

@@ -1,5 +1,6 @@
 import { createMessage, type Transport } from "@upyo/core";
 import { SmtpTransport } from "@upyo/smtp";
+import { after } from "next/server";
 
 export type Email = { to: string; subject: string; html: string; text: string };
 
@@ -37,4 +38,13 @@ export async function sendEmail({ to, subject, html, text }: Email) {
     throw new Error(
       `Email to ${to} failed: ${receipt.errorMessages.join("; ")}`,
     );
+}
+
+// After the response, so auth replies take the same time whether or not the account exists.
+export function sendEmailAfterResponse(email: Email) {
+  after(() =>
+    sendEmail(email).catch((error) =>
+      console.error(`"${email.subject}" email failed`, error),
+    ),
+  );
 }

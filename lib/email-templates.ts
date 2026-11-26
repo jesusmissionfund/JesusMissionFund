@@ -52,3 +52,30 @@ export function verificationEmail(name: string, url: string) {
     { label: "Verify email", url },
   );
 }
+
+export function applicationApprovedEmail(name: string, url: string) {
+  return template(
+    "Your missionary application was approved",
+    [
+      `Hello ${name},`,
+      "Your missionary application to Jesus' Mission Fund has been approved.",
+    ],
+    { label: "Go to your dashboard", url },
+  );
+}
+
+export function applicationRejectedEmail(
+  name: string,
+  reason: string,
+  url: string,
+) {
+  return template(
+    "Your missionary application",
+    [
+      `Hello ${name},`,
+      "After review, your missionary application to Jesus' Mission Fund was not approved.",
+      `Reason: ${reason}`,
+    ],
+    { label: "Go to your dashboard", url },
+  );
+}

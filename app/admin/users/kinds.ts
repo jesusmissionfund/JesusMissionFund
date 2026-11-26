@@ -3,7 +3,9 @@ import type { Prisma } from "@/app/generated/prisma/client";
 export const userKinds = {
   missionary: {
     label: "Missionary",
-    where: { missionaryApplication: { status: { not: "DRAFT" } } },
+    where: {
+      missionaryApplications: { some: { status: { not: "DRAFT" } } },
+    },
   },
   partner: {
     label: "Partner",
@@ -20,15 +22,14 @@ export function isUserKind(value: unknown): value is UserKind {
 
 type UserRecords = {
   role: string | null;
-  missionaryApplication: { status: string } | null;
+  missionaryApplications: { status: string }[];
   partnerProfile: { status: string } | null;
 };
 
 export function kindsOf(user: UserRecords): UserKind[] {
   if (user.role === "admin") return ["admin"];
   return [
-    ...(user.missionaryApplication &&
-    user.missionaryApplication.status !== "DRAFT"
+    ...(user.missionaryApplications.some(({ status }) => status !== "DRAFT")
       ? (["missionary"] as const)
       : []),
     ...(user.partnerProfile?.status === "ACTIVE" ? (["partner"] as const) : []),

@@ -1,8 +1,13 @@
 "use server";
 
+import type { MissionaryApplication } from "@/app/generated/prisma/client";
 import { invalidInput, type ActionResult } from "@/lib/action-result";
 import { prisma } from "@/lib/prisma";
 import { getUserSession } from "@/lib/session";
+import {
+  canStartApplication,
+  latestApplication,
+} from "@/lib/missionary-application";
 import { createAccount } from "../create-account";
 import type { AccountInput } from "../schema";
 import {
@@ -25,22 +30,36 @@ type DraftData = Partial<
   ContactInput & Omit<MinistryInput, "yearsServing"> & { yearsServing: number }
 >;
 
+function answersOf({
+  phone,
+  country,
+  region,
+  church,
+  yearsServing,
+  ministryFocus,
+}: MissionaryApplication) {
+  return { phone, country, region, church, yearsServing, ministryFocus };
+}
+
 async function saveDraft(data: DraftData): Promise<ActionResult> {
   const session = await getUserSession();
   if (!session) return signedOut;
 
   const userId = session.user.id;
-  const existing = await prisma.missionaryApplication.findUnique({
+  const [latest] = await prisma.missionaryApplication.findMany({
     where: { userId },
-    select: { status: true },
+    ...latestApplication,
   });
-  if (existing && existing.status !== "DRAFT") return alreadySubmitted;
-
-  await prisma.missionaryApplication.upsert({
-    where: { userId },
-    create: { userId, ...data },
-    update: data,
-  });
+  if (latest?.status === "DRAFT")
+    await prisma.missionaryApplication.update({
+      where: { id: latest.id },
+      data,
+    });
+  else if (canStartApplication(latest))
+    await prisma.missionaryApplication.create({
+      data: { ...(latest && answersOf(latest)), ...data, userId },
+    });
+  else return alreadySubmitted;
   return {};
 }
 
@@ -65,8 +84,16 @@ export async function submitApplication(): Promise<ActionResult> {
   if (!session) return signedOut;
 
   const userId = session.user.id;
-  const application = await prisma.missionaryApplication.findUnique({
-    where: { userId },
+  const { emailVerified } = await prisma.user.findUniqueOrThrow({
+    where: { id: userId },
+    select: { emailVerified: true },
+  });
+  if (!emailVerified)
+    return { error: "Please verify your email before submitting." };
+
+  const application = await prisma.missionaryApplication.findFirst({
+    where: { userId, status: "DRAFT" },
+    orderBy: { createdAt: "desc" },
   });
   const complete =
     application &&
@@ -81,7 +108,7 @@ export async function submitApplication(): Promise<ActionResult> {
   const submitted = await prisma.$transaction(async (tx) => {
     // Filtering on DRAFT stops a double submit overwriting submittedAt.
     const { count } = await tx.missionaryApplication.updateMany({
-      where: { userId, status: "DRAFT" },
+      where: { id: application.id, status: "DRAFT" },
       data: { status: "SUBMITTED", submittedAt: new Date() },
     });
     if (count === 1) {

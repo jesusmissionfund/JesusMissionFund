@@ -4,14 +4,15 @@ import { ArrowRight, HandHeart, HeartHandshake, UserRound } from "lucide-react";
 
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
+import { canStartApplication } from "@/lib/missionary-application";
 import {
   resumeStep,
   steps as missionarySteps,
   toApplicationDraft,
 } from "@/app/(auth)/signup/missionary/schema";
 import { steps as partnerSteps } from "@/app/(auth)/signup/partner/schema";
+import { SendVerificationButton } from "@/components/auth/SendVerificationButton";
 import { NextStepPanel } from "./_components/NextStepPanel";
-import { SendVerificationButton } from "./_components/SendVerificationButton";
 import { requirePerson } from "./person";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -110,7 +111,10 @@ export default async function DashboardPage({
                         : session.user.email}
                     </p>
                   </div>
-                  <SendVerificationButton email={session.user.email} />
+                  <SendVerificationButton
+                    email={session.user.email}
+                    callbackURL="/dashboard"
+                  />
                 </li>
               )}
               {todos.map((todo) => (
@@ -169,7 +173,25 @@ export default async function DashboardPage({
                   </>
                 )}
                 {application.status === "REJECTED" && (
-                  <h2 className="mt-3 text-2xl font-semibold">Not approved</h2>
+                  <>
+                    <h2 className="mt-3 text-2xl font-semibold">
+                      Not approved
+                    </h2>
+                    {application.rejectionReason && (
+                      <p className="mt-3 whitespace-pre-line text-sm leading-6 text-muted-foreground">
+                        {application.rejectionReason}
+                      </p>
+                    )}
+                    {canStartApplication(application) && (
+                      <Link
+                        href="/signup/missionary"
+                        className={`${linkClass} mt-5`}
+                      >
+                        Apply again{" "}
+                        <ArrowRight aria-hidden="true" className="size-4" />
+                      </Link>
+                    )}
+                  </>
                 )}
               </section>
             )}
