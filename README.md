@@ -1,26 +1,25 @@
 # Jesus' Mission Fund
 
-The public website for Jesus' Mission Fund, built with Next.js, React, and Tailwind CSS. Better Auth and Prisma dependencies are retained in the project setup.
+Website and member platform for Jesus' Mission Fund. Missionaries apply for support and send reports, partners register to give, and JMF staff run it from `/admin`.
 
-## Run locally
-
-Use pnpm for dependency management. The pnpm lockfile is the project's source of truth.
+## Setup
 
 ```bash
-pnpm install --frozen-lockfile
+pnpm install --frozen-lockfile   # also generates the Prisma client
+cp .env.example .env             # fill it in
+pnpm prisma migrate dev
+pnpm tsx scripts/create-admin.ts --email you@example.org --password '...'
 pnpm dev
 ```
 
-The development server starts at [http://localhost:3000](http://localhost:3000).
+Prisma 7 doesn't regenerate the client after `migrate`, so run `npx prisma generate` after schema changes.
 
-## Other commands
+## Deploying
 
-```bash
-pnpm lint
-pnpm build
-pnpm start
-```
+- Run `npx prisma migrate deploy` before starting a new version.
+- Rate limits trust `X-Forwarded-For`, which Vercel sets. On other hosting, set `advanced.ipAddress` in `lib/auth.ts`.
 
-Environment variables belong in `.env` and should not be committed. Prisma client output is generated under `app/generated/prisma`; update it through the Prisma schema and generator configuration rather than editing generated files directly.
+## Docs
 
-See [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) for the source tree and conventions.
+- [docs/architecture.md](docs/architecture.md): the rules behind roles, applications and reports that aren't obvious from the code.
+- [docs/conventions.md](docs/conventions.md): where shared pieces live, and the rules for changing things.
