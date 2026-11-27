@@ -23,6 +23,10 @@ export const auth = betterAuth({
         ...passwordResetEmail(user.name, url),
       }),
   },
+  user: {
+    // Sends a link to the new address; the email only changes once it's opened.
+    changeEmail: { enabled: true },
+  },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) =>
       sendEmailAfterResponse({
@@ -39,6 +43,7 @@ export const auth = betterAuth({
       "/request-password-reset": { window: 15 * 60, max: 10 },
       "/send-verification-email": { window: 15 * 60, max: 5 },
       "/change-password": { window: 15 * 60, max: 10 },
+      "/change-email": { window: 15 * 60, max: 5 },
       // Checked on every page view; counting it would write to the database each time.
       "/get-session": false,
     },

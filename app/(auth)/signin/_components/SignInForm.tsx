@@ -8,7 +8,8 @@ import { z } from "zod";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { authClient } from "@/lib/auth-client";
+import { authClient, authErrorOf } from "@/lib/auth-client";
+import { currentPasswordField, emailField } from "@/lib/validation";
 import {
   FormAlert,
   PasswordField,
@@ -17,8 +18,8 @@ import {
 } from "@/components/forms/fields";
 
 const signinSchema = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: emailField,
+  password: currentPasswordField("Password is required"),
   rememberMe: z.boolean(),
 });
 
@@ -35,20 +36,12 @@ export function SignInForm() {
 
   async function onSubmit(values: SigninInput) {
     setServerError("");
-    try {
-      const { error } = await authClient.signIn.email({
-        ...values,
-        callbackURL: "/dashboard",
-      });
-      if (error)
-        setServerError(
-          error.message || "We could not sign you in. Please try again.",
-        );
-    } catch {
-      setServerError(
-        "The sign-in service could not be reached. Please try again in a moment.",
-      );
-    }
+    setServerError(
+      await authErrorOf(
+        () => authClient.signIn.email({ ...values, callbackURL: "/dashboard" }),
+        "We could not sign you in. Please try again.",
+      ),
+    );
   }
 
   return (

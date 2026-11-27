@@ -36,8 +36,16 @@ export default async function MissionarySignupPage({
     : null;
   const [application] = user?.missionaryApplications ?? [];
   const startingNew = application?.status === "REJECTED";
-  if (application?.status !== "DRAFT" && !canStartApplication(application))
-    redirect("/dashboard");
+  if (
+    application &&
+    application.status !== "DRAFT" &&
+    !canStartApplication(application)
+  )
+    redirect(
+      application.status === "REJECTED"
+        ? "/dashboard"
+        : `/dashboard/applications/${application.id}`,
+    );
 
   const saved = toApplicationDraft(application ?? null, user);
   const draft = startingNew ? carriedOver(saved) : saved;

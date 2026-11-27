@@ -1,13 +1,14 @@
 // One row per missionary, so a request sent to everyone can be answered by each.
 model ReportRequest {
-  id        String            @id @default(cuid())
-  userId    String
-  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title     String
-  body      String
-  dueDate   DateTime?
-  createdAt DateTime          @default(now())
-  report    MissionaryReport?
+  id         String            @id @default(cuid())
+  userId     String
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  body       String
+  dueDate    DateTime?
+  remindedAt DateTime?
+  createdAt  DateTime          @default(now())
+  report     MissionaryReport?
 
   @@index([userId])
   @@index([createdAt])

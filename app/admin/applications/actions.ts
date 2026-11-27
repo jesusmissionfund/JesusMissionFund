@@ -12,6 +12,7 @@ import { currentApplication } from "@/lib/missionary-application";
 import { prisma } from "@/lib/prisma";
 import { siteUrl } from "@/lib/site";
 import { requireAdmin } from "@/lib/session";
+import { dateFromInput, optionalDateField } from "@/lib/validation";
 import { recordAudit } from "../audit";
 
 type Decision =
@@ -82,9 +83,8 @@ export async function reviewApplication(
 }
 
 function parseDate(value: string | undefined) {
-  if (!value) return null;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? undefined : date;
+  const parsed = optionalDateField.safeParse(value ?? "");
+  return parsed.success ? dateFromInput(parsed.data) : undefined;
 }
 
 export async function setReapplyAfter(

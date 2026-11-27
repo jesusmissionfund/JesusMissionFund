@@ -8,14 +8,16 @@ import { z } from "zod";
 import { FieldGroup } from "@/components/ui/field";
 import {
   FormAlert,
+  FormStatus,
   PasswordField,
   SubmitButton,
 } from "@/components/forms/fields";
-import { authClient } from "@/lib/auth-client";
+import { authClient, authErrorOf } from "@/lib/auth-client";
+import { currentPasswordField } from "@/lib/validation";
 import { newPasswordSchema } from "@/app/(auth)/signup/schema";
 
 const changePasswordSchema = newPasswordSchema.safeExtend({
-  currentPassword: z.string().min(1, "Enter your current password"),
+  currentPassword: currentPasswordField("Enter your current password"),
 });
 
 type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
@@ -38,24 +40,18 @@ export function ChangePasswordForm() {
   async function onSubmit({ currentPassword, password }: ChangePasswordInput) {
     setServerError("");
     setChanged(false);
-    try {
-      const { error } = await authClient.changePassword({
-        currentPassword,
-        newPassword: password,
-        revokeOtherSessions: true,
-      });
-      if (error)
-        return setServerError(
-          error.message ||
-            "We could not change your password. Please try again.",
-        );
-      form.reset(emptyValues);
-      setChanged(true);
-    } catch {
-      setServerError(
-        "The service could not be reached. Please try again in a moment.",
-      );
-    }
+    const error = await authErrorOf(
+      () =>
+        authClient.changePassword({
+          currentPassword,
+          newPassword: password,
+          revokeOtherSessions: true,
+        }),
+      "We could not change your password. Please try again.",
+    );
+    if (error) return setServerError(error);
+    form.reset(emptyValues);
+    setChanged(true);
   }
 
   return (
@@ -84,11 +80,10 @@ export function ChangePasswordForm() {
           autoComplete="new-password"
         />
         <FormAlert>{serverError}</FormAlert>
-        {changed && (
-          <p role="status" className="text-sm text-muted-foreground">
-            Password changed. Your other devices have been signed out.
-          </p>
-        )}
+        <FormStatus>
+          {changed &&
+            "Password changed. Your other devices have been signed out."}
+        </FormStatus>
         <SubmitButton pending={form.formState.isSubmitting}>
           Change password
         </SubmitButton>

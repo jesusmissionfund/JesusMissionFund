@@ -188,6 +188,15 @@ export function FormAlert({ children }: { children: ReactNode }) {
   );
 }
 
+export function FormStatus({ children }: { children: ReactNode }) {
+  if (!children) return null;
+  return (
+    <p role="status" className="text-sm text-muted-foreground">
+      {children}
+    </p>
+  );
+}
+
 export function SubmitButton({
   pending,
   children,

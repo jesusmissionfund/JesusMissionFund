@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { requirePerson } from "../person";
+import { EmailForm, NameForm } from "./_components/AccountForms";
 import { ChangePasswordForm } from "./_components/ChangePasswordForm";
 import { DetailsForm } from "./_components/DetailsForm";
 
@@ -19,22 +20,23 @@ export default async function DetailsPage() {
       links={links}
     >
       <section className="border border-border bg-card p-6 sm:p-8">
-        <dl className="mb-6 grid max-w-xl gap-3 border-b border-border pb-6 text-sm sm:grid-cols-2">
-          <div>
-            <dt className="text-subtle-foreground">Full name</dt>
-            <dd className="mt-1 font-medium">{session.user.name}</dd>
-          </div>
-          <div>
-            <dt className="text-subtle-foreground">Email address</dt>
-            <dd className="mt-1 font-medium">{session.user.email}</dd>
-          </div>
-        </dl>
+        <h2 className="mb-5 text-xl font-semibold">Phone and country</h2>
         <DetailsForm
           defaultValues={{
             phone: details.phone ?? "",
             country: details.country ?? "",
           }}
         />
+      </section>
+      <section className="mt-5 grid gap-8 border border-border bg-card p-6 sm:p-8 lg:grid-cols-2">
+        <div>
+          <h2 className="mb-5 text-xl font-semibold">Name</h2>
+          <NameForm name={session.user.name} />
+        </div>
+        <div>
+          <h2 className="mb-5 text-xl font-semibold">Email</h2>
+          <EmailForm email={session.user.email} />
+        </div>
       </section>
       <section className="mt-5 border border-border bg-card p-6 sm:p-8">
         <h2 className="text-xl font-semibold">Password</h2>

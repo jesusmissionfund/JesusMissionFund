@@ -144,7 +144,12 @@ export default async function UsersPage({
                 <tr key={user.id}>
                   <td className="px-5 py-3">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-semibold">{user.name}</span>
+                      <Link
+                        href={`/admin/users/${user.id}`}
+                        className="font-semibold hover:text-brand"
+                      >
+                        {user.name}
+                      </Link>
                       {user.banned && <Badge tone="danger">Banned</Badge>}
                     </div>
                     <span className="block text-muted-foreground">

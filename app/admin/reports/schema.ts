@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { optionalDateField } from "@/lib/validation";
+
 export const allMissionaries = "all";
 
 export const reportRequestSchema = z.object({
@@ -10,7 +12,7 @@ export const reportRequestSchema = z.object({
     .trim()
     .min(1, "Please say what you'd like in the report")
     .max(20000),
-  dueDate: z.union([z.literal(""), z.iso.date("Please enter a valid date")]),
+  dueDate: optionalDateField,
 });
 
 export type ReportRequestInput = z.infer<typeof reportRequestSchema>;

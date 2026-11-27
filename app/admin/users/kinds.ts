@@ -1,11 +1,10 @@
 import type { Prisma } from "@/app/generated/prisma/client";
+import { approvedMissionary } from "@/lib/missionary-application";
 
 export const userKinds = {
   missionary: {
     label: "Missionary",
-    where: {
-      missionaryApplications: { some: { status: { not: "DRAFT" } } },
-    },
+    where: approvedMissionary,
   },
   partner: {
     label: "Partner",
@@ -29,7 +28,7 @@ type UserRecords = {
 export function kindsOf(user: UserRecords): UserKind[] {
   if (user.role === "admin") return ["admin"];
   return [
-    ...(user.missionaryApplications.some(({ status }) => status !== "DRAFT")
+    ...(user.missionaryApplications.some(({ status }) => status === "APPROVED")
       ? (["missionary"] as const)
       : []),
     ...(user.partnerProfile?.status === "ACTIVE" ? (["partner"] as const) : []),

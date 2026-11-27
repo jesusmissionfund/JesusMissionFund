@@ -6,7 +6,7 @@ import { ApplicationAnswers } from "@/components/dashboard/ApplicationAnswers";
 import { Badge } from "@/components/dashboard/Badge";
 import { BackLink } from "@/components/dashboard/BackLink";
 import { DashboardShell } from "@/components/layout/DashboardShell";
-import { formatDate } from "@/lib/format";
+import { formatDate, toDateInput } from "@/lib/format";
 import {
   currentApplication,
   tomorrowAsDateInput,
@@ -78,7 +78,13 @@ export default async function AdminApplicationPage({
               )}
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              {user.email} · {application.phone}
+              {user.email} · {application.phone} ·{" "}
+              <Link
+                href={`/admin/users/${application.userId}`}
+                className="font-semibold text-brand"
+              >
+                View profile
+              </Link>
             </p>
             <p className="mt-1 text-xs text-subtle-foreground">
               {application.submittedAt &&
@@ -105,9 +111,11 @@ export default async function AdminApplicationPage({
                 applicationId={application.id}
                 applicantName={user.name}
                 minReapplyDate={minReapplyDate}
-                reapplyAfter={application.reapplyAfter
-                  ?.toISOString()
-                  .slice(0, 10)}
+                reapplyAfter={
+                  application.reapplyAfter
+                    ? toDateInput(application.reapplyAfter)
+                    : undefined
+                }
                 label={
                   application.reapplyAfter &&
                   application.reapplyAfter > new Date()

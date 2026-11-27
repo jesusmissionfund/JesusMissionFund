@@ -3,18 +3,19 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 
 import { Badge } from "@/components/dashboard/Badge";
-import { Tabs } from "@/components/dashboard/Tabs";
 import {
   Pagination,
   pageNumber,
   pageSize,
 } from "@/components/dashboard/Pagination";
+import { Tabs } from "@/components/dashboard/Tabs";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
+import { isOverdue } from "@/lib/report-request";
 import { requireAdmin } from "@/lib/session";
-import { cn } from "cn";
 import { adminLinks } from "../links";
+import { RequestActions } from "./_components/RequestActions";
 
 export const metadata: Metadata = { title: "Reports" };
 
@@ -22,6 +23,9 @@ const tabs = [
   { id: "reports", label: "Reports" },
   { id: "requests", label: "Requests" },
 ] as const;
+
+const rowClass =
+  "flex flex-wrap items-center justify-between gap-3 p-5 sm:px-6";
 
 export default async function AdminReportsPage({
   searchParams,
@@ -34,71 +38,42 @@ export default async function AdminReportsPage({
   );
   const range = { skip: (page - 1) * pageSize, take: pageSize };
 
-  const [rows, total] =
+  const [reports, requests, total] = await Promise.all([
     tab === "reports"
-      ? await Promise.all([
-          prisma.missionaryReport
-            .findMany({
-              orderBy: { createdAt: "desc" },
-              ...range,
-              select: {
-                id: true,
-                title: true,
-                createdAt: true,
-                requestId: true,
-                user: { select: { name: true } },
-              },
-            })
-            .then((reports) =>
-              reports.map((report) => ({
-                key: report.id,
-                href: `/admin/reports/${report.id}`,
-                title: report.title,
-                name: report.user.name,
-                meta: `Sent ${formatDate(report.createdAt)}`,
-                badge: report.requestId
-                  ? { tone: "info" as const, label: "Requested" }
-                  : null,
-              })),
-            ),
-          prisma.missionaryReport.count(),
-        ])
-      : await Promise.all([
-          prisma.reportRequest
-            .findMany({
-              orderBy: { createdAt: "desc" },
-              ...range,
-              select: {
-                id: true,
-                title: true,
-                createdAt: true,
-                dueDate: true,
-                user: { select: { name: true } },
-                report: { select: { id: true } },
-              },
-            })
-            .then((requests) =>
-              requests.map((request) => ({
-                key: request.id,
-                href: request.report
-                  ? `/admin/reports/${request.report.id}`
-                  : null,
-                title: request.title,
-                name: request.user.name,
-                meta: [
-                  `Requested ${formatDate(request.createdAt)}`,
-                  request.dueDate && `Due ${formatDate(request.dueDate)}`,
-                ]
-                  .filter(Boolean)
-                  .join(" · "),
-                badge: request.report
-                  ? { tone: "success" as const, label: "Answered" }
-                  : { tone: "warning" as const, label: "Waiting" },
-              })),
-            ),
-          prisma.reportRequest.count(),
-        ]);
+      ? prisma.missionaryReport.findMany({
+          orderBy: { createdAt: "desc" },
+          ...range,
+          select: {
+            id: true,
+            title: true,
+            createdAt: true,
+            requestId: true,
+            user: { select: { name: true } },
+          },
+        })
+      : [],
+    tab === "requests"
+      ? prisma.reportRequest.findMany({
+          orderBy: { createdAt: "desc" },
+          ...range,
+          select: {
+            id: true,
+            title: true,
+            createdAt: true,
+            dueDate: true,
+            remindedAt: true,
+            user: { select: { id: true, name: true } },
+            report: { select: { id: true } },
+          },
+        })
+      : [],
+    tab === "reports"
+      ? prisma.missionaryReport.count()
+      : prisma.reportRequest.count(),
+  ]);
   const pages = Math.max(1, Math.ceil(total / pageSize));
+  const empty =
+    tab === "reports" ? reports.length === 0 : requests.length === 0;
 
   return (
     <DashboardShell
@@ -128,48 +103,82 @@ export default async function AdminReportsPage({
       </div>
 
       <section className="border border-border bg-card">
-        {rows.length === 0 ? (
+        {empty ? (
           <p className="p-6 text-sm text-muted-foreground">
             {tab === "reports" ? "No reports yet." : "No requests yet."}
           </p>
         ) : (
           <ul className="divide-y divide-border">
-            {rows.map((row) => {
-              const content = (
-                <>
+            {reports.map((report) => (
+              <li key={report.id}>
+                <Link
+                  href={`/admin/reports/${report.id}`}
+                  className={`${rowClass} hover:bg-muted`}
+                >
                   <div>
                     <div className="flex flex-wrap items-center gap-3">
-                      <span className="font-semibold">{row.title}</span>
-                      {row.badge && (
-                        <Badge tone={row.badge.tone}>{row.badge.label}</Badge>
-                      )}
+                      <span className="font-semibold">{report.title}</span>
+                      {report.requestId && <Badge tone="info">Requested</Badge>}
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      {row.name}
+                      {report.user.name}
                     </p>
                   </div>
                   <span className="text-xs text-subtle-foreground">
-                    {row.meta}
+                    Sent {formatDate(report.createdAt)}
                   </span>
-                </>
-              );
-              const className =
-                "flex flex-wrap items-center justify-between gap-3 p-5 sm:px-6";
-              return (
-                <li key={row.key}>
-                  {row.href ? (
+                </Link>
+              </li>
+            ))}
+            {requests.map((request) => (
+              <li key={request.id} className={rowClass}>
+                <div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {request.report ? (
+                      <Link
+                        href={`/admin/reports/${request.report.id}`}
+                        className="font-semibold hover:text-brand"
+                      >
+                        {request.title}
+                      </Link>
+                    ) : (
+                      <span className="font-semibold">{request.title}</span>
+                    )}
+                    {request.report ? (
+                      <Badge tone="success">Answered</Badge>
+                    ) : isOverdue(request) ? (
+                      <Badge tone="danger">Overdue</Badge>
+                    ) : (
+                      <Badge tone="warning">Waiting</Badge>
+                    )}
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
                     <Link
-                      href={row.href}
-                      className={cn(className, "hover:bg-muted")}
+                      href={`/admin/users/${request.user.id}`}
+                      className="hover:text-brand"
                     >
-                      {content}
+                      {request.user.name}
                     </Link>
-                  ) : (
-                    <div className={className}>{content}</div>
-                  )}
-                </li>
-              );
-            })}
+                  </p>
+                  <p className="mt-1 text-xs text-subtle-foreground">
+                    {[
+                      `Requested ${formatDate(request.createdAt)}`,
+                      request.dueDate && `Due ${formatDate(request.dueDate)}`,
+                      request.remindedAt &&
+                        `Reminded ${formatDate(request.remindedAt)}`,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                </div>
+                {!request.report && (
+                  <RequestActions
+                    requestId={request.id}
+                    missionaryName={request.user.name}
+                  />
+                )}
+              </li>
+            ))}
           </ul>
         )}
       </section>

@@ -3,8 +3,15 @@
 import { revalidatePath } from "next/cache";
 
 import { Prisma } from "@/app/generated/prisma/client";
-import { invalidInput, type ActionResult } from "@/lib/action-result";
+import {
+  invalidInput,
+  signedOut,
+  type ActionResult,
+} from "@/lib/action-result";
+import { applicationSubmittedEmail } from "@/lib/email-templates";
+import { emailAdmins } from "@/lib/notify-admins";
 import { prisma } from "@/lib/prisma";
+import { siteUrl } from "@/lib/site";
 import { getUserSession } from "@/lib/session";
 import {
   canStartApplication,
@@ -24,7 +31,6 @@ import {
   type SupportInput,
 } from "./schema";
 
-const signedOut = { error: "Please sign in to continue your application." };
 const alreadySubmitted = {
   error: "Your application has already been submitted.",
 };
@@ -138,6 +144,13 @@ export async function submitApplication(): Promise<ActionResult> {
     return count === 1;
   });
   if (!submitted) return alreadySubmitted;
+  await emailAdmins(
+    applicationSubmittedEmail(
+      session.user.name,
+      `${siteUrl}/admin/applications/${application.id}`,
+    ),
+  );
   revalidatePath("/dashboard", "layout");
+  revalidatePath("/admin", "layout");
   return {};
 }

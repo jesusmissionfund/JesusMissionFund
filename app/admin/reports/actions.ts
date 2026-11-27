@@ -3,14 +3,19 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { invalidInput } from "@/lib/action-result";
+import { invalidInput, type ActionResult } from "@/lib/action-result";
 import { sendEmailAfterResponse } from "@/lib/email";
-import { reportRequestedEmail } from "@/lib/email-templates";
+import {
+  reportReminderEmail,
+  reportRequestedEmail,
+} from "@/lib/email-templates";
 import { formatDate } from "@/lib/format";
-import { approvedMissionary } from "@/lib/missionary-application";
+import { reachableMissionary } from "@/lib/missionary-application";
 import { prisma } from "@/lib/prisma";
+import { waitingRequest } from "@/lib/report-request";
 import { siteUrl } from "@/lib/site";
 import { requireAdmin } from "@/lib/session";
+import { dateFromInput } from "@/lib/validation";
 import { recordAudit } from "../audit";
 import {
   allMissionaries,
@@ -23,11 +28,11 @@ export async function requestReport(input: ReportRequestInput) {
   const parsed = reportRequestSchema.safeParse(input);
   if (!parsed.success) return invalidInput;
   const { recipient, title, body } = parsed.data;
-  const dueDate = parsed.data.dueDate ? new Date(parsed.data.dueDate) : null;
+  const dueDate = dateFromInput(parsed.data.dueDate);
   const toEveryone = recipient === allMissionaries;
 
   const missionaries = await prisma.user.findMany({
-    where: { ...(!toEveryone && { id: recipient }), ...approvedMissionary },
+    where: { ...(!toEveryone && { id: recipient }), ...reachableMissionary },
     select: { id: true, name: true, email: true },
   });
   if (missionaries.length === 0)
@@ -75,4 +80,71 @@ export async function requestReport(input: ReportRequestInput) {
   revalidatePath("/admin", "layout");
   revalidatePath("/dashboard", "layout");
   redirect("/admin/reports?tab=requests");
+}
+
+async function findWaitingRequest(id: string) {
+  return prisma.reportRequest.findFirst({
+    where: { id, ...waitingRequest },
+    select: {
+      id: true,
+      title: true,
+      dueDate: true,
+      user: { select: { id: true, name: true, email: true } },
+    },
+  });
+}
+
+const alreadyAnswered = {
+  error: "This request has been answered or withdrawn.",
+};
+
+export async function withdrawReportRequest(id: string): Promise<ActionResult> {
+  const { user: admin } = await requireAdmin();
+  const request = await findWaitingRequest(id);
+  if (!request) return alreadyAnswered;
+
+  await prisma.$transaction(async (tx) => {
+    await tx.reportRequest.delete({ where: { id } });
+    await recordAudit(
+      admin,
+      "REPORT_REQUEST_WITHDRAWN",
+      { id: request.user.id, name: request.user.name },
+      request.title,
+      tx,
+    );
+  });
+  revalidatePath("/admin", "layout");
+  revalidatePath("/dashboard", "layout");
+  return {};
+}
+
+export async function remindReportRequest(id: string): Promise<ActionResult> {
+  const { user: admin } = await requireAdmin();
+  const request = await findWaitingRequest(id);
+  if (!request) return alreadyAnswered;
+
+  await prisma.$transaction(async (tx) => {
+    await tx.reportRequest.update({
+      where: { id },
+      data: { remindedAt: new Date() },
+    });
+    await recordAudit(
+      admin,
+      "REPORT_REMINDER_SENT",
+      { id: request.user.id, name: request.user.name },
+      request.title,
+      tx,
+    );
+  });
+  sendEmailAfterResponse({
+    to: request.user.email,
+    ...reportReminderEmail(
+      request.user.name,
+      request.title,
+      request.dueDate && formatDate(request.dueDate),
+      `${siteUrl}/dashboard/reports/new?request=${id}`,
+    ),
+  });
+  revalidatePath("/admin", "layout");
+  return {};
 }
