@@ -36,6 +36,9 @@
   --border: #dfe5dc;
   --input: #d5ddd3;
   --ring: #315b42;
+  --device: #111714;
+  --device-frame: #1b211e;
+  --momo: #198754;
   --chart-1: #174b35;
   --chart-2: #315b42;
   --chart-3: #587261;
@@ -73,6 +76,9 @@
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
+  --color-device: var(--device);
+  --color-device-frame: var(--device-frame);
+  --color-momo: var(--momo);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
@@ -110,12 +116,15 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
 body {
   min-height: 100vh;
 }
-
 
 @layer base {
   * {

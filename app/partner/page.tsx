@@ -1,6 +1,14 @@
-import Footer from "../../components/layout/Footer";
-import Navbar from "../../components/layout/Navbar";
-import PartnerLanding from "../../components/partners/PartnerLanding";
+import type { Metadata } from "next";
+
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import PartnerLanding from "@/components/partners/PartnerLanding";
+
+export const metadata: Metadata = {
+  title: "Partners",
+  description:
+    "Missionaries carry the Gospel into their communities. Partners help provide the practical support that lets them stay focused on that work.",
+};
 
 export default function PartnerPage() {
   return (

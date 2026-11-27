@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { siteUrl } from "@/lib/site";
+import { siteName, siteUrl } from "@/lib/site";
 import { cn } from "cn";
 import { Toaster } from "@/components/ui/toast";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const siteName = "Jesus' Mission Fund";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 
-import { UserMenu } from "@/components/auth/UserMenu";
+import { UserMenu, type MenuUser } from "@/components/auth/UserMenu";
+import { logoSrc } from "@/lib/site";
 
 type DashboardLink = { label: string; href: string };
 
@@ -15,7 +16,7 @@ export function DashboardShell({
   children,
 }: {
   label: "Admin" | "My dashboard";
-  user: { name: string; email: string };
+  user: MenuUser;
   title: string;
   subtitle: string;
   links: DashboardLink[];
@@ -25,7 +26,7 @@ export function DashboardShell({
     <div className="min-h-screen bg-muted text-foreground">
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-border bg-card px-5 py-6 lg:flex">
         <Link href="/" className="flex items-center gap-3 font-semibold">
-          <Image src="/JMF_Logo-Green_NoBG.png" alt="" width={40} height={40} />
+          <Image src={logoSrc} alt="" width={40} height={40} />
           <span>Jesus&apos; Mission Fund</span>
         </Link>
         <div className="mt-10 border-y border-border py-4">

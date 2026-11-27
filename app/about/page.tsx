@@ -1,11 +1,28 @@
-"use client";
-
+import type { Metadata } from "next";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { Heart, Users, Target, Globe, Handshake, Eye } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
+import { Eye, Globe, Handshake, Heart, Target, Users } from "lucide-react";
+
 import Footer from "@/components/layout/Footer";
-import { Breadcrumb } from "@/components/layout/BreadCrumb";
+import Navbar from "@/components/layout/Navbar";
+import { Reveal } from "@/components/site/Reveal";
+import {
+  bodyClass,
+  Container,
+  Eyebrow,
+  heroSpacing,
+  heroTitleClass,
+  leadClass,
+  Section,
+  SectionHeader,
+  sectionTitleClass,
+} from "@/components/site/layout";
+import { cn } from "cn";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "For over a decade, we've been connecting generous hearts with dedicated missionaries, creating lasting change in communities around the world.",
+};
 
 const values = [
   {
@@ -67,228 +84,159 @@ const team = [
   },
 ];
 
-export default function About() {
+const splitGrid = "grid items-center gap-12 lg:grid-cols-2 lg:gap-16";
+
+export default function AboutPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
-      <Breadcrumb />
 
-      <section className="pt-32 pb-20 relative overflow-hidden bg-accent">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center px-4 py-2 text-secondary text-sm font-medium mb-6">
-              <Users className="w-4 h-4 mr-2" />
+      <section className={cn("bg-accent", heroSpacing)}>
+        <Container>
+          <Reveal immediate className="mx-auto max-w-3xl text-center">
+            <Eyebrow icon={Users} className="justify-center">
               Our Story
-            </div>
-            <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
+            </Eyebrow>
+            <h1 className={cn(heroTitleClass, "mt-6")}>
               About Jesus&apos; Mission Fund
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className={cn(leadClass, "mt-7")}>
               For over a decade, we&apos;ve been connecting generous hearts with
               dedicated missionaries, creating lasting change in communities
               around the world.
             </p>
-          </motion.div>
-        </div>
+          </Reveal>
+        </Container>
       </section>
 
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="inline-flex items-center px-4 py-2 text-secondary text-sm font-medium mb-6">
-                <Handshake className="w-4 h-4 mr-2" />
-                Our Mission
-              </div>
-              <h1 className="text-4xl font-bold text-foreground mb-6">
-                Our Mission
-              </h1>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                We are committed to providing financial, material, and
-                logistical support to missionaries, enabling them to carry out
-                their work efficiently and sustainably. JMF exists to bridge the
-                gap between those who want to give and those who serve on the
-                front lines of global missions.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Soul-winning is spiritual warfare, and missionaries stand on the
-                front lines for the Gospel. They were never meant to fight
-                alone. Through Jesus&apos; Mission Fund, your giving goes where
-                you cannot, speaking for Christ in lives and nations beyond your
-                reach.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative aspect-[4/3] rounded-3xl overflow-hidden"
-            >
-              <Image
-                src="/img4.jpg"
-                alt="Missionaries gathered in prayer"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-muted/30 bg-accent">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative aspect-[4/3] rounded-3xl overflow-hidden order-2 lg:order-1"
-            >
-              <Image
-                src="/about-vision.jpg"
-                alt="Global vision for the Gospel"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="order-1 lg:order-2"
-            >
-              <div className="inline-flex items-center px-4 py-2 text-secondary text-sm font-medium mb-6">
-                <Eye className="w-4 h-4 mr-2" />
-                Our Vision
-              </div>
-              <h1 className="text-4xl font-bold text-foreground mb-6">
-                A World Reached for Christ
-              </h1>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                We envision a world where every missionary called to the harvest
-                is fully equipped, sustainably supported, and never hindered by
-                lack. A world where the Gospel reaches every corner through
-                empowered laborers and faithful partners.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Kingdom impact is not limited by geography—it is multiplied
-                through obedience. When you give, you send missionaries to
-                unreached areas, fund evangelism and discipleship efforts, and
-                strengthen families who have answered the call.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Our Core Values
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              These principles guide everything we do and every relationship we
-              build.
+      <Section containerClassName={splitGrid}>
+        <Reveal from="left">
+          <Eyebrow icon={Handshake}>Our Mission</Eyebrow>
+          <h2 className={cn(sectionTitleClass, "mt-4")}>Our Mission</h2>
+          <div className={cn(bodyClass, "mt-5 space-y-6")}>
+            <p>
+              We are committed to providing financial, material, and logistical
+              support to missionaries, enabling them to carry out their work
+              efficiently and sustainably. JMF exists to bridge the gap between
+              those who want to give and those who serve on the front lines of
+              global missions.
             </p>
-          </motion.div>
+            <p>
+              Soul-winning is spiritual warfare, and missionaries stand on the
+              front lines for the Gospel. They were never meant to fight alone.
+              Through Jesus&apos; Mission Fund, your giving goes where you
+              cannot, speaking for Christ in lives and nations beyond your
+              reach.
+            </p>
+          </div>
+        </Reveal>
+        <Reveal from="right" className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src="/img4.jpg"
+            alt="Missionaries gathered in prayer"
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </Reveal>
+      </Section>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 ">
-            {values.map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="border border-border bg-card p-6 text-center transition-colors hover:border-input"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                  <value.icon className="w-7 h-7 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {value.title}
+      <Section className="bg-accent" containerClassName={splitGrid}>
+        <Reveal
+          from="left"
+          className="relative order-2 aspect-[4/3] overflow-hidden lg:order-1"
+        >
+          <Image
+            src="/about-vision.jpg"
+            alt="Global vision for the Gospel"
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </Reveal>
+        <Reveal from="right" className="order-1 lg:order-2">
+          <Eyebrow icon={Eye}>Our Vision</Eyebrow>
+          <h2 className={cn(sectionTitleClass, "mt-4")}>
+            A World Reached for Christ
+          </h2>
+          <div className={cn(bodyClass, "mt-5 space-y-6")}>
+            <p>
+              We envision a world where every missionary called to the harvest
+              is fully equipped, sustainably supported, and never hindered by
+              lack. A world where the Gospel reaches every corner through
+              empowered laborers and faithful partners.
+            </p>
+            <p>
+              Kingdom impact is not limited by geography—it is multiplied
+              through obedience. When you give, you send missionaries to
+              unreached areas, fund evangelism and discipleship efforts, and
+              strengthen families who have answered the call.
+            </p>
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section>
+        <Reveal>
+          <SectionHeader
+            title="Our Core Values"
+            description="These principles guide everything we do and every relationship we build."
+          />
+        </Reveal>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {values.map(({ icon: Icon, title, description }, index) => (
+            <Reveal
+              key={title}
+              delay={index * 0.1}
+              className="border border-border bg-card p-6 text-center transition-colors hover:border-input"
+            >
+              <span className="mx-auto mb-4 flex size-14 items-center justify-center bg-primary/10">
+                <Icon aria-hidden="true" className="size-7 text-primary" />
+              </span>
+              <h3 className="mb-2 text-lg font-semibold text-foreground">
+                {title}
+              </h3>
+              <p className="text-sm text-muted-foreground">{description}</p>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section className="bg-muted/30">
+        <Reveal>
+          <SectionHeader
+            title="Meet Our Team"
+            description="Dedicated individuals committed to serving missionaries and donors alike."
+          />
+        </Reveal>
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {team.map((member, index) => (
+            <Reveal
+              key={member.name}
+              delay={index * 0.1}
+              className="group overflow-hidden border border-border bg-card"
+            >
+              <div className="relative aspect-[4/5] w-full overflow-hidden">
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-6 text-center">
+                <h3 className="text-lg font-semibold text-foreground">
+                  {member.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  {value.description}
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {member.role}
                 </p>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
-      </section>
-
-      <section className="py-20 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Meet Our Team
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Dedicated individuals committed to serving missionaries and donors
-              alike.
-            </p>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 ">
-            {team.map((member, index) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group overflow-hidden border border-border bg-card"
-              >
-                <div className="relative w-full aspect-[4/5] overflow-hidden ">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6 text-center">
-                  <h3 className="text-lg font-semibold text-foreground">
-                    {member.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {member.role}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      </Section>
 
       <Footer />
     </main>

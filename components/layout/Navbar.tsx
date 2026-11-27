@@ -8,15 +8,9 @@ import { Menu, X } from "lucide-react";
 import { cn } from "cn";
 import { CreateAccountMenu } from "@/components/auth/CreateAccountMenu";
 import { UserMenu } from "@/components/auth/UserMenu";
+import { containerClass } from "@/components/site/layout";
 import { authClient } from "@/lib/auth-client";
-
-const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Partners", href: "/partner" },
-  { name: "Missionaries", href: "/missionary" },
-  { name: "Success stories", href: "/success-stories" },
-];
+import { logoSrc, siteLinks, siteName } from "@/lib/site";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,24 +29,21 @@ export default function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
       <nav
         aria-label="Main navigation"
-        className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8"
+        className={cn(
+          containerClass,
+          "flex h-[76px] items-center justify-between",
+        )}
       >
         <Link
           href="/"
-          aria-label="Jesus’ Mission Fund home"
+          aria-label={`${siteName} home`}
           className="flex shrink-0 items-center"
         >
-          <Image
-            src="/JMF_Logo-Green_NoBG.png"
-            alt="Jesus’ Mission Fund"
-            width={58}
-            height={58}
-            priority
-          />
+          <Image src={logoSrc} alt={siteName} width={58} height={58} priority />
         </Link>
 
         <div className="hidden items-center gap-6 lg:flex xl:gap-8">
-          {navLinks.map((link) => (
+          {siteLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -91,12 +82,12 @@ export default function Navbar() {
           aria-expanded={isMenuOpen}
           aria-controls="mobile-navigation"
           onClick={() => setIsMenuOpen((open) => !open)}
-          className="inline-flex h-11 w-11 items-center justify-center text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand lg:hidden"
+          className="inline-flex size-11 items-center justify-center text-primary transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand lg:hidden"
         >
           {isMenuOpen ? (
-            <X aria-hidden="true" className="h-5 w-5" />
+            <X aria-hidden="true" className="size-5" />
           ) : (
-            <Menu aria-hidden="true" className="h-5 w-5" />
+            <Menu aria-hidden="true" className="size-5" />
           )}
         </button>
       </nav>
@@ -104,10 +95,10 @@ export default function Navbar() {
       {isMenuOpen && (
         <div
           id="mobile-navigation"
-          className="border-t border-border bg-background px-5 pb-6 pt-3 sm:px-6 lg:hidden"
+          className="border-t border-border bg-background pb-6 pt-3 lg:hidden"
         >
-          <div className="mx-auto flex max-w-7xl flex-col">
-            {navLinks.map((link) => (
+          <div className={cn(containerClass, "flex flex-col")}>
+            {siteLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
