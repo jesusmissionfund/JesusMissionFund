@@ -42,7 +42,7 @@ async function startDraft(userId: string, path: SignupPath) {
     });
     return;
   }
-  // Reapplying starts on the application page instead, so earlier answers carry over.
+  // After a rejection, the application page starts the new one so it can copy the stable details.
   const existing = await prisma.missionaryApplication.findFirst({
     where: { userId },
     select: { id: true },

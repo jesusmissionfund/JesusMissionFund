@@ -153,6 +153,28 @@ export function toApplicationDraft(
   };
 }
 
+// What someone asks for can change, so a new application copies only these from the previous one.
+const carriedOverFields = [
+  "phone",
+  "country",
+  "region",
+  "church",
+  "yearsServing",
+  "ministryFocus",
+  "referenceName",
+  "referenceContact",
+] as const;
+
+type CarriedOverField = (typeof carriedOverFields)[number];
+
+export function carriedOver<
+  T extends Partial<Record<CarriedOverField, unknown>>,
+>(previous: T) {
+  return Object.fromEntries(
+    carriedOverFields.map((field) => [field, previous[field]]),
+  ) as Pick<T, CarriedOverField>;
+}
+
 export function resumeStep(signedIn: boolean, draft: ApplicationDraft): StepId {
   if (!signedIn) return "account";
   if (!contactSchema.safeParse(draft).success) return "contact";

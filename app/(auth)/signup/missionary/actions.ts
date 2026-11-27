@@ -2,10 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import {
-  Prisma,
-  type MissionaryApplication,
-} from "@/app/generated/prisma/client";
+import { Prisma } from "@/app/generated/prisma/client";
 import { invalidInput, type ActionResult } from "@/lib/action-result";
 import { prisma } from "@/lib/prisma";
 import { getUserSession } from "@/lib/session";
@@ -16,6 +13,7 @@ import {
 import { createAccount } from "../create-account";
 import type { AccountInput } from "../schema";
 import {
+  carriedOver,
   contactSchema,
   ministrySchema,
   resumeStep,
@@ -42,38 +40,6 @@ type DraftData = Partial<
   > & { yearsServing: number; estimatedCost: string | null }
 >;
 
-function answersOf({
-  phone,
-  country,
-  region,
-  church,
-  yearsServing,
-  ministryFocus,
-  community,
-  impact,
-  supportNeed,
-  needDetails,
-  estimatedCost,
-  referenceName,
-  referenceContact,
-}: MissionaryApplication) {
-  return {
-    phone,
-    country,
-    region,
-    church,
-    yearsServing,
-    ministryFocus,
-    community,
-    impact,
-    supportNeed,
-    needDetails,
-    estimatedCost,
-    referenceName,
-    referenceContact,
-  };
-}
-
 const isOpenApplicationConflict = (error: unknown) =>
   error instanceof Prisma.PrismaClientKnownRequestError &&
   error.code === "P2002";
@@ -95,7 +61,7 @@ async function saveDraft(data: DraftData): Promise<ActionResult> {
   else if (canStartApplication(current)) {
     try {
       await prisma.missionaryApplication.create({
-        data: { ...(current && answersOf(current)), ...data, userId },
+        data: { ...(current && carriedOver(current)), ...data, userId },
       });
     } catch (error) {
       if (!isOpenApplicationConflict(error)) throw error;
