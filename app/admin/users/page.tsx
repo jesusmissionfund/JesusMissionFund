@@ -8,13 +8,16 @@ import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
 import { Badge } from "@/components/dashboard/Badge";
+import {
+  Pagination,
+  pageNumber,
+  pageSize,
+} from "@/components/dashboard/Pagination";
 import { adminLinks } from "../links";
 import { UserActions } from "./_components/UserActions";
 import { isUserKind, kindsOf, userKinds } from "./kinds";
 
 export const metadata: Metadata = { title: "Users" };
-
-const pageSize = 25;
 
 export default async function UsersPage({
   searchParams,
@@ -24,7 +27,7 @@ export default async function UsersPage({
   const session = await requireAdmin();
   const { q = "", type, page: pageParam } = await searchParams;
   const query = q.trim();
-  const page = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);
+  const page = pageNumber(pageParam);
 
   const where: Prisma.UserWhereInput = {
     ...(isUserKind(type) && userKinds[type].where),
@@ -56,15 +59,6 @@ export default async function UsersPage({
     prisma.user.count({ where }),
   ]);
   const pages = Math.max(1, Math.ceil(total / pageSize));
-
-  function pageHref(target: number) {
-    const params = new URLSearchParams({
-      ...(query && { q: query }),
-      ...(isUserKind(type) && { type }),
-      page: String(target),
-    });
-    return `?${params}`;
-  }
 
   return (
     <DashboardShell
@@ -185,34 +179,16 @@ export default async function UsersPage({
         )}
       </section>
 
-      {pages > 1 && (
-        <nav
-          aria-label="Pagination"
-          className="mt-5 flex items-center justify-between text-sm"
-        >
-          <span className="text-muted-foreground">
-            Page {page} of {pages} · {total} users
-          </span>
-          <div className="flex gap-2">
-            {page > 1 && (
-              <Link
-                href={pageHref(page - 1)}
-                className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted"
-              >
-                Previous
-              </Link>
-            )}
-            {page < pages && (
-              <Link
-                href={pageHref(page + 1)}
-                className="border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted"
-              >
-                Next
-              </Link>
-            )}
-          </div>
-        </nav>
-      )}
+      <Pagination
+        page={page}
+        pages={pages}
+        total={total}
+        noun="users"
+        params={{
+          ...(query && { q: query }),
+          ...(isUserKind(type) && { type }),
+        }}
+      />
     </DashboardShell>
   );
 }
