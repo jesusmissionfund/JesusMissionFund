@@ -10,7 +10,11 @@ import { FormAlert, SubmitButton, TextField } from "@/components/forms/fields";
 import { saveDetails } from "../actions";
 import { detailsSchema, type DetailsInput } from "../schema";
 
-export function DetailsForm({ defaultValues }: { defaultValues: DetailsInput }) {
+export function DetailsForm({
+  defaultValues,
+}: {
+  defaultValues: DetailsInput;
+}) {
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const form = useForm<DetailsInput>({
@@ -27,12 +31,29 @@ export function DetailsForm({ defaultValues }: { defaultValues: DetailsInput }) 
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="max-w-xl">
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      noValidate
+      className="max-w-xl"
+    >
       <FieldGroup className="gap-5">
-        <TextField control={form.control} name="phone" label="Phone or WhatsApp number" type="tel" autoComplete="tel" />
-        <TextField control={form.control} name="country" label="Country" autoComplete="country-name" />
+        <TextField
+          control={form.control}
+          name="phone"
+          label="Phone or WhatsApp number"
+          type="tel"
+          autoComplete="tel"
+        />
+        <TextField
+          control={form.control}
+          name="country"
+          label="Country"
+          autoComplete="country-name"
+        />
         <FormAlert>{serverError}</FormAlert>
-        <SubmitButton pending={form.formState.isSubmitting}>Save changes</SubmitButton>
+        <SubmitButton pending={form.formState.isSubmitting}>
+          Save changes
+        </SubmitButton>
       </FieldGroup>
     </form>
   );

@@ -1,19 +1,18 @@
 import { z } from "zod";
 
+import { emailField, nameField, newPasswordField } from "@/lib/validation";
+
 export const accountSchema = z.object({
-  name: z.string().trim().min(1, "Please enter your full name").max(120),
-  email: z.email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(128),
+  name: nameField,
+  email: emailField,
+  password: newPasswordField,
 });
 
 export type AccountInput = z.infer<typeof accountSchema>;
 
 export const newPasswordSchema = z
   .object({
-    password: accountSchema.shape.password,
+    password: newPasswordField,
     confirmPassword: z.string(),
   })
   .refine((values) => values.password === values.confirmPassword, {

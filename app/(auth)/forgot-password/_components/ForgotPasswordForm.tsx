@@ -6,11 +6,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { FieldGroup } from "@/components/ui/field";
-import { authClient } from "@/lib/auth-client";
+import { authClient, authErrorOf } from "@/lib/auth-client";
+import { emailField } from "@/lib/validation";
 import { FormAlert, SubmitButton, TextField } from "@/components/forms/fields";
 
 const forgotPasswordSchema = z.object({
-  email: z.email("Please enter a valid email address"),
+  email: emailField,
 });
 
 type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
@@ -27,21 +28,16 @@ export function ForgotPasswordForm() {
 
   async function onSubmit({ email }: ForgotPasswordInput) {
     setServerError("");
-    try {
-      const { error } = await authClient.requestPasswordReset({
-        email,
-        redirectTo: "/reset-password",
-      });
-      if (error)
-        setServerError(
-          error.message || "We could not send the email. Please try again.",
-        );
-      else setSentTo(email);
-    } catch {
-      setServerError(
-        "The service could not be reached. Please try again in a moment.",
-      );
-    }
+    const error = await authErrorOf(
+      () =>
+        authClient.requestPasswordReset({
+          email,
+          redirectTo: "/reset-password",
+        }),
+      "We could not send the email. Please try again.",
+    );
+    if (error) setServerError(error);
+    else setSentTo(email);
   }
 
   // Same message either way, so the form can't be used to find accounts.

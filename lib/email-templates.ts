@@ -96,3 +96,40 @@ export function reportRequestedEmail(
     { label: "View the request", url },
   );
 }
+
+export function reportReminderEmail(
+  name: string,
+  title: string,
+  dueDate: string | null,
+  url: string,
+) {
+  return template(
+    `Reminder: ${title}`,
+    [
+      `Hello ${name},`,
+      `This is a reminder that Jesus' Mission Fund has asked you for a report: ${title}.`,
+      ...(dueDate ? [`It was due by ${dueDate}.`] : []),
+    ],
+    { label: "View the request", url },
+  );
+}
+
+export function applicationSubmittedEmail(applicantName: string, url: string) {
+  return template(
+    `New missionary application from ${applicantName}`,
+    [`${applicantName} has submitted a missionary application.`],
+    { label: "Review the application", url },
+  );
+}
+
+export function reportSentEmail(
+  missionaryName: string,
+  title: string,
+  url: string,
+) {
+  return template(
+    `New report from ${missionaryName}`,
+    [`${missionaryName} has sent a report: ${title}.`],
+    { label: "Read the report", url },
+  );
+}

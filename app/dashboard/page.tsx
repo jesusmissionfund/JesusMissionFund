@@ -5,6 +5,7 @@ import { ArrowRight, HandHeart, HeartHandshake, UserRound } from "lucide-react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { canStartApplication } from "@/lib/missionary-application";
+import { isOverdue } from "@/lib/report-request";
 import {
   resumeStep,
   steps as missionarySteps,
@@ -22,7 +23,7 @@ const linkClass =
 const eyebrowClass =
   "text-xs font-bold uppercase tracking-[0.16em] text-brand-muted";
 
-type Todo = { title: string; href: string; action: string };
+type Todo = { title: string; note?: string; href: string; action: string };
 
 export default async function DashboardPage({
   searchParams,
@@ -45,6 +46,9 @@ export default async function DashboardPage({
         ]),
     ...openRequests.map((request) => ({
       title: `Report requested: ${request.title}`,
+      note: request.dueDate
+        ? `${isOverdue(request) ? "Overdue · was due" : "Due"} ${formatDate(request.dueDate)}`
+        : undefined,
       href: `/dashboard/reports/new?request=${request.id}`,
       action: "Respond",
     })),
@@ -129,7 +133,14 @@ export default async function DashboardPage({
                   key={todo.href}
                   className="flex flex-wrap items-center justify-between gap-3 p-5 sm:px-6"
                 >
-                  <p className="font-medium">{todo.title}</p>
+                  <div>
+                    <p className="font-medium">{todo.title}</p>
+                    {todo.note && (
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {todo.note}
+                      </p>
+                    )}
+                  </div>
                   <Link href={todo.href} className={linkClass}>
                     {todo.action}{" "}
                     <ArrowRight aria-hidden="true" className="size-4" />

@@ -9,6 +9,8 @@ export const auditLabels: Record<AuditAction, string> = {
   APPLICATION_REJECTED: "Rejected application",
   APPLICATION_REAPPLY_CHANGED: "Changed when they can apply again",
   REPORT_REQUESTED: "Requested a report",
+  REPORT_REQUEST_WITHDRAWN: "Withdrew a report request",
+  REPORT_REMINDER_SENT: "Sent a report reminder",
   USER_BANNED: "Banned",
   USER_UNBANNED: "Unbanned",
   USER_SIGNED_OUT: "Signed out everywhere",

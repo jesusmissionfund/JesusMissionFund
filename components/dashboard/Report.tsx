@@ -1,7 +1,9 @@
 import { formatDate } from "@/lib/format";
+import { isOverdue } from "@/lib/report-request";
 
 export function ReportRequestNote({
   request,
+  waiting = false,
 }: {
   request: {
     title: string;
@@ -9,6 +11,7 @@ export function ReportRequestNote({
     dueDate: Date | null;
     createdAt: Date;
   };
+  waiting?: boolean;
 }) {
   return (
     <section className="border-l-2 border-brand-muted bg-muted px-5 py-4">
@@ -22,6 +25,9 @@ export function ReportRequestNote({
       <p className="mt-3 text-xs text-subtle-foreground">
         Requested {formatDate(request.createdAt)}
         {request.dueDate && ` · Due ${formatDate(request.dueDate)}`}
+        {waiting && isOverdue(request) && (
+          <span className="font-semibold text-destructive"> · Overdue</span>
+        )}
       </p>
     </section>
   );

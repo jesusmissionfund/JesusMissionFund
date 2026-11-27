@@ -3,9 +3,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, Plus } from "lucide-react";
 
+import { Badge } from "@/components/dashboard/Badge";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
+import { isOverdue } from "@/lib/report-request";
 import { requirePerson } from "../person";
 
 export const metadata: Metadata = { title: "Reports" };
@@ -49,7 +51,12 @@ export default async function ReportsPage() {
                   className="flex flex-wrap items-center justify-between gap-3 p-5 sm:px-6"
                 >
                   <div>
-                    <p className="font-medium">{request.title}</p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <p className="font-medium">{request.title}</p>
+                      {isOverdue(request) && (
+                        <Badge tone="danger">Overdue</Badge>
+                      )}
+                    </div>
                     {request.dueDate && (
                       <p className="mt-1 text-sm text-muted-foreground">
                         Due {formatDate(request.dueDate)}

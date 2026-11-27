@@ -35,7 +35,7 @@ export default async function NewReportPage({
       links={links}
     >
       <div className="max-w-3xl space-y-6">
-        {request && <ReportRequestNote request={request} />}
+        {request && <ReportRequestNote request={request} waiting />}
         <section className="border border-border bg-card p-6 sm:p-8">
           <ReportForm
             requestId={request?.id ?? null}

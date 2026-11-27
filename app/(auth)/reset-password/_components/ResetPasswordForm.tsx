@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { FieldGroup } from "@/components/ui/field";
-import { authClient } from "@/lib/auth-client";
+import { authClient, authErrorOf } from "@/lib/auth-client";
 import {
   FormAlert,
   PasswordField,
@@ -29,22 +29,12 @@ export function ResetPasswordForm({ token }: { token: string }) {
 
   async function onSubmit({ password }: NewPasswordInput) {
     setServerError("");
-    try {
-      const { error } = await authClient.resetPassword({
-        newPassword: password,
-        token,
-      });
-      if (error)
-        setServerError(
-          error.message ||
-            "We could not change your password. Please try again.",
-        );
-      else setDone(true);
-    } catch {
-      setServerError(
-        "The service could not be reached. Please try again in a moment.",
-      );
-    }
+    const error = await authErrorOf(
+      () => authClient.resetPassword({ newPassword: password, token }),
+      "We could not change your password. Please try again.",
+    );
+    if (error) setServerError(error);
+    else setDone(true);
   }
 
   if (done) {

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import { DashboardShell } from "@/components/layout/DashboardShell";
-import { approvedMissionary } from "@/lib/missionary-application";
+import { toDateInput } from "@/lib/format";
+import { reachableMissionary } from "@/lib/missionary-application";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
 import { adminLinks } from "../../links";
@@ -17,7 +18,7 @@ export default async function RequestReportPage({
   const { to } = await searchParams;
 
   const missionaries = await prisma.user.findMany({
-    where: approvedMissionary,
+    where: reachableMissionary,
     orderBy: { name: "asc" },
     select: { id: true, name: true },
   });
@@ -38,7 +39,7 @@ export default async function RequestReportPage({
         <RequestReportForm
           missionaries={missionaries}
           defaultRecipient={defaultRecipient}
-          today={new Date().toISOString().slice(0, 10)}
+          today={toDateInput(new Date())}
         />
       </section>
     </DashboardShell>

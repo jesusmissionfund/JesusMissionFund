@@ -3,6 +3,7 @@ import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
 import { currentApplication } from "@/lib/missionary-application";
+import { waitingRequest } from "@/lib/report-request";
 
 export const requirePerson = cache(async () => {
   const session = await requireUser();
@@ -21,7 +22,7 @@ export const requirePerson = cache(async () => {
       missionaryApplications: currentApplication,
       partnerProfile: true,
       reportRequests: {
-        where: { report: null },
+        where: waitingRequest,
         orderBy: { createdAt: "desc" },
         select: { id: true, title: true, dueDate: true },
       },

@@ -2,6 +2,7 @@ import type {
   MissionaryApplication,
   Prisma,
 } from "@/app/generated/prisma/client";
+import { toDateInput } from "@/lib/format";
 
 // Postgres sorts enums in declaration order, so an open application (at most one) comes before any rejected one.
 export const currentApplication = {
@@ -10,8 +11,12 @@ export const currentApplication = {
 } satisfies Prisma.MissionaryApplicationFindManyArgs;
 
 export const approvedMissionary = {
-  banned: false,
   missionaryApplications: { some: { status: "APPROVED" } },
+} satisfies Prisma.UserWhereInput;
+
+export const reachableMissionary = {
+  ...approvedMissionary,
+  banned: false,
 } satisfies Prisma.UserWhereInput;
 
 export function canStartApplication(
@@ -25,5 +30,5 @@ export function canStartApplication(
 }
 
 export function tomorrowAsDateInput() {
-  return new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);
+  return toDateInput(new Date(Date.now() + 86_400_000));
 }

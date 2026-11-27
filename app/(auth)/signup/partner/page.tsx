@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function PartnerSignupPage() {
   const session = await getSession();
   if (session?.user.role === "admin") redirect("/admin");
-  if (session) redirect("/dashboard");
+  if (session) redirect("/dashboard/partnership");
 
   return <PartnerSignupFlow />;
 }

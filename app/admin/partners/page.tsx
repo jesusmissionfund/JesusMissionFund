@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import {
@@ -6,9 +7,9 @@ import {
   pageNumber,
   pageSize,
 } from "@/components/dashboard/Pagination";
-import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
+import { PartnerPreferences } from "../_components/PartnerPreferences";
 import { adminLinks } from "../links";
 
 export const metadata: Metadata = { title: "Partners" };
@@ -50,34 +51,18 @@ export default async function PartnersPage({
           <ul className="divide-y divide-border">
             {partners.map((partner) => (
               <li key={partner.id} className="p-5 sm:px-6">
-                <h2 className="font-semibold">{partner.user.name}</h2>
+                <Link
+                  href={`/admin/users/${partner.userId}`}
+                  className="font-semibold hover:text-brand"
+                >
+                  {partner.user.name}
+                </Link>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {[partner.user.email, partner.user.phone]
                     .filter(Boolean)
                     .join(" · ")}
                 </p>
-                <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-3">
-                  {[
-                    ["Frequency", partner.frequency],
-                    ["Amount", partner.amount],
-                    ["Support", partner.supportInterest],
-                  ].map(([label, value]) => (
-                    <div key={label}>
-                      <dt className="inline text-muted-foreground">
-                        {label}:{" "}
-                      </dt>
-                      <dd className="inline">{value ?? "—"}</dd>
-                    </div>
-                  ))}
-                </dl>
-                {partner.message && (
-                  <p className="mt-3 whitespace-pre-line border-l-2 border-border pl-3 text-sm text-muted-foreground">
-                    {partner.message}
-                  </p>
-                )}
-                <p className="mt-3 text-xs text-subtle-foreground">
-                  Updated {formatDate(partner.updatedAt)}
-                </p>
+                <PartnerPreferences partner={partner} />
               </li>
             ))}
           </ul>

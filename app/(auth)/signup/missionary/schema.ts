@@ -4,6 +4,7 @@ import type {
   MissionaryApplication,
   User,
 } from "@/app/generated/prisma/client";
+import { countryField, phoneField } from "@/lib/validation";
 import type { SignupStep } from "../schema";
 
 export const ministryFocusOptions = [
@@ -25,12 +26,8 @@ export const supportNeedOptions = [
 ] as const;
 
 export const contactSchema = z.object({
-  phone: z
-    .string()
-    .trim()
-    .min(6, "Please enter a phone or WhatsApp number")
-    .max(30),
-  country: z.string().trim().min(1, "Please enter your country").max(100),
+  phone: phoneField,
+  country: countryField,
   region: z
     .string()
     .trim()
