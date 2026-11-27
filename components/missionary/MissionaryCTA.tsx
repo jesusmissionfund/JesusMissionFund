@@ -32,7 +32,7 @@ export default function MissionaryCTA() {
             effectively, we invite you to apply today.
           </p>
           <Link
-            href="/missionary/apply"
+            href="/signup/missionary"
             className="group w-full justify-center sm:w-auto flex items-center gap-2 rounded-md bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
           >
             Apply for support
