@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { answerSections } from "@/app/(auth)/signup/missionary/schema";
 import type { ApplicationStatus } from "@/app/generated/prisma/client";
+import { ApplicationAnswers } from "@/components/dashboard/ApplicationAnswers";
 import { Badge } from "@/components/dashboard/Badge";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
@@ -21,7 +21,7 @@ export default async function MyApplicationsPage() {
 
   const applications = await prisma.missionaryApplication.findMany({
     where: { userId: session.user.id, status: { not: "DRAFT" } },
-    orderBy: { createdAt: "desc" },
+    orderBy: { submittedAt: "desc" },
     // reapplyAfter is for admins only.
     omit: { reapplyAfter: true },
   });
@@ -66,30 +66,10 @@ export default async function MyApplicationsPage() {
                     {application.rejectionReason}
                   </p>
                 )}
-                <details className="mt-5 border-t border-border pt-4">
-                  <summary className="cursor-pointer text-sm font-semibold text-brand">
-                    Your answers
-                  </summary>
-                  <div className="mt-4 grid gap-6 md:grid-cols-2">
-                    {answerSections(application).map((section) => (
-                      <section key={section.step}>
-                        <h3 className="text-sm font-semibold">
-                          {section.title}
-                        </h3>
-                        <dl className="mt-2 space-y-2 text-sm">
-                          {section.rows.map(([label, value]) => (
-                            <div key={label}>
-                              <dt className="text-subtle-foreground">
-                                {label}
-                              </dt>
-                              <dd>{value ?? "—"}</dd>
-                            </div>
-                          ))}
-                        </dl>
-                      </section>
-                    ))}
-                  </div>
-                </details>
+                <ApplicationAnswers
+                  answers={application}
+                  summary="Your answers"
+                />
               </li>
             );
           })}

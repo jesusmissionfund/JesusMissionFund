@@ -10,6 +10,7 @@ import { steps, type ApplicationDraft, type StepId } from "../schema";
 import { ContactStep } from "./ContactStep";
 import { MinistryStep } from "./MinistryStep";
 import { ReviewStep } from "./ReviewStep";
+import { SupportStep } from "./SupportStep";
 
 type Account = { name: string; email: string; emailVerified: boolean };
 
@@ -68,6 +69,12 @@ export function MissionarySignupFlow({
       )}
       {step === "ministry" && (
         <MinistryStep
+          defaultValues={draft}
+          onDone={(values) => saved(values, "support")}
+        />
+      )}
+      {step === "support" && (
+        <SupportStep
           defaultValues={draft}
           onDone={(values) => saved(values, "review")}
         />

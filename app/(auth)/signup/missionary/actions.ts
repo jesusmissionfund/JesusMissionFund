@@ -1,20 +1,29 @@
 "use server";
 
-import type { MissionaryApplication } from "@/app/generated/prisma/client";
+import { revalidatePath } from "next/cache";
+
+import {
+  Prisma,
+  type MissionaryApplication,
+} from "@/app/generated/prisma/client";
 import { invalidInput, type ActionResult } from "@/lib/action-result";
 import { prisma } from "@/lib/prisma";
 import { getUserSession } from "@/lib/session";
 import {
   canStartApplication,
-  latestApplication,
+  currentApplication,
 } from "@/lib/missionary-application";
 import { createAccount } from "../create-account";
 import type { AccountInput } from "../schema";
 import {
   contactSchema,
   ministrySchema,
+  resumeStep,
+  supportSchema,
+  toApplicationDraft,
   type ContactInput,
   type MinistryInput,
+  type SupportInput,
 } from "./schema";
 
 const signedOut = { error: "Please sign in to continue your application." };
@@ -27,7 +36,10 @@ export async function createMissionaryAccount(input: AccountInput) {
 }
 
 type DraftData = Partial<
-  ContactInput & Omit<MinistryInput, "yearsServing"> & { yearsServing: number }
+  Omit<
+    ContactInput & MinistryInput & SupportInput,
+    "yearsServing" | "estimatedCost"
+  > & { yearsServing: number; estimatedCost: string | null }
 >;
 
 function answersOf({
@@ -37,29 +49,64 @@ function answersOf({
   church,
   yearsServing,
   ministryFocus,
+  community,
+  impact,
+  supportNeed,
+  needDetails,
+  estimatedCost,
+  referenceName,
+  referenceContact,
 }: MissionaryApplication) {
-  return { phone, country, region, church, yearsServing, ministryFocus };
+  return {
+    phone,
+    country,
+    region,
+    church,
+    yearsServing,
+    ministryFocus,
+    community,
+    impact,
+    supportNeed,
+    needDetails,
+    estimatedCost,
+    referenceName,
+    referenceContact,
+  };
 }
+
+const isOpenApplicationConflict = (error: unknown) =>
+  error instanceof Prisma.PrismaClientKnownRequestError &&
+  error.code === "P2002";
 
 async function saveDraft(data: DraftData): Promise<ActionResult> {
   const session = await getUserSession();
   if (!session) return signedOut;
 
   const userId = session.user.id;
-  const [latest] = await prisma.missionaryApplication.findMany({
+  const [current] = await prisma.missionaryApplication.findMany({
     where: { userId },
-    ...latestApplication,
+    ...currentApplication,
   });
-  if (latest?.status === "DRAFT")
+  if (current?.status === "DRAFT")
     await prisma.missionaryApplication.update({
-      where: { id: latest.id },
+      where: { id: current.id },
       data,
     });
-  else if (canStartApplication(latest))
-    await prisma.missionaryApplication.create({
-      data: { ...(latest && answersOf(latest)), ...data, userId },
-    });
-  else return alreadySubmitted;
+  else if (canStartApplication(current)) {
+    try {
+      await prisma.missionaryApplication.create({
+        data: { ...(current && answersOf(current)), ...data, userId },
+      });
+    } catch (error) {
+      if (!isOpenApplicationConflict(error)) throw error;
+      const { count } = await prisma.missionaryApplication.updateMany({
+        where: { userId, status: "DRAFT" },
+        data,
+      });
+      if (count === 0) return alreadySubmitted;
+    }
+  } else return alreadySubmitted;
+  revalidatePath("/dashboard", "layout");
   return {};
 }
 
@@ -76,6 +123,15 @@ export async function saveMinistry(
   return saveDraft({
     ...parsed.data,
     yearsServing: Number(parsed.data.yearsServing),
+  });
+}
+
+export async function saveSupport(input: SupportInput): Promise<ActionResult> {
+  const parsed = supportSchema.safeParse(input);
+  if (!parsed.success) return invalidInput;
+  return saveDraft({
+    ...parsed.data,
+    estimatedCost: parsed.data.estimatedCost || null,
   });
 }
 
@@ -97,11 +153,7 @@ export async function submitApplication(): Promise<ActionResult> {
   });
   const complete =
     application &&
-    contactSchema.safeParse(application).success &&
-    ministrySchema.safeParse({
-      ...application,
-      yearsServing: String(application.yearsServing),
-    }).success;
+    resumeStep(true, toApplicationDraft(application, null)) === "review";
   if (!complete)
     return { error: "Please complete every step before submitting." };
 
@@ -119,5 +171,7 @@ export async function submitApplication(): Promise<ActionResult> {
     }
     return count === 1;
   });
-  return submitted ? {} : alreadySubmitted;
+  if (!submitted) return alreadySubmitted;
+  revalidatePath("/dashboard", "layout");
+  return {};
 }

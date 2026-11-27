@@ -15,6 +15,15 @@ export const ministryFocusOptions = [
   "Other",
 ] as const;
 
+export const supportNeedOptions = [
+  "Transportation",
+  "Outreach or discipleship materials",
+  "Audio or visual equipment",
+  "Communication tools",
+  "Family or livelihood support",
+  "Other",
+] as const;
+
 export const contactSchema = z.object({
   phone: z
     .string()
@@ -42,11 +51,47 @@ export const ministrySchema = z.object({
     ministryFocusOptions,
     "Please choose your main ministry focus",
   ),
+  community: z
+    .string()
+    .trim()
+    .min(1, "Please tell us who you serve and what your ministry does")
+    .max(2000),
+  impact: z
+    .string()
+    .trim()
+    .min(1, "Please share an example of your ministry's impact")
+    .max(2000),
+});
+
+export const supportSchema = z.object({
+  supportNeed: z.enum(
+    supportNeedOptions,
+    "Please choose the support that would help most",
+  ),
+  needDetails: z
+    .string()
+    .trim()
+    .min(1, "Please describe the need and how support would help")
+    .max(2000),
+  estimatedCost: z.string().trim().max(100).optional(),
+  referenceName: z
+    .string()
+    .trim()
+    .min(1, "Please enter a pastor or ministry reference")
+    .max(120),
+  referenceContact: z
+    .string()
+    .trim()
+    .min(1, "Please enter your reference's phone or email")
+    .max(200),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
 export type MinistryInput = z.infer<typeof ministrySchema>;
-export type ApplicationDraft = Partial<ContactInput & MinistryInput>;
+export type SupportInput = z.infer<typeof supportSchema>;
+export type ApplicationDraft = Partial<
+  ContactInput & MinistryInput & SupportInput
+>;
 
 export const steps = [
   {
@@ -64,6 +109,12 @@ export const steps = [
     id: "ministry",
     title: "Your ministry",
     description: "Tell us about your calling and the people you serve.",
+  },
+  {
+    id: "support",
+    title: "Support and references",
+    description:
+      "Help us understand your current needs and who can speak to your work.",
   },
   {
     id: "review",
@@ -90,6 +141,15 @@ export function toApplicationDraft(
     ministryFocus: ministryFocusOptions.find(
       (option) => option === application?.ministryFocus,
     ),
+    community: application?.community ?? undefined,
+    impact: application?.impact ?? undefined,
+    supportNeed: supportNeedOptions.find(
+      (option) => option === application?.supportNeed,
+    ),
+    needDetails: application?.needDetails ?? undefined,
+    estimatedCost: application?.estimatedCost ?? undefined,
+    referenceName: application?.referenceName ?? undefined,
+    referenceContact: application?.referenceContact ?? undefined,
   };
 }
 
@@ -97,6 +157,7 @@ export function resumeStep(signedIn: boolean, draft: ApplicationDraft): StepId {
   if (!signedIn) return "account";
   if (!contactSchema.safeParse(draft).success) return "contact";
   if (!ministrySchema.safeParse(draft).success) return "ministry";
+  if (!supportSchema.safeParse(draft).success) return "support";
   return "review";
 }
 
@@ -120,6 +181,25 @@ export function answerSections(answers: Answers) {
         ["Church or ministry organization", answers.church],
         ["Years in ministry", answers.yearsServing],
         ["Main ministry focus", answers.ministryFocus],
+        [
+          "Who do you serve, and what does your ministry do?",
+          answers.community,
+        ],
+        [
+          "Share one example of how your ministry is making a difference.",
+          answers.impact,
+        ],
+      ] as const,
+    },
+    {
+      step: "support" as const,
+      title: "Support and references",
+      rows: [
+        ["What practical support would help most?", answers.supportNeed],
+        ["Describe the need and how support would help.", answers.needDetails],
+        ["Estimated cost", answers.estimatedCost],
+        ["Pastor or ministry reference name", answers.referenceName],
+        ["Reference phone or email", answers.referenceContact],
       ] as const,
     },
   ];

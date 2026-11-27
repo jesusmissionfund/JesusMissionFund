@@ -2,7 +2,7 @@ import { cache } from "react";
 
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
-import { latestApplication } from "@/lib/missionary-application";
+import { currentApplication } from "@/lib/missionary-application";
 
 export const requirePerson = cache(async () => {
   const session = await requireUser();
@@ -17,7 +17,7 @@ export const requirePerson = cache(async () => {
       emailVerified: true,
       phone: true,
       country: true,
-      missionaryApplications: latestApplication,
+      missionaryApplications: currentApplication,
       partnerProfile: true,
       _count: {
         select: {
