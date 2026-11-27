@@ -58,7 +58,9 @@ export function SelectField<T extends FieldValues>({
   name,
   label,
   options,
-}: FieldProps<T> & { options: readonly string[] }) {
+}: FieldProps<T> & {
+  options: readonly (string | { value: string; label: string })[];
+}) {
   return (
     <Controller
       name={name}
@@ -78,9 +80,15 @@ export function SelectField<T extends FieldValues>({
             <option value="" disabled>
               Select an option
             </option>
-            {options.map((option) => (
-              <option key={option}>{option}</option>
-            ))}
+            {options.map((option) =>
+              typeof option === "string" ? (
+                <option key={option}>{option}</option>
+              ) : (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ),
+            )}
           </select>
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>

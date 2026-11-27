@@ -9,6 +9,11 @@ export const currentApplication = {
   take: 1,
 } satisfies Prisma.MissionaryApplicationFindManyArgs;
 
+export const approvedMissionary = {
+  banned: false,
+  missionaryApplications: { some: { status: "APPROVED" } },
+} satisfies Prisma.UserWhereInput;
+
 export function canStartApplication(
   current: Pick<MissionaryApplication, "status" | "reapplyAfter"> | undefined,
 ) {

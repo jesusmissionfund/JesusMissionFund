@@ -9,6 +9,7 @@ export const requirePerson = cache(async () => {
   const {
     missionaryApplications: [application = null],
     partnerProfile: partner,
+    reportRequests: openRequests,
     _count,
     ...details
   } = await prisma.user.findUniqueOrThrow({
@@ -19,6 +20,11 @@ export const requirePerson = cache(async () => {
       country: true,
       missionaryApplications: currentApplication,
       partnerProfile: true,
+      reportRequests: {
+        where: { report: null },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, title: true, dueDate: true },
+      },
       _count: {
         select: {
           missionaryApplications: { where: { status: { not: "DRAFT" } } },
@@ -30,7 +36,7 @@ export const requirePerson = cache(async () => {
   const links = [
     { label: "Overview", href: "/dashboard" },
     ...(application?.status === "APPROVED"
-      ? [{ label: "Submit a report", href: "/dashboard/reports/new" }]
+      ? [{ label: "Reports", href: "/dashboard/reports" }]
       : []),
     ...(_count.missionaryApplications > 0
       ? [{ label: "My applications", href: "/dashboard/applications" }]
@@ -41,5 +47,5 @@ export const requirePerson = cache(async () => {
     { label: "My details", href: "/dashboard/details" },
   ];
 
-  return { session, details, application, partner, links };
+  return { session, details, application, partner, openRequests, links };
 });

@@ -79,3 +79,20 @@ export function applicationRejectedEmail(
     { label: "Go to your dashboard", url },
   );
 }
+
+export function reportRequestedEmail(
+  name: string,
+  title: string,
+  dueDate: string | null,
+  url: string,
+) {
+  return template(
+    `Report requested: ${title}`,
+    [
+      `Hello ${name},`,
+      `Jesus' Mission Fund has asked you for a report: ${title}.`,
+      ...(dueDate ? [`Please send it by ${dueDate}.`] : []),
+    ],
+    { label: "View the request", url },
+  );
+}

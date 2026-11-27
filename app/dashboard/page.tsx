@@ -27,21 +27,28 @@ type Todo = { title: string; href: string; action: string };
 export default async function DashboardPage({
   searchParams,
 }: PageProps<"/dashboard">) {
-  const { session, details, application, partner, links } =
+  const { session, details, application, partner, openRequests, links } =
     await requirePerson();
   // better-auth returns here with ?error=… when a verification link fails.
   const badVerifyLink =
     !details.emailVerified && Boolean((await searchParams).error);
 
-  const todos: Todo[] = details.phone
-    ? []
-    : [
-        {
-          title: "Add your phone number",
-          href: "/dashboard/details",
-          action: "Add",
-        },
-      ];
+  const todos: Todo[] = [
+    ...(details.phone
+      ? []
+      : [
+          {
+            title: "Add your phone number",
+            href: "/dashboard/details",
+            action: "Add",
+          },
+        ]),
+    ...openRequests.map((request) => ({
+      title: `Report requested: ${request.title}`,
+      href: `/dashboard/reports/new?request=${request.id}`,
+      action: "Respond",
+    })),
+  ];
   const missionaryStep =
     application?.status === "DRAFT"
       ? missionarySteps.findIndex(
@@ -119,7 +126,7 @@ export default async function DashboardPage({
               )}
               {todos.map((todo) => (
                 <li
-                  key={todo.title}
+                  key={todo.href}
                   className="flex flex-wrap items-center justify-between gap-3 p-5 sm:px-6"
                 >
                   <p className="font-medium">{todo.title}</p>

@@ -19,6 +19,8 @@ model User {
 
   missionaryApplications MissionaryApplication[]
   partnerProfile         PartnerProfile?
+  reportRequests         ReportRequest[]
+  reports                MissionaryReport[]
   auditActions           AuditLog[]              @relation("AuditActor")
   auditEntries           AuditLog[]              @relation("AuditTarget")
 
