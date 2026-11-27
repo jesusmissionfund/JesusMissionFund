@@ -24,7 +24,9 @@ function initials(name: string) {
     .join("");
 }
 
-export function UserMenu({ user }: { user: { name: string; email: string } }) {
+export type MenuUser = { name: string; email: string };
+
+export function UserMenu({ user }: { user: MenuUser }) {
   const router = useRouter();
 
   async function signOut() {
@@ -44,12 +46,19 @@ export function UserMenu({ user }: { user: { name: string; email: string } }) {
       <DropdownMenuContent align="end" className="w-64 p-1">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="px-3 py-2">
-            <span className="block truncate text-sm font-semibold text-foreground">{user.name}</span>
-            <span className="block truncate text-xs font-normal text-muted-foreground">{user.email}</span>
+            <span className="block truncate text-sm font-semibold text-foreground">
+              {user.name}
+            </span>
+            <span className="block truncate text-xs font-normal text-muted-foreground">
+              {user.email}
+            </span>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem render={<Link href="/dashboard" />} className="gap-3 px-3 py-2.5">
+        <DropdownMenuItem
+          render={<Link href="/dashboard" />}
+          className="gap-3 px-3 py-2.5"
+        >
           <LayoutDashboard aria-hidden="true" className="size-4" />
           Dashboard
         </DropdownMenuItem>
