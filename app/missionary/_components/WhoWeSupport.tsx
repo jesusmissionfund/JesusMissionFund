@@ -11,7 +11,7 @@ const criteria = [
   "Require support to sustain or expand their mission work",
 ];
 
-export default function WhoWeSupport() {
+export function WhoWeSupport() {
   return (
     <Section className="bg-muted/30">
       <Reveal>

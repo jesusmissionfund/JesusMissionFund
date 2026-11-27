@@ -5,7 +5,6 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  // No full CSP until the page scripts and inline styles are listed.
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
   {

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { setReapplyAfter } from "../actions";
-import { inputClass } from "./input-class";
+import { compactInputClass } from "@/components/styles";
 
 export function ReapplyControl({
   applicationId,
@@ -83,7 +83,7 @@ export function ReapplyControl({
               min={minReapplyDate}
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className={inputClass}
+              className={compactInputClass}
             />
           </label>
           <AlertDialogFooter>

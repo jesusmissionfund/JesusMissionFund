@@ -18,13 +18,6 @@ export const leadClass =
   "text-base leading-7 text-muted-foreground md:text-lg md:leading-8";
 export const bodyClass = "text-base leading-7 text-muted-foreground";
 
-export const buttonClass =
-  "inline-flex min-h-12 items-center justify-center gap-3 bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover";
-export const outlineButtonClass =
-  "inline-flex min-h-12 items-center justify-center gap-3 border border-input px-6 text-sm font-semibold text-brand transition-colors hover:border-brand";
-export const textLinkClass =
-  "inline-flex items-center gap-2 text-sm font-semibold text-brand underline decoration-brand/40 underline-offset-4 hover:decoration-brand";
-
 export function Container({ className, ...props }: ComponentProps<"div">) {
   return <div className={cn(containerClass, className)} {...props} />;
 }

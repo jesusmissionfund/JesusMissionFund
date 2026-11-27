@@ -16,6 +16,8 @@ import {
   newPasswordSchema,
   type NewPasswordInput,
 } from "@/app/(auth)/signup/schema";
+import { buttonClass } from "@/components/styles";
+import { cn } from "cn";
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const [serverError, setServerError] = useState("");
@@ -47,10 +49,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
           Your password has been changed and you&apos;ve been signed out
           everywhere. Sign in with your new password.
         </p>
-        <Link
-          href="/signin"
-          className="mt-8 inline-flex h-12 w-full items-center justify-center bg-primary text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
-        >
+        <Link href="/signin" className={cn(buttonClass, "mt-8 w-full")}>
           Sign in
         </Link>
       </>

@@ -9,7 +9,7 @@ const steps = [
   "Submit references where required",
 ];
 
-export default function ApplicationProcess() {
+export function ApplicationProcess() {
   return (
     <Section id="application-process" className="scroll-mt-24">
       <Reveal>

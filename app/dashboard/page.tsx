@@ -15,11 +15,10 @@ import { steps as partnerSteps } from "@/app/(auth)/signup/partner/schema";
 import { SendVerificationButton } from "@/components/auth/SendVerificationButton";
 import { NextStepPanel } from "./_components/NextStepPanel";
 import { requirePerson } from "./person";
+import { plainLinkClass, smallButtonClass } from "@/components/styles";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-const linkClass =
-  "inline-flex items-center gap-2 text-sm font-semibold text-brand";
 const eyebrowClass =
   "text-xs font-bold uppercase tracking-[0.16em] text-brand-muted";
 
@@ -141,7 +140,7 @@ export default async function DashboardPage({
                       </p>
                     )}
                   </div>
-                  <Link href={todo.href} className={linkClass}>
+                  <Link href={todo.href} className={plainLinkClass}>
                     {todo.action}{" "}
                     <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
@@ -183,7 +182,7 @@ export default async function DashboardPage({
                     </p>
                     <Link
                       href="/dashboard/reports/new"
-                      className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
+                      className={`${smallButtonClass} mt-5`}
                     >
                       Submit a ministry report{" "}
                       <ArrowRight aria-hidden="true" className="size-4" />
@@ -203,7 +202,7 @@ export default async function DashboardPage({
                     {canStartApplication(application) && (
                       <Link
                         href="/signup/missionary"
-                        className={`${linkClass} mt-5`}
+                        className={`${plainLinkClass} mt-5`}
                       >
                         Apply again{" "}
                         <ArrowRight aria-hidden="true" className="size-4" />
@@ -246,11 +245,14 @@ export default async function DashboardPage({
                   gift. The team can help with questions.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
-                  <Link href="/partner#mobile-money" className={linkClass}>
+                  <Link href="/partner#mobile-money" className={plainLinkClass}>
                     View giving steps{" "}
                     <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
-                  <Link href="/dashboard/partnership" className={linkClass}>
+                  <Link
+                    href="/dashboard/partnership"
+                    className={plainLinkClass}
+                  >
                     Edit partnership{" "}
                     <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
@@ -292,7 +294,10 @@ export default async function DashboardPage({
                   </div>
                 ))}
               </dl>
-              <Link href="/dashboard/details" className={`${linkClass} mt-5`}>
+              <Link
+                href="/dashboard/details"
+                className={`${plainLinkClass} mt-5`}
+              >
                 Edit details{" "}
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
@@ -323,7 +328,7 @@ function JoinCard({
         </span>
         <h2 className="font-semibold">{title}</h2>
       </div>
-      <Link href={href} className={linkClass}>
+      <Link href={href} className={plainLinkClass}>
         {action} <ArrowRight aria-hidden="true" className="size-4" />
       </Link>
     </section>

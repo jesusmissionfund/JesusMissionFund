@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Eye, Globe, Handshake, Heart, Target, Users } from "lucide-react";
 
-import Footer from "@/components/layout/Footer";
-import Navbar from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
 import { Reveal } from "@/components/site/Reveal";
 import {
   bodyClass,
@@ -130,7 +130,7 @@ export default function AboutPage() {
             </p>
           </div>
         </Reveal>
-        <Reveal from="right" className="relative aspect-[4/3] overflow-hidden">
+        <Reveal from="right" className="relative aspect-4/3 overflow-hidden">
           <Image
             src="/img4.jpg"
             alt="Missionaries gathered in prayer"
@@ -144,7 +144,7 @@ export default function AboutPage() {
       <Section className="bg-accent" containerClassName={splitGrid}>
         <Reveal
           from="left"
-          className="relative order-2 aspect-[4/3] overflow-hidden lg:order-1"
+          className="relative order-2 aspect-4/3 overflow-hidden lg:order-1"
         >
           <Image
             src="/about-vision.jpg"
@@ -216,7 +216,7 @@ export default function AboutPage() {
               delay={index * 0.1}
               className="group overflow-hidden border border-border bg-card"
             >
-              <div className="relative aspect-[4/5] w-full overflow-hidden">
+              <div className="relative aspect-4/5 w-full overflow-hidden">
                 <Image
                   src={member.image}
                   alt={member.name}

@@ -45,7 +45,7 @@ export function DashboardShell({
               {link.label}
               <ChevronRight
                 aria-hidden="true"
-                className="h-4 w-4 text-subtle-foreground"
+                className="size-4 text-subtle-foreground"
               />
             </Link>
           ))}
@@ -54,14 +54,14 @@ export function DashboardShell({
           href="/"
           className="mt-auto inline-flex items-center gap-2 px-3 py-3 text-sm text-muted-foreground hover:text-primary"
         >
-          <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+          <ArrowLeft aria-hidden="true" className="size-4" />
           Back to website
         </Link>
       </aside>
 
       <div className="lg:pl-64">
         <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur-sm">
-          <div className="mx-auto flex min-h-[72px] max-w-7xl items-center justify-between px-5 sm:px-8">
+          <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between px-5 sm:px-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
                 {label}

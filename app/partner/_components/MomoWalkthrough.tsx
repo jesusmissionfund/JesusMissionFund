@@ -61,7 +61,7 @@ const steps = [
 
 const keypad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"];
 
-export default function MomoWalkthrough() {
+export function MomoWalkthrough() {
   const reduceMotion = useReducedMotion();
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(!reduceMotion);
@@ -137,16 +137,16 @@ export default function MomoWalkthrough() {
         </p>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[560px]">
+      <div className="relative mx-auto w-full max-w-140">
         <div
           aria-hidden="true"
-          className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-accent via-background to-warning-muted blur-2xl"
+          className="absolute -inset-8 rounded-[3rem] bg-linear-to-br from-accent via-background to-warning-muted blur-2xl"
         />
         <div
           aria-hidden="true"
-          className="relative mx-auto w-[300px] rounded-[2.8rem] border-[8px] border-device-frame bg-device p-2 shadow-2xl shadow-foreground/40 sm:w-[330px]"
+          className="relative mx-auto w-75 rounded-[2.8rem] border-8 border-device-frame bg-device p-2 shadow-2xl shadow-foreground/40 sm:w-82.5"
         >
-          <div className="relative h-[560px] overflow-hidden rounded-[2.15rem] bg-muted">
+          <div className="relative h-140 overflow-hidden rounded-[2.15rem] bg-muted">
             <div className="relative z-20 flex h-10 items-center justify-between px-6 text-[10px] font-semibold text-foreground">
               <span>9:41</span>
               <span className="flex items-center gap-1.5">
@@ -184,7 +184,7 @@ export default function MomoWalkthrough() {
           </div>
         </div>
 
-        <div className="relative mx-auto mt-5 flex max-w-[330px] items-center justify-between">
+        <div className="relative mx-auto mt-5 flex max-w-82.5 items-center justify-between">
           <button
             type="button"
             onClick={() => goToStep(current - 1)}

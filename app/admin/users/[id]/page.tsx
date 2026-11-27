@@ -19,6 +19,7 @@ import { adminLinks } from "../../links";
 import { RequestActions } from "../../reports/_components/RequestActions";
 import { UserActions } from "../_components/UserActions";
 import { kindsOf, userKinds } from "../kinds";
+import { plainLinkClass } from "@/components/styles";
 
 export const metadata: Metadata = { title: "Person" };
 
@@ -88,7 +89,7 @@ export default async function AdminUserPage({
             {kinds.includes("missionary") && (
               <Link
                 href={`/admin/reports/request?to=${user.id}`}
-                className="text-sm font-semibold text-brand"
+                className={plainLinkClass}
               >
                 Request a report
               </Link>

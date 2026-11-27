@@ -5,17 +5,19 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import {
   accentWordClass,
   bodyClass,
-  buttonClass,
   Container,
   Eyebrow,
   heroSpacing,
   heroTitleClass,
   leadClass,
-  outlineButtonClass,
   Section,
   sectionTitleClass,
-  textLinkClass,
 } from "@/components/site/layout";
+import {
+  buttonClass,
+  outlineButtonClass,
+  textLinkClass,
+} from "@/components/styles";
 import { cn } from "cn";
 
 const stories = [
@@ -37,7 +39,6 @@ const stories = [
   },
 ];
 
-// Placeholder images until the real story photos arrive.
 const evidenceStories = [
   {
     id: "tricycle-evidence",
@@ -101,7 +102,7 @@ function EvidencePlaceholder({
 }) {
   return (
     <div
-      className="relative aspect-[4/3] overflow-hidden bg-inverse"
+      className="relative aspect-4/3 overflow-hidden bg-inverse"
       aria-label={`${title} video placeholder`}
     >
       <Image
@@ -122,7 +123,7 @@ function EvidencePlaceholder({
   );
 }
 
-export default function SuccessStoriesContent() {
+export function SuccessStoriesContent() {
   return (
     <>
       <section className={heroSpacing}>
@@ -150,7 +151,7 @@ export default function SuccessStoriesContent() {
             </div>
           </div>
           <figure className="relative">
-            <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+            <div className="relative aspect-4/3 overflow-hidden bg-secondary">
               <Image
                 src="/img3.jpg"
                 alt="A missionary holding books for ministry"
@@ -261,7 +262,7 @@ export default function SuccessStoriesContent() {
                         className={index === 0 ? "col-span-2" : ""}
                       >
                         <div
-                          className={`relative overflow-hidden bg-border ${index === 0 ? "aspect-[16/9]" : "aspect-[4/3]"}`}
+                          className={`relative overflow-hidden bg-border ${index === 0 ? "aspect-video" : "aspect-4/3"}`}
                         >
                           <Image
                             src={photo.src}
@@ -271,7 +272,7 @@ export default function SuccessStoriesContent() {
                             className="object-cover"
                           />
                         </div>
-                        <figcaption className="mt-2 text-xs uppercase tracking-[0.1em] text-muted-foreground">
+                        <figcaption className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">
                           {photo.caption} · placeholder
                         </figcaption>
                       </figure>
@@ -288,7 +289,7 @@ export default function SuccessStoriesContent() {
                         title={video.title}
                         note={video.note}
                       />
-                      <figcaption className="mt-2 text-xs uppercase tracking-[0.1em] text-muted-foreground">
+                      <figcaption className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">
                         4:3 video placeholder
                       </figcaption>
                     </figure>

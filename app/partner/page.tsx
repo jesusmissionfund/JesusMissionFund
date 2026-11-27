@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import Footer from "@/components/layout/Footer";
-import Navbar from "@/components/layout/Navbar";
-import PartnerLanding from "@/components/partners/PartnerLanding";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
+import { PartnerLanding } from "./_components/PartnerLanding";
 
 export const metadata: Metadata = {
   title: "Partners",

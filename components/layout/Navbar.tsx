@@ -11,8 +11,9 @@ import { UserMenu } from "@/components/auth/UserMenu";
 import { containerClass } from "@/components/site/layout";
 import { authClient } from "@/lib/auth-client";
 import { logoSrc, siteLinks, siteName } from "@/lib/site";
+import { smallButtonClass } from "@/components/styles";
 
-export default function Navbar() {
+export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const { data: session, isPending } = authClient.useSession();
@@ -29,10 +30,7 @@ export default function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
       <nav
         aria-label="Main navigation"
-        className={cn(
-          containerClass,
-          "flex h-[76px] items-center justify-between",
-        )}
+        className={cn(containerClass, "flex h-19 items-center justify-between")}
       >
         <Link
           href="/"
@@ -68,7 +66,7 @@ export default function Navbar() {
                 >
                   Sign in
                 </Link>
-                <CreateAccountMenu className="min-h-11 justify-center gap-2 bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2" />
+                <CreateAccountMenu className={smallButtonClass} />
               </>
             )
           )}
@@ -136,7 +134,9 @@ export default function Navbar() {
                   >
                     Sign in
                   </Link>
-                  <CreateAccountMenu className="min-h-11 flex-1 justify-center gap-2 bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover" />
+                  <CreateAccountMenu
+                    className={cn(smallButtonClass, "flex-1")}
+                  />
                 </div>
               )
             )}
