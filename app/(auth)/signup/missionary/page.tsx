@@ -9,7 +9,7 @@ import {
 } from "@/lib/missionary-application";
 import { resumeParam } from "../schema";
 import { MissionarySignupFlow } from "./_components/MissionarySignupFlow";
-import { resumeStep, toApplicationDraft } from "./schema";
+import { carriedOver, resumeStep, toApplicationDraft } from "./schema";
 
 export const metadata: Metadata = {
   title: "Missionary application",
@@ -35,11 +35,12 @@ export default async function MissionarySignupPage({
       })
     : null;
   const [application] = user?.missionaryApplications ?? [];
-  const reapplying = application?.status === "REJECTED";
+  const startingNew = application?.status === "REJECTED";
   if (application?.status !== "DRAFT" && !canStartApplication(application))
     redirect("/dashboard");
 
-  const draft = toApplicationDraft(application ?? null, user);
+  const saved = toApplicationDraft(application ?? null, user);
+  const draft = startingNew ? carriedOver(saved) : saved;
 
   return (
     // Keyed so signing in to an existing account remounts the flow at its resume step.
@@ -56,7 +57,9 @@ export default async function MissionarySignupPage({
           : null
       }
       initialDraft={draft}
-      initialStep={reapplying ? "contact" : resumeStep(Boolean(session), draft)}
+      initialStep={
+        startingNew ? "contact" : resumeStep(Boolean(session), draft)
+      }
     />
   );
 }
