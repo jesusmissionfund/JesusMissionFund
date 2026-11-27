@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { isOverdue } from "@/lib/report-request";
 import { requirePerson } from "../person";
+import { plainLinkClass, smallButtonClass } from "@/components/styles";
 
 export const metadata: Metadata = { title: "Reports" };
 
@@ -31,10 +32,7 @@ export default async function ReportsPage() {
       links={links}
     >
       <div className="space-y-6">
-        <Link
-          href="/dashboard/reports/new"
-          className="inline-flex min-h-11 items-center gap-2 bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
-        >
+        <Link href="/dashboard/reports/new" className={smallButtonClass}>
           <Plus aria-hidden="true" className="size-4" />
           New report
         </Link>
@@ -65,7 +63,7 @@ export default async function ReportsPage() {
                   </div>
                   <Link
                     href={`/dashboard/reports/new?request=${request.id}`}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-brand"
+                    className={plainLinkClass}
                   >
                     Respond <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>

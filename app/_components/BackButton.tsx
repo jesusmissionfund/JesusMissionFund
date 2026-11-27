@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-import { outlineButtonClass } from "@/components/site/layout";
+import { outlineButtonClass } from "@/components/styles";
 import { cn } from "cn";
 
 export function BackButton() {

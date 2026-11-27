@@ -2,9 +2,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { CallToAction } from "@/components/site/CallToAction";
-import { buttonClass, outlineButtonClass } from "@/components/site/layout";
+import { buttonClass, outlineButtonClass } from "@/components/styles";
 
-export default function CTASection() {
+export function CTASection() {
   return (
     <CallToAction
       eyebrow="Take part"

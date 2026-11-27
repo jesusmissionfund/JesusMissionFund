@@ -12,7 +12,6 @@ import {
 import {
   accentWordClass,
   bodyClass,
-  buttonClass,
   Container,
   Eyebrow,
   heroSpacing,
@@ -20,11 +19,11 @@ import {
   leadClass,
   Section,
   sectionTitleClass,
-  textLinkClass,
 } from "@/components/site/layout";
+import { buttonClass, textLinkClass } from "@/components/styles";
 import { cn } from "cn";
 import { CallToAction } from "@/components/site/CallToAction";
-import MomoWalkthrough from "./MomoWalkthrough";
+import { MomoWalkthrough } from "./MomoWalkthrough";
 
 const supportAreas = [
   {
@@ -54,7 +53,7 @@ const supportAreas = [
   },
 ];
 
-export default function PartnerLanding() {
+export function PartnerLanding() {
   return (
     <>
       <section className={cn("bg-background", heroSpacing)}>
@@ -83,7 +82,7 @@ export default function PartnerLanding() {
             </div>
           </div>
           <div className="sm:pl-6">
-            <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+            <div className="relative aspect-4/3 overflow-hidden bg-secondary">
               <Image
                 src="/pexels-rdne-6646949.jpg"
                 alt="Volunteers organizing practical support"
@@ -106,7 +105,7 @@ export default function PartnerLanding() {
         className="scroll-mt-24 bg-background"
         containerClassName="grid gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-20"
       >
-        <div className="relative min-h-[320px] overflow-hidden bg-secondary sm:min-h-[460px]">
+        <div className="relative min-h-80 overflow-hidden bg-secondary sm:min-h-115">
           <Image
             src="/img3.jpg"
             alt="Missionary preparing materials for ministry"

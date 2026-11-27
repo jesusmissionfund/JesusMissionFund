@@ -4,17 +4,16 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import {
   accentWordClass,
-  buttonClass,
   Container,
   Eyebrow,
   heroSpacing,
   heroTitleClass,
   leadClass,
-  textLinkClass,
 } from "@/components/site/layout";
+import { buttonClass, textLinkClass } from "@/components/styles";
 import { cn } from "cn";
 
-export default function LandingHero() {
+export function LandingHero() {
   return (
     <section className={cn("bg-background", heroSpacing)}>
       <Container className="grid items-center gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16">
@@ -40,7 +39,7 @@ export default function LandingHero() {
         </Reveal>
 
         <Reveal immediate delay={0.12}>
-          <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+          <div className="relative aspect-4/3 overflow-hidden bg-secondary">
             <video
               src="/JesusMissionFund_Intro.mp4"
               muted

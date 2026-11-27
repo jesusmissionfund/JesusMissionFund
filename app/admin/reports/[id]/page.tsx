@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
 import { adminLinks } from "../../links";
+import { plainLinkClass } from "@/components/styles";
 
 export const metadata: Metadata = { title: "Report" };
 
@@ -38,7 +39,7 @@ export default async function AdminReportPage({
           <BackLink href="/admin/reports" label="All reports" />
           <Link
             href={`/admin/reports/request?to=${report.user.id}`}
-            className="text-sm font-semibold text-brand"
+            className={plainLinkClass}
           >
             Request a report from {report.user.name}
           </Link>

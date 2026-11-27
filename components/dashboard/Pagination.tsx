@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-const linkClass =
-  "border border-input bg-card px-3 py-2 font-semibold text-brand hover:bg-muted";
+import { smallOutlineButtonClass } from "@/components/styles";
 
 export function Pagination({
   page,
@@ -31,12 +30,12 @@ export function Pagination({
       </span>
       <div className="flex gap-2">
         {page > 1 && (
-          <Link href={href(page - 1)} className={linkClass}>
+          <Link href={href(page - 1)} className={smallOutlineButtonClass}>
             Previous
           </Link>
         )}
         {page < pages && (
-          <Link href={href(page + 1)} className={linkClass}>
+          <Link href={href(page + 1)} className={smallOutlineButtonClass}>
             Next
           </Link>
         )}

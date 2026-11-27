@@ -11,7 +11,7 @@ const items = [
   { icon: Star, text: "Prayer covering and ministry encouragement" },
 ];
 
-export default function SupportIncludes() {
+export function SupportIncludes() {
   return (
     <Section>
       <Reveal>

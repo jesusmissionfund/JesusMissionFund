@@ -6,6 +6,8 @@ import { auth } from "@/lib/auth";
 import { AuthShell } from "../_components/AuthShell";
 import { SignInAside } from "../_components/SignInAside";
 import { ResetPasswordForm } from "./_components/ResetPasswordForm";
+import { buttonClass } from "@/components/styles";
+import { cn } from "cn";
 
 export const metadata: Metadata = {
   title: "Choose a new password",
@@ -51,7 +53,7 @@ export default async function ResetPasswordPage({
           </p>
           <Link
             href="/forgot-password"
-            className="mt-8 inline-flex h-12 w-full items-center justify-center bg-primary text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
+            className={cn(buttonClass, "mt-8 w-full")}
           >
             Send a new link
           </Link>

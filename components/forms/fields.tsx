@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "cn";
+import { buttonClass, inputClass } from "@/components/styles";
 
-const controlClass =
-  "h-12 w-full border border-input bg-card px-4 text-sm text-foreground outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/10 aria-invalid:border-destructive";
+const controlClass = cn(inputClass, "h-12 w-full px-4");
 
 type FieldProps<T extends FieldValues> = {
   control: Control<T>;
@@ -208,7 +208,10 @@ export function SubmitButton({
     <Button
       type="submit"
       disabled={pending}
-      className="h-12 w-full gap-3 bg-primary text-sm font-semibold text-primary-foreground hover:bg-primary-hover disabled:cursor-wait disabled:opacity-65"
+      className={cn(
+        buttonClass,
+        "w-full disabled:cursor-wait disabled:opacity-65",
+      )}
     >
       {pending ? "Please wait…" : children}
       {!pending && <ArrowRight aria-hidden="true" className="size-4" />}

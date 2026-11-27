@@ -3,7 +3,7 @@ import { Heart } from "lucide-react";
 import { accentWordClass } from "@/components/site/layout";
 import { FeatureSection } from "./FeatureSection";
 
-export default function MissionarySection() {
+export function MissionarySection() {
   return (
     <FeatureSection
       eyebrow="For Missionaries"

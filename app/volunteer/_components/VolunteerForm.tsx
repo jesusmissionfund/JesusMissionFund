@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { buttonClass } from "@/components/styles";
 
 type Field = {
   name: string;
@@ -178,10 +179,7 @@ export function VolunteerForm() {
         <p className="text-xs text-subtle-foreground">
           Prototype preview: your information will not be saved yet.
         </p>
-        <button
-          type="submit"
-          className="inline-flex min-h-12 items-center justify-center gap-3 bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
-        >
+        <button type="submit" className={buttonClass}>
           Send volunteer interest
           <ArrowRight aria-hidden="true" className="size-4" />
         </button>

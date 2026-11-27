@@ -3,7 +3,7 @@ import { Shield } from "lucide-react";
 import { accentWordClass } from "@/components/site/layout";
 import { FeatureSection } from "./FeatureSection";
 
-export default function PartnersSection() {
+export function PartnersSection() {
   return (
     <FeatureSection
       eyebrow="For Partners"

@@ -6,11 +6,11 @@ import type { ReactNode } from "react";
 import { Reveal } from "@/components/site/Reveal";
 import {
   bodyClass,
-  buttonClass,
   Eyebrow,
   Section,
   sectionTitleClass,
 } from "@/components/site/layout";
+import { buttonClass } from "@/components/styles";
 import { cn } from "cn";
 
 export function FeatureSection({
@@ -59,7 +59,7 @@ export function FeatureSection({
           width={800}
           height={600}
           sizes="(min-width: 1024px) 50vw, 100vw"
-          className="aspect-[4/3] w-full object-cover"
+          className="aspect-4/3 w-full object-cover"
         />
       </Reveal>
     </Section>

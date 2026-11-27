@@ -16,6 +16,12 @@ import {
 import { adminLinks } from "../links";
 import { UserActions } from "./_components/UserActions";
 import { isUserKind, kindsOf, userKinds } from "./kinds";
+import {
+  inputClass,
+  smallButtonClass,
+  smallOutlineButtonClass,
+} from "@/components/styles";
+import { cn } from "cn";
 
 export const metadata: Metadata = { title: "Users" };
 
@@ -80,14 +86,14 @@ export default async function UsersPage({
               name="q"
               defaultValue={query}
               placeholder="Search by name or email"
-              className="h-10 w-full border border-input bg-card pl-9 pr-3 text-sm outline-none focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/10"
+              className={cn(inputClass, "h-10 w-full pl-9 pr-3")}
             />
           </label>
           <select
             name="type"
             defaultValue={isUserKind(type) ? type : ""}
             aria-label="Filter by type"
-            className="h-10 border border-input bg-card px-3 text-sm outline-none focus-visible:border-brand"
+            className={cn(inputClass, "h-10 px-3")}
           >
             <option value="">Everyone</option>
             {Object.entries(userKinds).map(([value, { label }]) => (
@@ -96,17 +102,11 @@ export default async function UsersPage({
               </option>
             ))}
           </select>
-          <button
-            type="submit"
-            className="h-10 border border-input bg-card px-4 text-sm font-semibold text-brand hover:bg-muted"
-          >
+          <button type="submit" className={smallOutlineButtonClass}>
             Filter
           </button>
         </form>
-        <Link
-          href="/admin/users/new"
-          className="inline-flex h-10 items-center justify-center gap-2 bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
-        >
+        <Link href="/admin/users/new" className={smallButtonClass}>
           <Plus aria-hidden="true" className="size-4" />
           Add admin account
         </Link>

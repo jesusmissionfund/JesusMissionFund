@@ -26,7 +26,7 @@ const linkClass =
   "text-inverse-foreground/65 transition-colors hover:text-inverse-foreground";
 const iconClass = "size-5 shrink-0 text-inverse-muted";
 
-export default function Footer() {
+export function Footer() {
   return (
     <footer className="bg-inverse text-inverse-foreground">
       <Container className="py-14 md:py-16">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Home } from "lucide-react";
 
-import { buttonClass } from "@/components/site/layout";
+import { buttonClass } from "@/components/styles";
 import { BackButton } from "./_components/BackButton";
 
 export const metadata: Metadata = { title: "Page not found" };

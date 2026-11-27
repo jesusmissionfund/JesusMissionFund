@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import Footer from "@/components/layout/Footer";
-import Navbar from "@/components/layout/Navbar";
-import {
-  Container,
-  Eyebrow,
-  heroSpacing,
-  textLinkClass,
-} from "@/components/site/layout";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
+import { Container, Eyebrow, heroSpacing } from "@/components/site/layout";
+import { textLinkClass } from "@/components/styles";
 import { cn } from "cn";
 import { VolunteerForm } from "./_components/VolunteerForm";
 

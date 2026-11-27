@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { reviewApplication } from "../actions";
-import { inputClass } from "./input-class";
+import { compactInputClass } from "@/components/styles";
 
 export function ReviewActions({
   applicationId,
@@ -115,7 +115,7 @@ export function ReviewActions({
               maxLength={1000}
               aria-label="Reason for rejection"
               placeholder="Reason"
-              className={inputClass}
+              className={compactInputClass}
             />
             <label className="grid gap-1.5 text-sm">
               <span>Can apply again from (optional)</span>
@@ -124,7 +124,7 @@ export function ReviewActions({
                 min={minReapplyDate}
                 value={reapplyAfter}
                 onChange={(event) => setReapplyAfter(event.target.value)}
-                className={inputClass}
+                className={compactInputClass}
               />
               <span className="text-xs text-muted-foreground">
                 Not shown to the applicant. Leave empty to let them apply again

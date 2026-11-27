@@ -3,16 +3,16 @@ import { ArrowDown, Shield } from "lucide-react";
 
 import { Reveal } from "@/components/site/Reveal";
 import {
-  buttonClass,
   Container,
   Eyebrow,
   heroSpacing,
   heroTitleClass,
   leadClass,
 } from "@/components/site/layout";
+import { buttonClass } from "@/components/styles";
 import { cn } from "cn";
 
-export default function MissionaryPartnerHero() {
+export function MissionaryPartnerHero() {
   return (
     <section className={cn("bg-accent", heroSpacing)}>
       <Container>

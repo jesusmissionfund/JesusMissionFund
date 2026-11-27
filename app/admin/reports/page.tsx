@@ -16,6 +16,7 @@ import { isOverdue } from "@/lib/report-request";
 import { requireAdmin } from "@/lib/session";
 import { adminLinks } from "../links";
 import { RequestActions } from "./_components/RequestActions";
+import { smallButtonClass } from "@/components/styles";
 
 export const metadata: Metadata = { title: "Reports" };
 
@@ -95,7 +96,7 @@ export default async function AdminReportsPage({
         />
         <Link
           href="/admin/reports/request"
-          className="mb-2 inline-flex h-10 items-center gap-2 bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-hover"
+          className={`${smallButtonClass} mb-2`}
         >
           <Plus aria-hidden="true" className="size-4" />
           Request a report

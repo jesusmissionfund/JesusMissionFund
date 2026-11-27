@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Reveal } from "@/components/site/Reveal";
-import { buttonClass, Section, SectionHeader } from "@/components/site/layout";
+import { Section, SectionHeader } from "@/components/site/layout";
+import { buttonClass } from "@/components/styles";
 
-export default function MissionaryCTA() {
+export function MissionaryCTA() {
   return (
     <Section>
       <Reveal className="text-center">
