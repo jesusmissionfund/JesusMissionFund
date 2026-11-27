@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import {
   canStartApplication,
-  latestApplication,
+  currentApplication,
 } from "@/lib/missionary-application";
 import { resumeParam } from "../schema";
 import { MissionarySignupFlow } from "./_components/MissionarySignupFlow";
@@ -30,7 +30,7 @@ export default async function MissionarySignupPage({
           emailVerified: true,
           phone: true,
           country: true,
-          missionaryApplications: latestApplication,
+          missionaryApplications: currentApplication,
         },
       })
     : null;

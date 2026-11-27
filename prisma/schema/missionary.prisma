@@ -7,23 +7,31 @@ enum ApplicationStatus {
 
 // Contact fields keep what was submitted; the user's own are updated from them.
 model MissionaryApplication {
-  id              String            @id @default(cuid())
-  userId          String
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status          ApplicationStatus @default(DRAFT)
-  phone           String?
-  country         String?
-  region          String?
-  church          String?
-  yearsServing    Int?
-  ministryFocus   String?
-  submittedAt     DateTime?
-  reviewedAt      DateTime?
-  rejectionReason String?
-  reapplyAfter    DateTime?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  id               String            @id @default(cuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status           ApplicationStatus @default(DRAFT)
+  phone            String?
+  country          String?
+  region           String?
+  church           String?
+  yearsServing     Int?
+  ministryFocus    String?
+  community        String?
+  impact           String?
+  supportNeed      String?
+  needDetails      String?
+  estimatedCost    String?
+  referenceName    String?
+  referenceContact String?
+  submittedAt      DateTime?
+  reviewedAt       DateTime?
+  rejectionReason  String?
+  reapplyAfter     DateTime?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
+  @@unique([userId], map: "missionary_application_one_open_per_user", where: raw("status <> 'REJECTED'"))
   @@index([userId])
   @@index([status])
   @@map("missionary_application")

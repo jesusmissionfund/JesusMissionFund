@@ -48,7 +48,10 @@ async function startDraft(userId: string, path: SignupPath) {
     select: { id: true },
   });
   if (!existing)
-    await prisma.missionaryApplication.create({ data: { userId } });
+    await prisma.missionaryApplication.createMany({
+      data: { userId },
+      skipDuplicates: true,
+    });
 }
 
 // Not a server action, so the client can't choose what gets created.

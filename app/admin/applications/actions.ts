@@ -8,7 +8,7 @@ import {
   applicationRejectedEmail,
 } from "@/lib/email-templates";
 import { formatDate } from "@/lib/format";
-import { latestApplication } from "@/lib/missionary-application";
+import { currentApplication } from "@/lib/missionary-application";
 import { prisma } from "@/lib/prisma";
 import { siteUrl } from "@/lib/site";
 import { requireAdmin } from "@/lib/session";
@@ -106,7 +106,7 @@ export async function setReapplyAfter(
             id: true,
             name: true,
             missionaryApplications: {
-              ...latestApplication,
+              ...currentApplication,
               select: { id: true },
             },
           },

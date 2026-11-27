@@ -5,12 +5,13 @@ import type { ApplicationStatus } from "@/app/generated/prisma/client";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { formatDate } from "@/lib/format";
 import {
-  latestApplication,
+  currentApplication,
   tomorrowAsDateInput,
 } from "@/lib/missionary-application";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
 import { cn } from "cn";
+import { ApplicationAnswers } from "@/components/dashboard/ApplicationAnswers";
 import { Badge } from "@/components/dashboard/Badge";
 import { adminLinks } from "../links";
 import { ReapplyControl } from "./_components/ReapplyControl";
@@ -44,7 +45,7 @@ export default async function ApplicationsPage({
           email: true,
           emailVerified: true,
           missionaryApplications: {
-            ...latestApplication,
+            ...currentApplication,
             select: { id: true },
           },
         },
@@ -91,7 +92,7 @@ export default async function ApplicationsPage({
         ) : (
           <ul className="divide-y divide-border">
             {applications.map((application) => {
-              const isLatest =
+              const isCurrent =
                 application.user.missionaryApplications[0]?.id ===
                 application.id;
               return (
@@ -111,7 +112,7 @@ export default async function ApplicationsPage({
                       {application.status === "REJECTED" && (
                         <Badge tone="danger">Rejected</Badge>
                       )}
-                      {application.status === "REJECTED" && !isLatest && (
+                      {application.status === "REJECTED" && !isCurrent && (
                         <Badge tone="info">Started again</Badge>
                       )}
                       {!application.user.emailVerified && (
@@ -149,6 +150,10 @@ export default async function ApplicationsPage({
                         <dd className="inline">{application.yearsServing}</dd>
                       </div>
                     </dl>
+                    <ApplicationAnswers
+                      answers={application}
+                      summary="Full application"
+                    />
                     {application.rejectionReason && (
                       <p className="mt-3 whitespace-pre-line border-l-2 border-destructive/40 pl-3 text-sm text-muted-foreground">
                         {application.rejectionReason}
@@ -161,7 +166,7 @@ export default async function ApplicationsPage({
                         ` · Reviewed ${formatDate(application.reviewedAt)}`}
                     </p>
                   </div>
-                  {application.status === "REJECTED" && isLatest && (
+                  {application.status === "REJECTED" && isCurrent && (
                     <ReapplyControl
                       applicationId={application.id}
                       applicantName={application.user.name}

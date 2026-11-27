@@ -24,7 +24,7 @@ export function ReviewStep({
   const [pending, setPending] = useState(false);
   const [serverError, setServerError] = useState("");
 
-  const [contact, ministry] = answerSections(draft);
+  const [contact, ...rest] = answerSections(draft);
   const sections = [
     {
       ...contact,
@@ -34,7 +34,7 @@ export function ReviewStep({
         ...contact.rows,
       ],
     },
-    ministry,
+    ...rest,
   ];
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -74,7 +74,9 @@ export function ReviewStep({
                 className="grid gap-1 px-4 py-3 sm:grid-cols-[0.9fr_1.1fr]"
               >
                 <dt className="text-sm text-muted-foreground">{label}</dt>
-                <dd className="text-sm text-foreground">{value}</dd>
+                <dd className="whitespace-pre-line text-sm text-foreground">
+                  {value}
+                </dd>
               </div>
             ))}
           </dl>
